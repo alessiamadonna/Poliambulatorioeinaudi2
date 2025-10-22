@@ -2364,7 +2364,30 @@ footer {
       
       animateStats();
       updateScrollIndicators();
+      // Forza il browser a riconoscere l'overflow dopo il caricamento
+setTimeout(() => {
+  const navContainer = document.getElementById('navContainer');
+  if (navContainer) {
+    // Forza un mini-scroll per attivare lo scrollbar
+    navContainer.scrollLeft = 1;
+    setTimeout(() => {
+      navContainer.scrollLeft = 0;
+    }, 10);
+  }
+}, 100);
+
+// Forza il rilevamento anche dopo il caricamento dei font
+document.fonts.ready.then(() => {
+  const navContainer = document.getElementById('navContainer');
+  if (navContainer) {
+    navContainer.scrollLeft = 1;
+    setTimeout(() => {
+      navContainer.scrollLeft = 0;
+      updateScrollIndicators();
+    }, 10);
+  }
     });
+       });
   </script>
 </body>
 </html>
