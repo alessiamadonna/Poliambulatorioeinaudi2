@@ -280,7 +280,7 @@
     @keyframes fadeInUp { from{opacity:0; transform:translateY(40px)} to{opacity:1; transform:translateY(0)} }
     @keyframes fadeInDown { from{opacity:0; transform:translateY(-30px)} to{opacity:1; transform:translateY(0)} }
 
-   .quick-nav { position: sticky; top: 20px; z-index: 100; margin: 60px auto 80px; max-width: 1100px; animation: fadeInUp 1.4s ease; }
+  .quick-nav { position: sticky; top: 20px; z-index: 100; margin: 60px auto 80px; max-width: 1100px; animation: fadeInUp 1.4s ease; }
 .nav-wrapper { position: relative; }
 .nav-wrapper::before, .nav-wrapper::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:10; pointer-events:none; opacity:0; transition:opacity .3s ease; }
 .nav-wrapper::before { left:0; background: linear-gradient(to right, rgba(254,247,251,.95), transparent); }
@@ -330,8 +330,15 @@
   gap:14px; 
   flex-wrap:nowrap; 
   min-width:min-content;
-  /* AGGIUNGI SOLO QUESTA RIGA - È L'UNICA CHE SERVE */
-  padding-right: 50px;
+}
+
+/* AGGIUNGI QUESTO - Elemento invisibile alla fine per forzare l'overflow */
+.nav-chips::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 1px;
+  flex-shrink: 0;
 }
 
 .nav-chip{
