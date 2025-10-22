@@ -290,55 +290,7 @@
 @keyframes pulse-arrow { 0%,100%{transform:translateY(-50%) scale(1)} 50%{transform:translateY(-50%) scale(1.1)} }
 .scroll-arrow.left{left:12px;} .scroll-arrow.right{right:12px;}
 .nav-wrapper.show-left .scroll-arrow.left, .nav-wrapper.show-right .scroll-arrow.right { opacity:1; }
-/* FORZA SCROLLBAR SEMPRE VISIBILE SU CHROME */
-.nav-container {
-  /* Disabilita overlay scrollbar di Chrome */
-  scrollbar-gutter: stable;
-}
 
-/* Stile per Chrome/Edge/Safari */
-.nav-container::-webkit-scrollbar {
-  height: 12px;
-  -webkit-appearance: none;
-}
-
-.nav-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.nav-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 31, 125, 0.6);
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-}
-
-.nav-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 31, 125, 0.8);
-}
-
-/* AGGIUNGI QUESTA REGOLA SPECIFICA PER CHROME */
-@supports selector(::-webkit-scrollbar) {
-  .nav-container {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 31, 125, 0.6) rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Forza lo scrollbar a essere sempre presente */
-  .nav-container::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 12px;
-    height: 12px;
-  }
-  
-  .nav-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 31, 125, 0.6);
-    border-radius: 10px;
-    border: 2px solid white;
-  }
-}
 .nav-container { 
   background: rgba(255,255,255,.85); 
   backdrop-filter: blur(20px); 
@@ -351,6 +303,7 @@
   scrollbar-width: thin; /* CAMBIATO: più compatibile */
   scrollbar-color: rgba(255,31,125,.6) rgba(0,0,0,.08); /* CAMBIATO: più visibile */
   scroll-behavior:smooth; 
+  scrollbar-gutter: stable both-edges;
 }
 
 .nav-container::-webkit-scrollbar{
