@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Specializzazioni – Timeline Interattiva</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+    
+    :root {
+      --pink: #ff1f7d;
+      --orange: #ff8c00;
+      --green: #1f9d55;
+      --bg-main: #fef7fb;
+      --bg-card: #ffffff;
+      --text: #0b1220;
+      --text-muted: #565e66;
+      --radius: 24px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-main);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.08;
+      filter: blur(80px);
+    }
+    body::before { width: 500px; height: 500px; top: -200px; right: -100px; background: linear-gradient(135deg, var(--pink), var(--orange)); animation: float1 20s ease-in-out infinite; }
+    body::after { width: 400px; height: 400px; bottom: -150px; left: -100px; background: linear-gradient(135deg, var(--orange), var(--green)); animation: float2 25s ease-in-out infinite; }
+    @keyframes float1 { 0%,100%{transform:translate(0,0) rotate(0)} 50%{transform:translate(-100px,100px) rotate(180deg)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0) rotate(0)} 50%{transform:translate(100px,-100px) rotate(-180deg)} }
+
+    /* Sidebar Desktop */
+    .sidebar-desktop {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background: white;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 30px 25px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-sidebar {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 25px;
+      color: #555;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      border-left: 4px solid transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-item:hover {
+      background: linear-gradient(90deg, rgba(255, 31, 125, 0.05) 0%, transparent 100%);
+      color: #ff8c00;
+      border-left-color: #ff8c00;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(255, 31, 125, 0.1) 0%, transparent 100%);
+      color: #ff1f7d;
+      border-left-color: #ff1f7d;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      margin-right: 15px;
+      opacity: 0.7;
+    }
+
+    .nav-item:hover .nav-icon,
+    .nav-item.active .nav-icon {
+      opacity: 1;
+    }
+
+    .sidebar-footer {
+      display: none;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      z-index: 5000;
+      padding: 0 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hamburger {
+      width: 30px;
+      height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      z-index: 5002;
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 3px;
+      background: #333;
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .mnav-head {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .mnav-close {
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font-size: 26px;
+      color: #666;
+      line-height: 1;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    }
+
+    .mnav-close:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .mnav-list {
+      list-style: none;
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mnav-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #222;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      transition: background-color 0.18s ease, transform 0.12s ease, border-color 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .mnav-link:hover,
+    .mnav-link:focus-visible {
+      background: linear-gradient(90deg, rgba(255, 31, 125, 0.14), rgba(255, 79, 157, 0.12));
+      outline: none;
+    }
+
+    .mnav-link:active {
+      transform: scale(0.98);
+    }
+
+    .mnav-link.active {
+      color: #fff;
+      background: linear-gradient(90deg, #ff1f7d, #ff4f9d);
+      border-color: transparent;
+    }
+
+    .sidebar-mobile {
+      position: fixed;
+      left: -100vw;
+      top: 64px;
+      width: 78vw;
+      max-width: 340px;
+      height: auto;
+      max-height: calc(100dvh - 80px);
+      background: white;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      z-index: 4500;
+      transition: left 0.28s ease;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-left: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .sidebar-mobile.active {
+      left: 10px;
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.18);
+      z-index: 4000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    main { max-width: 1200px; margin: 0 auto 0 280px; padding: 80px 20px 120px; position: relative; z-index: 2; }
+    .hero { text-align: center; margin-bottom: 100px; position: relative; }
+    .hero-badge { display:inline-block; padding:10px 24px; border-radius:50px; font-size:14px; font-weight:700; background: linear-gradient(135deg, var(--pink), var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:24px; text-transform:uppercase; letter-spacing:1.5px; animation: fadeInDown .8s ease; border:2px solid rgba(255,31,125,.2); }
+    h1 { font-size: clamp(52px, 8vw, 108px); font-weight: 900; background: linear-gradient(135deg, var(--pink), var(--orange), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 24px; line-height: 1; animation: fadeInUp 1s ease; letter-spacing: -0.02em; }
+    .subtitle { font-size: clamp(18px, 3vw, 22px); color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.7; animation: fadeInUp 1.2s ease; font-weight: 500; }
+    @keyframes fadeInUp { from{opacity:0; transform:translateY(40px)} to{opacity:1; transform:translateY(0)} }
+    @keyframes fadeInDown { from{opacity:0; transform:translateY(-30px)} to{opacity:1; transform:translateY(0)} }
+
+    .quick-nav { position: sticky; top: 20px; z-index: 100; margin: 60px auto 80px; max-width: 1100px; animation: fadeInUp 1.4s ease; }
+    .nav-wrapper { position: relative; }
+    .nav-wrapper::before, .nav-wrapper::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:10; pointer-events:none; opacity:0; transition:opacity .3s ease; }
+    .nav-wrapper::before { left:0; background: linear-gradient(to right, rgba(254,247,251,.95), transparent); }
+    .nav-wrapper::after { right:0; background: linear-gradient(to left, rgba(254,247,251,.95), transparent); }
+    .nav-wrapper.show-left::before { opacity:1; }
+    .nav-wrapper.show-right::after { opacity:1; }
+    .scroll-arrow { position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; background: linear-gradient(135deg, var(--pink), var(--orange)); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:bold; z-index:11; opacity:0; transition:all .3s; pointer-events:none; box-shadow:0 4px 12px rgba(255,31,125,.3); animation:pulse-arrow 2s ease-in-out infinite; }
+    @keyframes pulse-arrow { 0%,100%{transform:translateY(-50%) scale(1)} 50%{transform:translateY(-50%) scale(1.1)} }
+    .scroll-arrow.left{left:12px;} .scroll-arrow.right{right:12px;}
+    .nav-wrapper.show-left .scroll-arrow.left, .nav-wrapper.show-right .scroll-arrow.right { opacity:1; }
+    .nav-container { 
+      background: rgba(255,255,255,.85); 
+      backdrop-filter: blur(20px); 
+      border-radius: 20px; 
+      padding: 18px 28px; 
+      box-shadow: 0 8px 32px rgba(0,0,0,.08); 
+      border:1px solid rgba(255,255,255,.5); 
+      overflow-x:auto; 
+      overflow-y:hidden; 
+      scrollbar-width:auto; 
+      scrollbar-color: rgba(255,31,125,.4) rgba(0,0,0,.05); 
+      scroll-behavior:smooth; 
+    }
+    .nav-container::-webkit-scrollbar{height:10px;} 
+    .nav-container::-webkit-scrollbar-track{background:rgba(0,0,0,.05); border-radius:10px;} 
+    .nav-container::-webkit-scrollbar-thumb{background:rgba(255,31,125,.4); border-radius:10px; border:2px solid rgba(255,255,255,.85);} 
+    .nav-container::-webkit-scrollbar-thumb:hover{background:rgba(255,31,125,.6)}
+    .nav-chips{display:flex; gap:14px; flex-wrap:nowrap; min-width:min-content;}
+    .nav-chip{flex-shrink:0; display:flex; align-items:center; justify-content:center; padding:14px 28px; background:#fff; border:2px solid rgba(255,31,125,.1); border-radius:14px; font-size:15px; font-weight:600; color:var(--text); cursor:pointer; transition:all .4s cubic-bezier(.16,1,.3,1); white-space:nowrap; position:relative; overflow:hidden; letter-spacing:.3px;}
+    .nav-chip:hover{ transform:translateY(-3px); box-shadow:0 10px 25px rgba(255,31,125,.25); border-color: var(--pink); }
+    .nav-chip.active{ background: linear-gradient(135deg, var(--pink), var(--orange)); color:#fff; border-color:transparent; box-shadow: 0 8px 24px rgba(255,31,125,.35); transform:translateY(-2px); }
+
+    .timeline { position: relative; min-height: 500px; }
+    .timeline::before { content:''; position:absolute; top:0; bottom:0; left:50%; width:4px; background: linear-gradient(180deg, var(--pink), var(--orange) 50%, var(--green)); transform:translateX(-50%); border-radius:10px; box-shadow:0 0 20px rgba(255,31,125,.2); }
+    .timeline-item { --dot-color: var(--pink); position:relative; width:50%; padding:40px 50px; opacity:0; transform:translateY(60px); transition: all .9s cubic-bezier(.16,1,.3,1); }
+    .timeline-item.left { left:0; text-align:right; }
+    .timeline-item.right { left:50%; text-align:left; }
+    .timeline-item::before { content:''; position:absolute; top:50px; width:20px; height:20px; border-radius:50%; border:4px solid var(--bg-main); z-index:10; box-shadow:0 0 0 4px var(--dot-color), 0 0 20px var(--dot-color); transition:all .5s cubic-bezier(.16,1,.3,1); animation:pulse 2s ease-in-out infinite; background: var(--dot-color); }
+    .timeline-item.left::before { right:-10px; } .timeline-item.right::before { left:-10px; }
+    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.2);opacity:.8} }
+    .timeline-item.visible{ opacity:1; transform:translateY(0); }
+
+    .card { background: var(--bg-card); padding:40px; border-radius: var(--radius); box-shadow: var(--shadow-sm); border:2px solid transparent; position:relative; transition: all .6s cubic-bezier(.16,1,.3,1); overflow:hidden; }
+    .card.clickable { cursor:pointer; }
+    .card.non-clickable { cursor:default; }
+    .card.clickable::before { content:''; position:absolute; inset:-3px; border-radius: var(--radius); padding:3px; background: linear-gradient(135deg, var(--pink), var(--orange), var(--green)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity:0; transition:opacity .6s ease; pointer-events:none; animation: rotate 3s linear infinite; }
+    @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .card.clickable:hover::before{opacity:1}
+    .card.clickable:hover{ transform: translateY(-16px) scale(1.03); box-shadow: var(--shadow-lg); }
+    .card.clickable::after{ content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:linear-gradient(to bottom right, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60% ); transform: translate(-100%,-100%) rotate(45deg); transition: transform .8s ease; }
+    .card.clickable:hover::after{ transform: translate(100%,100%) rotate(45deg); }
+    .card h3 { font-size: clamp(24px, 3vw, 34px); font-weight: 900; margin-bottom: 12px; line-height: 1.3; letter-spacing: -0.01em; }
+    .card p.short { color: var(--text-muted); font-size: 17px; margin-bottom: 0; transition: all .4s ease; font-weight: 500; }
+    .card.non-clickable p.short { display: none; }
+    .click-hint{ position:absolute; bottom:20px; left:50%; transform:translateX(-50%); font-size:13px; font-weight:600; color:var(--text-muted); opacity:0; transition: all .4s ease; pointer-events:none; white-space:nowrap; }
+    .card.clickable:hover .click-hint{ opacity:1; bottom:24px; }
+
+    .stats{ display:flex; justify-content:center; gap:80px; margin-top:100px; flex-wrap:wrap; }
+    .stat-item { text-align:center; position:relative; }
+    .stat-item::before{ content:''; position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:60px; height:4px; background: linear-gradient(90deg, var(--pink), var(--orange)); border-radius:2px; }
+    .stat-number{ font-size:64px; font-weight:900; background: linear-gradient(135deg, var(--pink), var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-top:24px; }
+    .stat-label{ color: var(--text-muted); font-size:15px; text-transform:uppercase; letter-spacing:1.5px; margin-top:12px; font-weight:700; }
+    @media(max-width:1024px){
+      .sidebar-desktop{ display:none; }
+      .mobile-header{ display:flex; }
+      main { padding: 100px 20px 80px; margin-left: 0; }
+      .quick-nav { margin-top: 80px; top: 70px; }
+    }
+    @media(max-width:768px){
+      .timeline::before { left: 30px; }
+      .timeline-item { width: 100%; padding: 30px 20px 30px 70px; text-align: left; left: 0 !important; }
+      .timeline-item::before { left: 21px !important; top: 40px; }
+      .card { padding: 30px; }
+      .full-content { flex-direction: column; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; display: flex; }
+      .stats { gap: 50px; }
+      .stat-number { font-size: 48px; }
+    }
+
+    /* Modal Styles with 3D Rotation Animation */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      perspective: 1200px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+      transform: rotateY(-90deg) scale(0.8);
+      opacity: 0;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .modal-overlay.active .modal {
+      animation: modalSpinIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .modal-overlay.closing .modal {
+      animation: modalSpinOut 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+    }
+
+    @keyframes modalSpinIn {
+      0% {
+        transform: rotateY(-90deg) scale(0.8);
+        opacity: 0;
+      }
+      100% {
+        transform: rotateY(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes modalSpinOut {
+      0% {
+        transform: rotateY(0deg) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: rotateY(90deg) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    .modal-header {
+      padding: 30px 40px 10px 40px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--pink);
+    }
+
+    .modal-header h3 {
+      margin-top: 4px;
+      font-size: 20px;
+      color: var(--orange);
+    }
+
+    .modal-body {
+      padding: 20px 40px 40px 40px;
+      overflow-y: auto;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .modal-body .actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .modal-body .btn {
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    .modal-body .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .modal-body .btn:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+
+    .modal-body .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(255, 31, 125, 0.25);
+    }
+
+    .modal-body .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(255, 31, 125, 0.35);
+    }
+
+    .modal-body .btn-outline {
+      background: var(--bg-main);
+      border: 2px solid rgba(255, 31, 125, 0.2);
+      color: var(--text);
+    }
+
+    .modal-body .btn-outline:hover {
+      background: #fff;
+      border-color: var(--pink);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 31, 125, 0.15);
+    }
+
+    .modal-body .btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s ease, transform 0.3s ease;
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: var(--pink);
+      transform: scale(1.1);
+    }
+
+    @media(max-width: 768px) {
+      .modal {
+        max-width: 94vw;
+        max-height: 90vh;
+      }
+      .modal-header {
+        padding: 18px 18px 10px 18px;
+      }
+      .modal-body {
+        padding: 10px 18px 18px 18px;
+      }
+      .modal-close {
+        top: 8px;
+        right: 10px;
+      }
+    }
+/* ===============================
+   FOOTER
+   =============================== */
+   .footer-luxury.light {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f3 100%);
+    color: #333;
+    margin-left: 280px;
+    padding: 100px 0 50px;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 140, 0, 0.15);
+    box-shadow: inset 0 10px 40px rgba(255, 140, 0, 0.05);
+}
+
+.footer-luxury.light .footer-glow {
+    position: absolute;
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 140, 0, 0.18), rgba(255, 31, 125, 0.12), transparent 70%);
+    filter: blur(60px);
+    animation: glowMove 8s ease-in-out infinite alternate;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+.footer-logo {
+    font-size: 42px;
+    font-weight: 900;
+    color: #222;
+    letter-spacing: -1px;
+}
+
+.footer-logo span {
+    background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-slogan {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.55);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.footer-links h4,
+.footer-contact h4,
+.footer-social h4 {
+    font-size: 20px;
+    color: #222;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.footer-links h4::after,
+.footer-contact h4::after,
+.footer-social h4::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+    border-radius: 3px;
+}
+
+.footer-links ul,
+.footer-contact ul {
+    list-style: none;
+}
+
+.footer-links li,
+.footer-contact li {
+    margin-bottom: 10px;
+    font-size: 19px;
+    color: rgba(0, 0, 0, 0.6);
+    transition: color 0.3s, transform 0.3s;
+}
+
+.footer-links li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-links li:hover,
+.footer-contact li:hover {
+    color: #ff4f9d;
+    transform: translateX(5px);
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #ff1f7d;
+}
+
+.social-icons a:hover {
+    transform: translateY(-5px) scale(1.1);
+    background: linear-gradient(135deg, #ff8c00, #ff4f9d);
+    color: white;
+    box-shadow: 0 0 25px rgba(255, 140, 0, 0.3);
+}
+
+.social-icons a svg {
+    width: 22px;
+    height: 22px;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 30px;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.55);
+    margin-bottom: 8px;
+}
+
+.footer-credit {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.heart {
+    color: #ff4f9d;
+    animation: heartPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes heartPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes glowMove {
+    0% { transform: translateX(-50%) translateY(0); }
+    100% { transform: translateX(-50%) translateY(-20px); }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* ===============================
+   RESPONSIVE FOOTER
+   =============================== */
+
+@media (max-width: 1024px) {
+    .footer-luxury.light {
+        margin-left: 0;
+        padding: 80px 0 40px;
+    }
+
+    .footer-container {
+        padding: 0 40px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        margin-bottom: 60px;
+    }
+
+    .footer-logo {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-luxury.light {
+        margin-left: 0;
+        padding: 60px 0 30px;
+    }
+
+    .footer-container {
+        padding: 0 20px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .footer-logo {
+        font-size: 32px;
+    }
+
+    .footer-slogan {
+        font-size: 14px;
+    }
+
+    .footer-links h4,
+    .footer-contact h4,
+    .footer-social h4 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .footer-links h4::after,
+    .footer-contact h4::after,
+    .footer-social h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-links li,
+    .footer-contact li {
+        font-size: 16px;
+    }
+
+    .footer-links li:hover,
+    .footer-contact li:hover {
+        transform: translateX(0);
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-bottom p {
+        font-size: 12px;
+    }
+
+    .footer-luxury.light .footer-glow {
+        width: 600px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-luxury.light {
+        padding: 40px 0 20px;
+    }
+
+    .footer-container {
+        padding: 0 15px;
+    }
+
+    .footer-logo {
+        font-size: 28px;
+    }
+
+    .footer-grid {
+        gap: 25px;
+    }
+
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+    }
+
+    .social-icons a svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+  </style>
+</head>
+<body>
+  <!-- Sidebar Desktop -->
+  <div class="sidebar-desktop">
+    <div class="sidebar-header">
+      <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar"/>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="index.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item active" href="visite.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        Visite
+      </a>
+      <a class="nav-item" href="dottori.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        I nostri specialisti
+      </a>
+      <a class="nav-item" href="terapie.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        Terapie
+      </a>
+      <a class="nav-item" href="servizi.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+        </svg>
+        Servizi
+      </a>
+      <a class="nav-item" href="eventi.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Eventi
+      </a>
+      <a class="nav-item" href="index.html#contatti">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        Info
+      </a>
+    </nav>
+  </div>
+
+  <!-- Mobile Header -->
+  <div class="mobile-header">
+    <img src="img/logo.png" alt="StudioMed Logo" style="height: 40px;"/>
+    <div class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
+  <!-- Sidebar Mobile -->
+  <div class="sidebar-mobile" id="sidebarMobile">
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="index.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item active" href="visite.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        Visite
+      </a>
+      <a class="nav-item" href="dottori.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        I nostri specialisti
+      </a>
+      <a class="nav-item" href="terapie.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        Terapie
+      </a>
+      <a class="nav-item" href="servizi.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+        </svg>
+        Servizi
+      </a>
+      <a class="nav-item" href="eventi.html">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Eventi
+      </a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="hero">
+      <div class="hero-badge">✨ Eccellenza Medica</div>
+      <h1>Specializzazioni</h1>
+      <div class="subtitle">
+        Esplora il nostro portfolio completo di specializzazioni mediche con professionisti certificati e tecnologie all'avanguardia
+      </div>
+    </div>
+
+    <nav class="quick-nav">
+      <div class="nav-wrapper" id="navWrapper">
+        <div class="scroll-arrow left">‹</div>
+        <div class="scroll-arrow right">›</div>
+        <div class="nav-container" id="navContainer">
+          <div class="nav-chips" id="navChips"></div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="timeline" id="timeline"></div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-number" data-target="38">0</div>
+        <div class="stat-label">Specializzazioni</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="100">0</div>
+        <div class="stat-label">+ Professionisti</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="15">0</div>
+        <div class="stat-label">Anni Esperienza</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">×</button>
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+<!-- Footer (fuori da <main> per chiarezza, ma può rimanere dentro se preferisci) -->
+   <!-- Footer -->
+    <footer class="footer-luxury light">
+        <div class="footer-glow"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Poliambulatorio <span>Luigi Einaudi</span></h2>
+                    <p class="footer-slogan">La salute, reinventata.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Esplora</h4>
+                    <ul>
+                        <li><a href="servizi.html">Diagnosi</a></li>
+                        <li><a href="dottori.html">Visite</a></li>
+                        <li><a href="terapie.html">Terapie</a></li>
+                        <li><a href="eventi.html">Eventi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contatti</h4>
+                    <ul>
+                        <li>📞 +39 0173 742501</li>
+                        <li>✉️ info@studiomed.it</li>
+                        <li>📍 Via Torino 118/B, 12063 Dogliani CN</li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Seguici</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Poliambulatorio-Luigi-Einaudi-100014016342183/" class="facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/poliambulatorioluigieinaudi/" class="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                       <a href="#" class="doctorlib" aria-label="Doctolib">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 <strong>Poliambulatorio Luigi Einaudi</strong> –  P.I. 03611100045</p>
+            </div>
+        </div>
+    </footer>
+
+  <script>
+    function toggleMobileMenu(){
+      document.querySelector('.hamburger').classList.toggle('active');
+      document.querySelector('.sidebar-mobile').classList.toggle('active');
+      document.querySelector('.mobile-overlay').classList.toggle('active');
+    }
+
+    // Mobile menu management
+    document.addEventListener('DOMContentLoaded', function(){
+      const COLORS = [
+        { name: 'pink', value: '#ff1f7d' },
+        { name: 'orange', value: '#ff8c00' },
+        { name: 'green', value: '#1f9d55' }
+      ];
+      
+      const SPECS = [
+        { title: "Agopuntura" },
+        { title: "Allergologia" },
+        { title: "Biologia nutrizionale" },
+        { title: "Cardiologia" },
+        { title: "Chirurgia generale" },
+        { title: "Chirurgia plastica e Medicina estetica" },
+        { title: "Chirurgia vascolare, Angiologia ed Eco-Color-Doppler" },
+        { title: "Chirurgia vertebrale" },
+        { title: "Dermatologia e Venereologia" },
+        { title: "Dietistica e Nutrizione" },
+        { title: "Ecografia" },
+        { title: "Ematologia (malattie del sangue)" },
+        { title: "Endocrinologia e Diabetologia" },
+        { title: "Fisioterapia" },
+        { title: "Gastroenterologia ed Endoscopia digestiva" },
+        { title: "Ginecologia e Ostetricia" },
+        { title: "Logopedia" },
+        { title: "Medicina del lavoro" },
+        { title: "Medicina dello sport" },
+        { title: "Medicina fisica e riabilitativa (fisiatra)" },
+        { title: "Medicina interna / reumatologia" },
+        { title: "Medicina legale e assicurativa" },
+        { title: "Nefrologia" },
+        { title: "Neurologia" },
+        { title: "Oculistica e Oftalmologia" },
+        { title: "Omeopatia" },
+        { title: "Ortopedia" },
+        { title: "Otorinolaringoiatria e Chirurgia estetica nasale" },
+        { title: "Pneumologia" },
+        { title: "Podologia" },
+        { title: "Psichiatria e Psicologia" },
+        { title: "Reumatologia" },
+        { title: "Senologia" },
+        { title: "Terapia del dolore /Anestesiologia" },
+        { title: "Terapie alternative" },
+        { title: "Urologia e Andrologia" },
+        { title: "Vulnologia (trattamento e cura ulcere)" },
+        { title: "Neuropsicomotricità" }
+      ];
+
+      const timeline = document.getElementById('timeline');
+      const navChips = document.getElementById('navChips');
+      const navContainer = document.getElementById('navContainer');
+      const navWrapper = document.getElementById('navWrapper');
+
+      function updateScrollIndicators() {
+        const scrollLeft = navContainer.scrollLeft || 0;
+        const maxScroll = (navContainer.scrollWidth - navContainer.clientWidth) || 0;
+        if (scrollLeft > 20) navWrapper.classList.add('show-left'); 
+        else navWrapper.classList.remove('show-left');
+        if (scrollLeft < maxScroll - 20) navWrapper.classList.add('show-right'); 
+        else navWrapper.classList.remove('show-right');
+      }
+      
+      navContainer.addEventListener('scroll', updateScrollIndicators);
+      window.addEventListener('resize', updateScrollIndicators);
+      updateScrollIndicators();
+
+      // CONTENUTI MODALE
+      const CONTENT = {
+        "Agopuntura": `
+<p>L’Agopuntura è una tecnica terapeutica che consiste nel trattamento e nella prevenzione di varie patologie tramite la stimolazione di specifici punti per mezzo di aghi molto sottili, sterili e monouso, assolutamente priva di effetti collaterali.</p>
+<p>L’Agopuntura ha un’azione antidolorifica, antiinfiammatoria e decontratturante sui muscoli, essa ha, inoltre, un effetto sedativo, ansiolitico e antidepressivo.</p>
+<p>Si valutano i sintomi e la storia clinica del paziente. I cicli sono di 5/10 sedute, a seconda della patologia da trattare e della risposta del paziente.</p>
+<p>L’Agopuntura è un atto medico, pertanto, può essere praticata solo da personale laureato in medicina e chirurgia ed abilitato alla professione medica.</p>
+<p>Le principali patologie che possono essere trattate dall’Agopuntura sono di tipo:</p>
+<ul>
+<li>Muscolo-scheletriche</li>
+<li>Neurologiche e cefalee</li>
+<li>Urologiche</li>
+<li>Ostetrico-ginecologiche</li>
+<li>Broncopolmonari</li>
+<li>Gastroenterologiche</li>
+<li>Otorinolaringoiatriche</li>
+<li>Dermatologiche</li>
+<li>Psico-emotive</li>
+</ul>
+<div class="actions">
+<button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+<button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+</div>
+`,
+        "Allergologia": `
+<p>L’Allergologia previene, tratta e diagnostica le allergie, ovvero l’insieme delle reazioni che l’organismo mette in atto quando entra in contatto con particolari sostanze estranee, definite “allergeni”.</p>
+<p>Le allergie si differenziano in: allergopatie respiratorie (riniti, asma), allergie e intolleranze alimentari e patologie cutanee (dermatite atopica, eczemi da contatto e orticaria allergica).</p>
+<p>È possibile effettuare visite specialistiche allergologiche comprensive di test diagnostici (Prick Test, Skin SPT, Patch Test e spirometria semplice) indispensabili per la diagnosi delle allergie.</p>
+<div class="actions">
+<button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+<button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+</div>
+`,
+        "Cardiologia": `
+<p>La Cardiologia si occupa della diagnosi, prevenzione e cura delle malattie cardiovascolari. Il cardiologo effettua la valutazione del cuore e dell'apparato circolatorio, prescrivendo esami e terapie adeguate al quadro clinico del paziente.</p>
+
+  <p><strong>Principali sintomi per cui è indicato rivolgersi al cardiologo:</strong></p>
+  <ul>
+    <li>Dolori al petto</li>
+    <li>Palpitazioni</li>
+    <li>Affanno o fiato corto (disapnea)</li>
+    <li>Picchi pressori accelerati</li>
+    <li>Svenimenti</li>
+    <li>Gonfiore a caviglie, gambe, addome</li>
+    <li>Stanchezza immotivata (astenia)</li>
+    <li>Sudorazione eccessiva</li>
+    <li>Pressione arteriosa elevata</li>
+  </ul>
+
+  <p><strong>Esami cardiologici eseguiti:</strong></p>
+
+  <p><strong>Elettrocardiogramma (ECG) basale:</strong> test diagnostico che registra l’attività elettrica del cuore e le variazioni generate dal battito cardiaco, trasformandole in tracciati grafici interpretati dallo specialista in cardiologia.</p>
+
+  <p>L’Elettrocardiogramma a riposo è ampiamente utilizzato per fornire informazioni cruciali su diverse condizioni cardiache, ad esempio:</p>
+  <ul>
+    <li>Aritmie cardiache e altre anomalie del ritmo cardiaco come battiti troppo veloci, troppo lenti o irregolari</li>
+    <li>Ipertrofia ventricolare, ovvero l’ingrossamento dei ventricoli del cuore</li>
+    <li>Ischemia o infarto miocardico da sofferenza coronaria</li>
+    <li>Alterazioni strutturali di cavità cardiache, atri o ventricoli (cuore ingrossato)</li>
+    <li>Monitoraggio e valutazione del funzionamento di protesi cardiache e dispositivi impiantabili come il pacemaker</li>
+  </ul>
+
+  <p><strong>Ecocardiografia, Ecocardiogramma o Eco-Color-Doppler cardiaco:</strong> esame diagnostico che, attraverso l’utilizzo degli ultrasuoni, produce immagini del cuore bidimensionali dinamiche e precise in tempo reale. Consente di valutare dimensioni, forme e movimento delle strutture del cuore, fornendo informazioni cruciali per la diagnosi e il trattamento di svariate condizioni cardiache.</p>
+
+  <p><strong>Holter Pressorio, Holter ECG:</strong> monitoraggio pressorio delle 24 ore. È un test non invasivo che registra la pressione arteriosa continuativamente, permettendo ai medici di valutare il ritmo cardiaco durante le normali attività quotidiane e il sonno. Il referto viene consegnato entro 48 ore dal termine dell’esame.</p>
+
+  <p><strong>Ecodoppler ed Ecocolordoppler tronchi sovraortici (TSA):</strong> esami diagnostici non invasivi fondamentali per valutare la salute delle arterie che portano il sangue al cervello. Servono a diagnosticare precocemente patologie cardiovascolari come l’aterosclerosi e a intercettare rischi di ictus.</p>
+
+  <p>Grazie a queste tecniche avanzate è possibile monitorare il flusso sanguigno nelle arterie carotidee e vertebrali, identificando tempestivamente eventuali alterazioni e riducendo sensibilmente i rischi.</p>
+
+`,
+        "Chirurgia generale": `
+ <p>La Chirurgia generale interviene sulle patologie degli organi della cavità addominale (intestino, colon, fegato, stomaco, esofago, pancreas, cistifellea, fegato, dotti biliari) oltre che della mammella e della tiroide. Tratta inoltre, ulcere, neoplasie, diverticoli, polipi, calcoli, etc...</p>
+
+  <p><strong>Tra le patologie trattate con maggior frequenza risultano</strong></p>
+  <ul>
+    <li>Cisti Tendinee E Sebacee</li>
+    <li>Ernie Iatali E Inguinali</li>
+    <li>Ulcere E Neoplasie</li>
+    <li>Diverticoli O Calcoli</li>
+  </ul>
+
+  <h4>Visita Chirurgica Generale</h4>
+  <p>L’obiettivo è quello di identificare la migliore strategia di trattamento per le condizioni che possono richiedere un intervento chirurgico, valutare rischi e benefici delle procedure proposte e i possibili esiti. In presenza di interventi chirurgici, lo Specialista seguirà il paziente anche nel decorso post- operatorio, monitorando il recupero o per valutare l’andamento di una condizione che richieda attenzione chirurgica continuativa, per una corretta e completa guarigione.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Chirurgia plastica e Medicina estetica": `
+ <p>La Chirurgia generale interviene sulle patologie degli organi della cavità addominale (intestino, colon, fegato, stomaco, esofago, pancreas, cistifellea, fegato, dotti biliari) oltre che della mammella e della tiroide. Tratta inoltre, ulcere, neoplasie, diverticoli, polipi, calcoli, etc...</p>
+
+  <p><strong>Tra le patologie trattate con maggior frequenza risultano</strong></p>
+  <ul>
+    <li>Cisti Tendinee E Sebacee</li>
+    <li>Ernie Iatali E Inguinali</li>
+    <li>Ulcere E Neoplasie</li>
+    <li>Diverticoli O Calcoli</li>
+  </ul>
+
+  <h4>Visita Chirurgica Generale</h4>
+  <p>L’obiettivo è quello di identificare la migliore strategia di trattamento per le condizioni che possono richiedere un intervento chirurgico, valutare rischi e benefici delle procedure proposte e i possibili esiti. In presenza di interventi chirurgici, lo Specialista seguirà il paziente anche nel decorso post- operatorio, monitorando il recupero o per valutare l’andamento di una condizione che richieda attenzione chirurgica continuativa, per una corretta e completa guarigione.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Chirurgia vascolare, Angiologia ed Eco-Color-Doppler": `
+<p>La Chirurgia Vascolare è quel ramo della chirurgia che si occupa di intervenire chirurgicamente per risolvere o migliorare la prognosi delle patologie che interessano i vasi sanguigni dell’organismo, utilizzando tecniche di riparazione, derivazione, sostituzione e rimozione.</p>
+
+  <p>La Chirurgia Vascolare è un approfondimento specialistico fondamentale per la diagnosi e la gestione delle patologie che interessano il sistema circolatorio, in particolare arterie e vene.</p>
+
+  <p>Questo tipo di visita è indicato per valutare la presenza di disturbi vascolari come insufficienza venosa, arteriosclerosi, aneurismi e varici, arteriopatia, insufficienza cerebrovascolare, oltre che per la prevenzione di gravi complicanze cardiovascolari come ictus o trombosi.</p>
+
+  <p>Alla visita spesso si associano analisi del sangue per valutare i livelli di colesterolo, esami radiologici o eco-doppler dei vasi.</p>
+
+  <p><strong>L’Eco-Color-Doppler</strong> è una metodica di indagine diagnostica che utilizza gli ultrasuoni, fornendo informazioni sullo stato delle pareti dei vasi esaminati e sulla velocità del flusso sanguigno. Si tratta di un esame senza alcuna controindicazione.</p>
+
+  <p><strong>L’Ecocolordoppler</strong> è un esame diagnostico utilizzato nella Chirurgia Vascolare per valutare lo stato di salute di vene e arterie, individuando eventuali anomalie. Permette al Chirurgo Vascolare di ottenere una mappatura dettagliata del sistema circolatorio del paziente.</p>
+
+  <p><strong>Ecocolordoppler doppio distretto:</strong> esame diagnostico avanzato che consente di valutare contemporaneamente il flusso sanguigno e lo stato delle pareti vascolari in due aree anatomiche diverse, gli arti inferiori e superiori. Permette di individuare eventuali occlusioni, restringimenti o anomalie nel flusso. È particolarmente indicato nei pazienti che presentano sintomi o fattori di rischio vascolari in più aree del corpo, garantendo una valutazione completa e accurata dello stato di salute del sistema circolatorio.</p>
+
+  <p><strong>La Scleroterapia</strong> è un trattamento minimamente invasivo utilizzato per eliminare vene varicose e capillari dilatati, migliorando sia la salute circolatoria che l’aspetto estetico. Attraverso una soluzione applicata nelle vene, contribuisce alla chiusura e successivo riassorbimento del vaso trattato. È particolarmente indicata per il trattamento di piccole varici e per la rimozione di capillari superficiali, riducendo sintomi come dolore, gonfiore e crampi alle gambe.</p>
+
+  <p><strong>È possibile prenotare visite chirurgiche vascolari ed i seguenti esami:</strong></p>
+  <ul>
+    <li>Eco-Color-Doppler TSA – vasi del collo</li>
+    <li>Eco-Color-Doppler dei grossi vasi addominali</li>
+    <li>Eco-Color-Doppler arterioso agli arti inferiori/superiori</li>
+    <li>Eco-Color-Doppler venoso agli arti inferiori/superiori</li>
+    <li>Eco-Color-Doppler aorta addominale</li>
+    <li>Eco-Color-Doppler delle arterie renali</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Chirurgia plastica e Medicina estetica": `
+<p>La Medicina Estetica si occupa di migliorare la qualità della vita di chi vive un disagio per un inestetismo o ha piacere di migliorare il proprio aspetto. Propone un programma di prevenzione e terapia dell’invecchiamento generale e cutaneo e si occupa della correzione degli inestetismi dell’intero organismo.</p>
+
+  <p><strong>I trattamenti ambulatoriali da noi effettuati sono:</strong></p>
+  <ul>
+    <li>Eliminazione dei depositi localizzati di grasso per via iniettiva</li>
+    <li>Sedute di peeling su viso e décolleté contro le macchie scure dovute al fotoinvecchiamento</li>
+    <li>Sedute di biorivitalizzazione a base di un cocktail di acido ialuronico e vitamine per rassodare la cute di braccia, décolleté e viso</li>
+    <li>Filler a base di acido ialuronico per la correzione di rughe, pieghe e per creare labbra più giovani e attraenti</li>
+    <li>Trattamento professionale per la prevenzione della caduta dei capelli, il rinfoltimento e la cura del cuoio capelluto per uomo e donna</li>
+    <li>Trattamenti di ridensificazione delle guance e delle linee della marionetta</li>
+    <li>Trattamento di ringiovanimento mani</li>
+  </ul>
+
+  <p><strong>Consulenze personalizzate / Visite pre-operatorie di Chirurgia Plastica.</strong></p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Dermatologia": `
+ <p>La Dermatologia si occupa di prevenzione, diagnosi e trattamento delle malattie della pelle, dei tessuti connessi (peli e capelli, unghie, ghiandole sudoripare e sebacee) e delle patologie sessualmente trasmissibili (malattie veneree).</p>
+
+  <p><strong>Tratta le seguenti patologie:</strong></p>
+  <ul>
+    <li><strong>Dermatologia medica:</strong> diagnosi e terapia di malattie infiammatorie cutanee, prevenzione, diagnosi e trattamento delle malattie neoplastiche epidermiche (verruche, eczemi, porri, cisti sebacee, psoriasi, acne, eritemi, orticarie, invecchiamento cutaneo, macchie cutanee, infezioni fungine, sospetti casi di cancro della pelle)</li>
+    <li>Dermatochirurgia</li>
+    <li>Dermatologia allergologica</li>
+    <li>Dermatologia pediatrica</li>
+    <li>Crioterapia</li>
+    <li>Diatermocoagulazione</li>
+    <li>Dermatoscopia delle neoformazioni pigmentate</li>
+    <li>Controllo e mappatura nevi</li>
+  </ul>
+
+  <p>Il Dermatologo raccoglie un’anamnesi dettagliata per comprendere al meglio la storia medica dei pazienti e i sintomi manifestati. Segue un esame fisico accurato, durante il quale vengono osservate attentamente le zone interessate, utilizzando strumenti specifici come il dermatoscopio, per esaminare più da vicino le lesioni cutanee.</p>
+
+  <p>Il Dermatologo non solo diagnostica le condizioni cutanee, ma si occupa anche di educare il paziente riguardo alle cure appropriate e alle buone pratiche di prevenzione. In base alla valutazione effettuata, lo specialista prescrive trattamenti mirati a gestire efficacemente la salute della pelle, migliorandone al contempo l’aspetto estetico.</p>
+
+  <p>Gli appuntamenti di follow-up permettono di seguire l’evoluzione di malattie della pelle e degli annessi cutanei, assicurandosi che il piano terapeutico sia efficace e idoneo a mantenere la salute cutanea nel lungo periodo.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+        "Dietistica e Nutrizione": `
+<p><strong>Elaborazione di regimi alimentari</strong> specifici per diverse esigenze.</p>
+<p><strong>Studio di nutrizione</strong>: analisi dell'assunzione, assorbimento e utilizzo dei nutrienti e del modo in cui influenzano la salute.</p>
+<p>L'obiettivo è introdurre abitudini alimentari sostenibili nel tempo, all'interno di uno stile di vita corretto.</p>
+<p>I programmi sono <strong>personalizzati</strong> in base alle esigenze dell'individuo.</p>
+<h4>Per chi è indicato</h4>
+<ul>
+  <li>Adulti e bambini</li>
+  <li>Adolescenti in età evolutiva</li>
+  <li>Sovrappeso e obesità</li>
+  <li>Diabete</li>
+  <li>Ipertensione</li>
+  <li>Ipercolesterolemia</li>
+  <li>Ipertrigliceridemia</li>
+  <li>Patologie del tratto gastro-intestinale</li>
+  <li>Pre e post-intervento di chirurgia bariatrica o estetica</li>
+  <li>Vegetariani e vegani</li>
+  <li>Gravidanza e allattamento</li>
+  <li>Alimentazione sportiva</li>
+  <li>Celiachia</li>
+  <li>Intolleranze alimentari</li>
+</ul>
+<div class="actions">
+  <button class="btn btn-primary" onclick="window.open('https://www.miodottore.it', '_blank')"><span>📅 Prenota Visita</span></button>
+  <button class="btn btn-outline" onclick="window.location.href='mailto:info@studiomed.it'"><span>💬 Richiedi Info</span></button>
+</div>
+`,
+ "Ecografia": `
+ <p>L’Ecografia (o Ecotomografia) è un metodo di indagine diagnostica medica che utilizza ultrasuoni (suoni ad altissima frequenza).</p>
+
+  <p>È un esame non invasivo, privo di rischi e di effetti collaterali; non ha alcuna controindicazione. L’esame dura circa 20 minuti. Tale metodica viene considerata come esame di partenza e costituisce l’approccio iniziale per lo studio di numerosi organi, per poi passare, se necessario, ad esami più specifici.</p>
+
+  <p><strong>È possibile eseguire le seguenti ecografie:</strong></p>
+  <ul>
+    <li><strong>Ecografia addome completo:</strong> offre una visione dettagliata di organi interni per patologie a carico di fegato, cistifellea e vie biliari, pancreas, milza, reni, vescica, prostata, ovaie e utero. È altresì essenziale nel monitoraggio di condizioni croniche e nella guida di procedure mediche.</li>
+    <li><strong>Ecografia tiroide:</strong> per lo studio di patologie a carico della tiroide come piccoli noduli, gozzo e tiroide ipofunzionante.</li>
+    <li><strong>Ecografia scrotale:</strong> valutazione degli organi riproduttivi maschili, in particolare di scroto, testicoli ed epididimo. Evidenzia varicocele, idrocele, tumori e segni d’infertilità maschile.</li>
+    <li><strong>Ecografia parti molli:</strong> utile per tendiniti, infiammazioni articolari (spalla, gomito, polso, ginocchio, caviglia), cisti, fibromi, ecc.</li>
+    <li><strong>Ecografia muscolo-tendinea, osteoarticolare o muscoloscheletrica:</strong> studia le componenti muscolo–scheletriche sia nelle patologie di natura traumatica che degenerativa a carico di tutte le articolazioni. È utile in caso di lesioni sportive, infiammazioni, strappi muscolari, traumi o dolori persistenti. Non impiega radiazioni ionizzanti e quindi non danneggia l’organismo.</li>
+  </ul>
+
+  <p><strong>Preparazione ecografia addome:</strong> è consigliata una piccola preparazione per garantire la nitidezza delle immagini e l’efficacia dell’esame. Generalmente si richiede di evitare cibo e bevande per circa 6-8 ore prima dell’esame. Se non risulta possibile, nelle ore antecedenti si consiglia di assumere cibo ridotto e leggero, privo di scorie ai pasti principali. Il digiuno aiuta a svuotare l’intestino e a ridurre la presenza di gas, che può ostacolare la visualizzazione degli organi interni. Nella valutazione della zona pelvica è richiesto di bere acqua per riempire la vescica.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+ `,
+ "Ematologia (malattie del sangue)": `
+ <p>Specialità della medicina interna che si occupa del sangue e degli organi che compongono il sistema emopoietico. L’Ematologo studia le cause, la diagnosi, il trattamento, la prognosi e la prevenzione delle malattie del sangue e degli organi emopoietici.</p>
+
+  <p><strong>L’Ematologia riguarda:</strong></p>
+  <ul>
+    <li>Lo studio delle malattie dei globuli rossi e del metabolismo del ferro (anemie e policitemie)</li>
+    <li>I disturbi dell’emoglobina (emoglobinopatie), le coagulopatie, l’emofilia, la porpora e le trombofilie</li>
+    <li>Le disfunzioni del midollo osseo e del sistema immunitario</li>
+    <li>I tumori del sangue come linfomi e leucemie</li>
+    <li>Le gammapatie (mielosi)</li>
+    <li>Le trasfusioni e le tecniche trasfusionali</li>
+    <li>I trapianti di cellule staminali</li>
+  </ul>
+
+  <p>L’Ematologo prescrive esami del sangue e ne analizza i risultati, prendendo decisioni su ulteriori analisi e consultandosi con altri specialisti per definire il piano terapeutico più adatto al paziente. Può prescrivere terapie farmacologiche a base di farmaci immunosoppressori, biologici, fattori di crescita o chemioterapici. In altri casi può ritenere necessaria la somministrazione o la rimozione di particolari componenti del sangue.</p>
+
+  <p>È consigliata una visita ematologica in presenza di sintomi che facciano sospettare una malattia ematologica, ad esempio esami del sangue che rivelano un’alterazione dei livelli di emoglobina, globuli bianchi o rossi, oppure emorragie senza una causa apparente.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+ `,
+ "Ecografia": `
+ <p>L’Ecografia (o Ecotomografia) è un metodo di indagine diagnostica medica che utilizza ultrasuoni (suoni ad altissima frequenza).</p>
+
+  <p>È un esame non invasivo, privo di rischi e di effetti collaterali; non ha alcuna controindicazione. L’esame dura circa 20 minuti. Tale metodica viene considerata come esame di partenza e costituisce l’approccio iniziale per lo studio di numerosi organi per poi passare, se necessario, ad esami più specifici.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+
+  <p><strong>È possibile eseguire le seguenti ecografie:</strong></p>
+  <ul>
+    <li><strong>Ecografia addome completo:</strong> offre una visione dettagliata di organi interni per patologie a carico del fegato, cistifellea e vie biliari, pancreas, milza, reni, vescica, prostata, ovaie e utero, etc... È altresì essenziale nel monitoraggio di condizioni croniche e nella guida di procedure mediche.</li>
+    <li><strong>Ecografia tiroide:</strong> patologie a carico della tiroide come: piccoli noduli, il gozzo e una tiroide più piccola e meno funzionante rispetto alla normalità.</li>
+    <li><strong>Ecografia scrotale:</strong> valutazione degli organi riproduttivi maschili, in particolare patologie a carico dello scroto, dei testicoli e dell’epididimo. Evidenzia il varicocele, idrocele, tumori, segni d’infertilità maschile.</li>
+    <li><strong>Ecografia parti molli:</strong> tendiniti, infiammazioni articolari (spalla, gomito, polso, ginocchio, caviglia), cisti, fibromi, ecc...</li>
+    <li><strong>Ecografia muscolo-tendinea, osteoarticolare o muscoloscheletrica:</strong> studia le componenti muscolo–scheletriche sia nelle patologie di natura traumatica che degenerativa a carico di tutte le articolazioni. Può essere utile in caso di lesioni sportive, ad esempio infiammazioni, strappi muscolari oltre a traumi o dolori persistenti. Nello specifico, questo tipo di ecografia non impiega radiazioni ionizzanti e quindi non danneggia l’organismo.</li>
+  </ul>
+
+  <p><strong>Preparazione ecografia addome:</strong> è consigliata una piccola preparazione per garantire la nitidezza delle immagini e l’efficacia dell’esame. Generalmente, si richiede di evitare cibo e bevande per circa 6-8 ore prima dell’esame. Se non risulta possibile, nelle ore antecedenti assumere cibo ridotto e leggero, privo di scorie ai pasti principali. Il digiuno aiuta a svuotare l’intestino e a ridurre la presenza di gas, che può ostacolare la visualizzazione degli organi interni. Nella valutazione della zona pelvica è richiesto di bere acqua per riempire la vescica.</p>
+ `,
+ "Endocrinologia e Diabetologia": `
+ <h4>Endocrinologia</h4>
+  <p>L’Endocrinologo diagnostica e tratta i disturbi che colpiscono le ghiandole a secrezione interna, gli ormoni presenti nell’organismo umano e le patologie che da questi possono derivare.</p>
+
+  <p><strong>Patologie più trattate:</strong></p>
+  <ul>
+    <li>Bassa statura</li>
+    <li>Diabete</li>
+    <li>Disturbi metabolici</li>
+    <li>Infertilità</li>
+    <li>Malattie della tiroide</li>
+    <li>Menopausa</li>
+    <li>Pressione alta (ipertensione)</li>
+    <li>Problemi di colesterolo</li>
+    <li>Problemi legati alla pubertà (precoce o ritardata)</li>
+    <li>Produzione eccessiva o insufficiente di ormoni</li>
+    <li>Osteoporosi e fragilità ossea</li>
+    <li>Tumori delle ghiandole endocrine</li>
+  </ul>
+
+  <p>Molto importante per l’Endocrinologo è anche il ricorso alla diagnostica per immagini: la visualizzazione degli organi endocrini può infatti rivelare la presenza di anomalie.</p>
+
+  <h4>Diabetologia</h4>
+  <p>La Diabetologia si occupa di studiare il diabete a 360°, seguendone la diagnosi, il trattamento e il follow-up.</p>
+
+  <p>Il diabete mellito è una malattia cronica caratterizzata dall’aumento della concentrazione di glucosio nel sangue. Responsabile di questo fenomeno è un difetto dell’insulina, l’ormone deputato alla regolamentazione del trasporto di glucosio nelle cellule.</p>
+
+  <p>Quando l’insulina è prodotta in quantità non sufficiente dal pancreas, nel sangue si riscontrano livelli di glucosio più alti del normale (iperglicemia), favorendo così l’instaurarsi del diabete mellito.</p>
+
+  <p><strong>Disturbi e patologie trattate dai diabetologi:</strong></p>
+  <ul>
+    <li>Diabete</li>
+    <li>Neuropatia diabetica</li>
+    <li>Osteoporosi</li>
+  </ul>
+
+  <p>Inoltre, il diabetologo fornisce indicazioni per la misurazione domiciliare della glicemia in un’ottica di prevenzione e gestione delle complicanze del diabete a lungo termine, come problemi cardiovascolari, renali, oftalmici e neurologici.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+        "Fisioterapia": `
+<p>La Fisioterapia ha finalità preventive, curative e riabilitative in ambito ortopedico, neurologico e cognitivo, anche con tecniche manuali.</p>
+<p>Attraverso la <strong>rieducazione motoria</strong> il fisioterapista accompagna il paziente nel recupero funzionale.</p>
+<h4>Cosa offriamo</h4>
+<ul>
+  <li>Valutazione e diagnosi (anamnesi, obiettivi, pianificazione trattamento)</li>
+  <li>Rieducazione motoria e funzionale</li>
+  <li>Riabilitazione propriocettiva e posturale</li>
+  <li>Rieducazione neurologica (patologie centrali e periferiche)</li>
+  <li>Rieducazione viscerale e perineale</li>
+  <li>Educazione e rieducazione psicomotoria</li>
+  <li>Bendaggio funzionale e Kinesio Taping</li>
+</ul>
+<div class="actions">
+  <button class="btn btn-primary" onclick="window.open('https://www.miodottore.it', '_blank')"><span>📅 Prenota Visita</span></button>
+  <button class="btn btn-outline" onclick="window.location.href='mailto:info@studiomed.it'"><span>💬 Richiedi Info</span></button>
+</div>
+`,
+ "Gastroenterologia ed Endoscopia digestiva": `
+<h3>Gastroenterologia / Endoscopia Digestiva</h3>
+
+  <p>La Gastroenterologia è la scienza dedicata allo studio, diagnosi e trattamento dei disturbi e delle malattie del tratto gastrointestinale e dell’apparato digerente, che include l’esofago, lo stomaco, l’intestino tenue, il colon-retto, il fegato, le vie biliari e il pancreas. 
+  A tali organi possono corrispondere diversi disturbi, come reflusso acido, sindrome dell’intestino irritabile o patologie più complesse quali malattie infiammatorie intestinali, epatiche e pancreatiche, o celiachia.</p>
+
+  <p>La visita gastroenterologica, come esame medico specialistico, prevede da parte dello Specialista un’accurata valutazione dei sintomi riferiti dal paziente, quali dolore addominale, difficoltà digestive e alterazioni del ritmo intestinale, al fine di identificare la causa sottostante.</p>
+
+  <p>Una volta compresa l’eziologia, il Gastroenterologo, avvalendosi se necessario di accertamenti specifici come esami del sangue, ecografia addominale, gastroscopia, TAC o risonanza magnetica, potrà procedere con una terapia mirata e verificarne gli esiti ai successivi controlli.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+  `,
+  "Ginecologia e Ostetricia": `
+<p>La Ginecologia svolge attività di assistenza alla donna, con i controlli e la cura delle patologie vaginali, ovariche, uterine e ginecologiche, ponendo particolare attenzione all’apparato riproduttivo femminile per lo stato di gravidanza, per il parto ed il periodo successivo alla nascita del bambino, ma anche dei percorsi di coppia legati all’infertilità.</p>
+
+  <p><strong>Principali patologie e trattamenti:</strong></p>
+  <ul>
+    <li><strong>Diagnostica ginecologica:</strong> diagnosi prenatale, fisiopatologia della riproduzione, sterilità della coppia.</li>
+    <li><strong>Patologie ginecologiche benigne:</strong> amenorrea, fibromatosi uterina, disturbi del ciclo mestruale, patologia degenerativa uterina o ovarica, disturbi della menopausa, dolore pelvico cronico, herpes genitale, condilomi, endometriosi.</li>
+    <li><strong>Centro di Procreazione Medicalmente Assistita:</strong> trattamento dell’infertilità di coppia che propone il progetto di accompagnare i futuri genitori in tutte le tappe di questo percorso.</li>
+  </ul>
+
+  <p><strong>Presso il Poliambulatorio Luigi Einaudi è possibile eseguire:</strong></p>
+  <ul>
+    <li>Visita Ginecologica comprensiva di Ecografia Trans Vaginale</li>
+    <li>Visita Ostetrica</li>
+    <li>Visita di Consulenza per sospetto sterilità</li>
+    <li>PAP TEST (esame di screening ginecologico cruciale per la prevenzione del cancro al collo dell’utero)</li>
+    <li>HPV TEST (esame diagnostico che valuta diversi fattori e in particolare la presenza del papilloma virus)</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Logopedia": `
+<p>La Logopedia (dal greco “logos” parola e “paideia” educazione) si occupa del trattamento dei disturbi del linguaggio e della comunicazione nei bambini, negli adulti e negli anziani.</p>
+
+  <p>È opportuno chiedere una Consulenza Logopedica qualora si osservino delle difficoltà legate all’area della comunicazione, degli apprendimenti o della deglutizione, quali voce, articolazione (pronuncia dei singoli suoni e comprensibilità di un discorso), fluenza (capacità di parlare in modo sciolto), competenze comunicative e capacità di percezione uditiva.</p>
+
+
+  <p><strong>Sintomi:</strong></p>
+  <ul>
+    <li>Disturbi della voce da cause funzionali</li>
+    <li>Disturbi della pronuncia da cause organiche del vocal contract</li>
+    <li>Disturbi della fluenza</li>
+    <li>Disturbi centrali della motricità del distretto fono-articolatorio</li>
+    <li>Disturbi specifici del linguaggio</li>
+    <li>Disturbi specifici degli apprendimenti</li>
+  </ul>
+
+  <p>La precocità dell’intervento è essenziale in età evolutiva, così come in presenza di alcune patologie dell’adulto.</p>
+
+  <p>Per l’attivazione della sfera cognitiva vengono utilizzati strumenti come puzzle, libri illustrati e memory, validi aiuti per sviluppare una corretta respirazione, memoria e soglia dell’attenzione.</p>
+
+  <h4>Squilibrio Ormonale Oro-Facciale (SMOF)</h4>
+  <p>Lo Squilibrio Ormonale Oro-Facciale (SMOF) è un’alterazione dell’equilibrio delle strutture del complesso bucco-facciale trattabile con la Logopedia.</p>
+
+  <p><strong>Lo SMOF è determinato da diversi fattori:</strong></p>
+  <ul>
+    <li>Mancato passaggio di deglutizione da tipo infantile a quella di tipo adulto con una postura linguale a riposo e in deglutizione corretta</li>
+    <li>Malocclusioni dentali</li>
+    <li>Respirazione orale per presenza di patologie organiche di natura otorino-laringoiatrica e/o allergologica</li>
+    <li>Scorretta postura della lingua determinata da vizi orali (succhiamento del pollice, prolungato utilizzo di ciuccio o biberon, onicofagia, ecc.)</li>
+    <li>Traumi</li>
+    <li>Disfunzioni del sistema nervoso centrale</li>
+  </ul>
+
+  <p><strong>Lo SMOF determina alterazioni in tutte le funzioni orali:</strong></p>
+  <ul>
+    <li>Problemi di masticazione</li>
+    <li>Crescita anomala dei denti e malocclusione</li>
+    <li>Palato ogivale</li>
+    <li>Difetti di pronuncia a carico di alcuni suoni</li>
+    <li>Disturbi di natura respiratoria</li>
+    <li>Problemi posturali a carico della colonna</li>
+    <li>Alterazioni estetiche e mimiche</li>
+  </ul>
+
+  <p>Le cause dello SMOF devono essere intercettate precocemente per evitare meccanismi di compenso che, a lungo andare, alterano le normali funzionalità nel bambino e nell’adulto.</p>
+
+  <p>Il Logopedista è il professionista sanitario competente nella valutazione e rieducazione delle funzioni orali, come suzione, deglutizione, masticazione, respirazione, fonazione, mimica e gusto.</p>
+
+  <p>Il trattamento logopedico risulta coadiuvante all’ortodonzia, in quanto le anomalie posturali linguali possono compromettere l’intervento ortodontico e il ripristino di tutte le funzioni orali.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Medicina del lavoro": `
+<p>Indirizzata all’accertamento delle condizioni di salute dei lavoratori in base alla normativa vigente, si applica a tutti i settori di attività, pubblici e privati, e a tutte le tipologie di rischio secondo il D.Lgs. 81/2008 (Testo Unico in materia di tutela della salute e della sicurezza nei luoghi di lavoro).</p>
+
+  <p>L’inosservanza di tali normative comporta severe sanzioni civili e penali. Il Poliambulatorio Luigi Einaudi è in grado di fornire alla vostra azienda i servizi di medicina del lavoro (incarico Medico Competente), collaborazione per la stesura del documento di valutazione dei rischi (DVR), valutazione dei rischi specifici (fisico, chimico, biologico, ecc.), e assistenza medico-legale.</p>
+
+  <h4>I nostri servizi per la Medicina del Lavoro</h4>
+  <p>La normativa che tutela la salute e la sicurezza nei luoghi di lavoro ha stabilito precisi obblighi a carico di ogni datore di lavoro, sia per piccole, medie o grandi aziende, pubbliche o private.</p>
+
+  <p>La complessità dei requisiti a cui rispondere e le responsabilità civili o penali che ne potrebbero derivare rendono utile per i Responsabili aziendali avvalersi della consulenza di strutture esterne specializzate nel settore.</p>
+
+  <p>Il Poliambulatorio Luigi Einaudi è in grado di fornire alle aziende assistenza esperta e completa su tutte le problematiche inerenti la tutela della salute sui luoghi di lavoro, garantendo i supporti e gli interventi medico-ambientali previsti dalla legge e un puntuale rispetto delle procedure amministrative da espletare nei confronti degli Organi di Vigilanza competenti.</p>
+
+
+  <h4>Servizi di Sorveglianza Sanitaria</h4>
+  <ul>
+    <li>Sopralluoghi aziendali</li>
+    <li>Visite mediche preassuntive, preventive e periodiche</li>
+    <li>Esecuzione prelievi ed esami di laboratorio</li>
+    <li>Accertamenti diagnostici per alcol e tossicodipendenza</li>
+    <li>Accertamenti diagnostici per inquinamento acustico e ambientale</li>
+    <li>Diagnostica per abuso di sostanze e/o farmaci</li>
+    <li>Medicina del lavoro</li>
+    <li>Perizie medico-legali</li>
+    <li>Servizi di consulenza alle aziende</li>
+  </ul>
+
+  <p><strong>Sicurezza e prevenzione sul luogo di lavoro</strong> in conformità al D.Lgs. 81/2008</p>
+
+  <h4>Corsi di Formazione</h4>
+  <ul>
+    <li>Corsi di primo soccorso</li>
+    <li>Corsi di formazione (R.S.P.P, antincendio, ecc.)</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Medicina dello sport": `
+<p>Un approccio completo alla salute è fondamentale per prevenire possibili problemi legati all’attività sportiva.</p>
+
+  <p>Oltre alle visite di patologie cardiovascolari, il Poliambulatorio Luigi Einaudi offre un servizio completo di prevenzione a 360°!</p>
+
+  <p>La Medicina dello Sport ha lo scopo di valutare le capacità funzionali e strutturali per poter praticare uno <strong>sport agonistico</strong> secondo la normativa di legge.</p>
+
+  <p><strong>Comprende i seguenti test:</strong> esami delle urine, misure antropometriche, visita clinica, ECG a riposo, ECG sotto sforzo o IRI test, prova spirometrica, acuità visiva e percezione acustica.</p>
+
+  <p>Valuta inoltre le capacità funzionali e strutturali per poter praticare uno <strong>sport non agonistico</strong> secondo la normativa di legge.</p>
+
+  <p><strong>Comprende i seguenti test:</strong> misure antropometriche, visita clinica, ECG a riposo, acuità visiva e percezione acustica.</p>
+
+  <p>Per entrambi i test, in caso di minore, è necessario essere accompagnati da un genitore o tutore.</p>
+
+
+  <h4>Un team di professionisti offre agli sportivi:</h4>
+  <ul>
+    <li>Possibilità di preparazione atletica-motoria sportiva con Personal Trainer</li>
+    <li>Abilitazione preparatore atletico professionista F.I.G.C.</li>
+    <li>Fisioterapia sportiva</li>
+    <li>Recupero infortuni in ambito sportivo</li>
+    <li>Programmi dietetici e nutrizionali per sportivi</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Nefrologia": `
+<p>La Nefrologia è la disciplina che tratta le malattie che colpiscono inizialmente i reni e che successivamente possono interessare anche altri organi e apparati, oppure possono essere secondarie ad altre patologie (ad esempio endocrinologiche o diabetiche).</p>
+
+  <p>La Nefrologia propone la prevenzione, la diagnosi e la cura delle malattie nefrologiche e delle loro complicanze, incluso il trattamento sostitutivo dell’insufficienza renale cronica.</p>
+
+  <p>Nello specifico, il Nefrologo, come medico chirurgo, è specializzato nella gestione di condizioni renali acute e croniche.</p>
+
+  <p><strong>Queste condizioni possono includere:</strong></p>
+  <ul>
+    <li>Insufficienza renale acuta o cronica</li>
+    <li>Sindrome nefrosica</li>
+    <li>Glomerulonefrite</li>
+    <li>Calcoli renali (anche recidivi)</li>
+    <li>Infezioni urinarie ricorrenti</li>
+    <li>Ipertensione correlata ai reni</li>
+    <li>Escherichia Coli</li>
+  </ul>
+
+  <p>Durante la prima visita viene valutato lo stato di salute dei reni per identificare eventuali disfunzioni e/o patologie. Successivamente, verrà monitorato l’andamento della funzione renale e l’efficacia del trattamento in corso.</p>
+
+  <p><strong>È consigliabile prenotare una visita nefrologica se si manifestano i seguenti sintomi:</strong></p>
+  <ul>
+    <li>Gonfiore a gambe o viso</li>
+    <li>Aumento della pressione arteriosa</li>
+    <li>Cambiamenti nella frequenza o nel colore delle urine</li>
+    <li>Dolore lombare</li>
+    <li>Sete eccessiva (polidipsia)</li>
+    <li>Disidratazione (poliuria)</li>
+    <li>Stanchezza cronica</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Neurologia": `
+<p>Centro di diagnosi, cura e assistenza dei disturbi della memoria e cognitivi, con valutazione dell’efficienza del sistema nervoso.</p>
+
+  <p>Le malattie e le disfunzioni che colpiscono e possono compromettere la mente e l’intelletto sono tra le più temute tra tutte. I sintomi associati alle malattie neurologiche possono essere cefalee, disturbi del movimento, ictus, paralisi, nevriti. La perdita della memoria è una delle più preoccupanti: essa non è solo uno strumento essenziale per la nostra vita quotidiana, ma è il fondamento della nostra identità, del nostro essere nel mondo.</p>
+
+  <p><strong>Prestazioni offerte:</strong></p>
+  <ul>
+    <li>Visita neurologica con screening basale delle funzioni cognitive</li>
+    <li>Valutazione delle funzioni cognitive e comportamentali</li>
+    <li>Riabilitazione neuropsicologica e stimolazione cognitiva</li>
+    <li>Ginnastica mentale e potenziamento della memoria</li>
+    <li>Formazione, interventi educativi e di supporto ai familiari</li>
+    <li>Neuroauricoloterapia</li>
+    <li>Visita neurologica per disturbi del sonno</li>
+  </ul>
+
+  <p>Presso il nostro Centro è prevista attività clinica a supporto anche per percorsi lunghi, come per esempio nel caso di:
+  M. di Parkinson, M. di Alzheimer, sclerosi multipla, vasculopatia cerebrale, malattie degenerative, epilessia ed altro ancora.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+        "Medicina del sonno": `
+<h3>Disturbi del Sonno: perché è importante dormire bene?</h3>
+
+  <p>Dormire bene, sia in termini di quantità che di qualità, è fondamentale per ogni individuo. Il sonno, infatti, svolge un ruolo importante per il benessere psico-fisico ed è responsabile di una serie di funzioni indispensabili per la rigenerazione quotidiana, per invecchiare bene mantenendosi in forma, e per il successo scolastico, lavorativo e sportivo.</p>
+
+  <p>La Medicina del Sonno è una branca medica che si occupa della diagnosi e del trattamento dei disturbi del sonno e delle patologie correlate. La visita con il Medico di Medicina del Sonno permette a chi avverte un disturbo del dormire di ricevere una diagnosi ed essere indirizzato verso la terapia più opportuna.</p>
+
+  <p>Il servizio di Medicina del Sonno si caratterizza per un innovativo approccio multidisciplinare che prende la forma di un vero e proprio <strong>percorso terapeutico personalizzato e integrato</strong>, che inizia con una prima visita neurologica per il sonno, indispensabile per un corretto inquadramento diagnostico.</p>
+
+  <p><strong>I rischi collegati alla deprivazione di sonno</strong> e ai suoi disturbi sono molti, nonostante vengano spesso sottovalutati: riduzione delle capacità cognitive e dell’apprendimento, stanchezza, irritabilità, depressione e, a lungo termine, insorgenza di patologie cardiovascolari, ipertensione, obesità, disturbi psichici e diabete.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Oculistica": `
+<p>La struttura di Oculistica effettua attività di prevenzione, diagnosi, terapia medica e chirurgica, e attività di controllo di tutte le patologie dell’occhio. 
+  Si occupa inoltre di prevenzione e accertamento dei difetti visivi e della loro correzione con occhiali o lenti a contatto.</p>
+
+  <p><strong>Si dedica, con particolare riguardo, a:</strong></p>
+  <ul>
+    <li>Visite ortottiche per bambini</li>
+    <li>Chirurgia della cataratta, dello strabismo, del glaucoma e del distacco di retina</li>
+    <li>Screening, diagnosi e terapia dell’ambliopia e dello strabismo</li>
+    <li>Prevenzione, diagnosi e terapia della degenerazione maculare legata all’età</li>
+    <li>Screening, diagnosi, terapia e follow-up della retinopatia diabetica</li>
+    <li>Esame fundus per pazienti diabetici</li>
+  </ul>
+
+  <p>La prima visita prevede da parte dell’Oculista un esame completo che include la valutazione dell’acuità visiva, la misurazione della pressione intraoculare, l’esame del fondo oculare e test per la valutazione di difetti rifrattivi. 
+  Al termine della visita lo specialista può fornire, se reputa necessario, raccomandazioni per la cura degli occhi o pianificare altri esami specifici per approfondire eventuali problematiche riscontrate.</p>
+
+  <p>La visita di controllo è un appuntamento di follow-up volto a monitorare lo stato di salute degli occhi e l’efficacia dei trattamenti prescritti.</p>
+
+  <p>È consigliata la visita oculistica per chi soffre di difetti visivi come miopia, astigmatismo, ipermetropia, per il monitoraggio di cataratta o glaucoma, per fotofobia (ipersensibilità alla luce) o semplicemente per regolari controlli di routine.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Otorinolaringoiatria e Chirurgia estetica nasale": `
+<h3>Otorinolaringoiatria</h3>
+
+  <p>L’Otorinolaringoiatria si occupa del trattamento medico-chirurgico delle patologie di orecchio, naso, gola e ghiandole salivari, nonché dell’intervento chirurgico su tiroide e su paratiroide.</p>
+
+  <p><strong>Tratta diverse problematiche:</strong></p>
+  <ul>
+    <li>otite</li>
+    <li>labirintite*</li>
+    <li>vertigini</li>
+    <li>tracheite</li>
+    <li>laringite</li>
+    <li>disfagie</li>
+    <li>sinusite</li>
+    <li>russamento</li>
+    <li>asma</li>
+    <li>apnea notturna</li>
+    <li>naso: setto plastica, poli ectomia nasale, chirurgia endoscopica delle sinusiti e dei turbinati (FESS), rinoplastica funzionale</li>
+    <li>bocca e gola: tonsillectomia, adenoidectomia, microlaringoscopia ed interventi alle corde vocali</li>
+    <li>orecchio: timpanoplastica, strapedotomia, drenaggi trans-timpanici</li>
+    <li>terapia del russamento</li>
+    <li>capo e collo: asportazione nevi e cisti del collo</li>
+  </ul>
+
+  <p>Presso il nostro Centro è possibile effettuare una visita accurata, comprensiva di <strong>Esame Audiometrico</strong>, tramite cuffie e una zona silente, utile a valutare i differenziali acustici e il livello di decibel del suono percepiti dal paziente.</p>
+
+  <p><strong>Si esegue inoltre:</strong></p>
+  <ul>
+    <li>Fibroscopia nasale e laringea</li>
+    <li>Esame audio impedenziometrico</li>
+    <li>Esame vestibolare con bedside examination</li>
+    <li>Diagnostica per russatori ed apnoici</li>
+    <li>Chirurgia del russamento</li>
+    <li>Chirurgia delle vie lacrimali</li>
+    <li>Chirurgia della patologia dei seni para nasali</li>
+    <li>Chirurgia del collo e della laringe</li>
+    <li>Chirurgia endoscopia delle ghiandole salivari</li>
+  </ul>
+
+  <h4>La Labirintite</h4>
+  <p>Si tratta di un’infiammazione acuta a carico dell’orecchio interno che si verifica in seguito a un’infezione delle vie respiratorie. Si caratterizza per intense vertigini, tintinnio forte, nistagmo e andatura barcollante. Insieme a una vertigine transitoria, presenta una fistola tra orecchio medio e orecchio interno. Le vertigini sono il principale sintomo che consente di riconoscere e differenziare la neurite dalla patologia idropica (sindrome di Ménière) e dalla vertigine parossistica: tutte manifestazioni che impattano significativamente sulla qualità della vita di chi ne soffre perché impediscono di svolgere normali attività come la guida di veicoli, il lavoro e la pratica di attività fisica.</p>
+
+  <p><strong>Altri sintomi tipici delle vertigini periferiche sono:</strong></p>
+  <ul>
+    <li>acufeni</li>
+    <li>dolore all’orecchio / sensazione di orecchio ovattato</li>
+    <li>nausea</li>
+    <li>vomito</li>
+    <li>senzazione di stordimento</li>
+    <li>aumento della salivazione</li>
+    <li>instabilità</li>
+    <li>abbassamento del tono dell’umore</li>
+  </ul>
+
+  <p>La sintomatologia si acuisce (ovvero si intensifica) ogni volta che si effettuano movimenti della testa bruschi o veloci. Successivamente, in base alla sintomatologia e al quadro clinico del singolo paziente, possono venire prescritti farmaci, tra cui antidolorifici, antistaminici, antibiotici e corticosteroidi. A questi si associano spesso anche esercizi e trattamenti fisici utili a ridurre la sintomatologia dolorosa. Il consiglio, quando si verifica un attacco di vertigini, è quello di mantenere la testa ferma e, se possibile, diminuire l’illuminazione dell’ambiente circostante, evitare movimenti improvvisi del capo e ridurre drasticamente l’utilizzo di schermi retroilluminati (smartphone, computer, televisione).</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+
+`,
+"Omeopatia": `
+<h3>Omeopatia</h3>
+
+  <p><em>Terapie e tecniche alternative non convenzionali</em></p>
+  <p><strong>…un’alternativa alla medicina tradizionale…</strong></p>
+
+  <p>L’Omeopatia, come medicina non convenzionale, propone un tipo di cura che guarda alla totalità della persona e non solo alla malattia in sé.</p>
+
+  <blockquote>
+    “Per guarire una malattia, bisogna somministrare all’individuo che ne è affetto un rimedio che gli provocherebbe, se fosse sano, la malattia che lo affligge.”  
+    <br><strong>— Christian Samuel Friedrich Hahnemann</strong>
+  </blockquote>
+
+  <p>Elemento cardine della scienza omeopatica è costituito dalla <strong>Legge di Hering</strong> (medico omeopata tedesco dell’Ottocento).  
+  Quest’ultima segnala se la cura sta procedendo nella direzione giusta e quanto tempo ci vorrà per la guarigione.</p>
+
+  <p><strong>La Legge di Hering è espressa da quattro principi fondamentali:</strong></p>
+  <ul>
+    <li>La malattia progredisce dall’esterno all’interno, mentre quando è curata guarisce dall’interno all’esterno.  
+    La malattia ha quindi direzione centripeta, mentre la guarigione ha direzione centrifuga.</li>
+    <li>La guarigione dovrà verificarsi dall’alto verso il basso: partirà quindi dal piano psicologico-mentale per arrivare al piano fisico-corporeo.</li>
+    <li>La guarigione dovrà iniziare dagli organi più importanti e proseguire in quelli di importanza minore.</li>
+    <li>La guarigione avviene in ordine inverso alla comparsa dei sintomi.</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Ortopedia": `
+<h3>Ortopedia</h3>
+
+  <p>L’Ortopedia si occupa del trattamento, delle malformazioni e dei problemi funzionali dell’apparato muscolo-scheletrico di carattere acuto, cronico o degenerativo e delle strutture ad esso associate, quali muscoli e legamenti.</p>
+
+  <p>L’Ortopedico è in grado di diagnosticare tali problematiche, tra cui infezioni, traumi sportivi, fratture, problemi alle articolazioni, osteoporosi e tumori alle ossa.  
+  L’obiettivo è quello di preservare e recuperare la funzionalità e la mobilità delle strutture articolari del paziente.</p>
+
+  <p><strong>Nello specifico, le aree più spesso trattate dall’Ortopedico sono:</strong></p>
+  <ul>
+    <li><strong>Spalla:</strong> sindrome da conflitto sotto-acromiale, lesione della cuffia dei rotatori, instabilità della spalla, lussazione, artrosi</li>
+    <li><strong>Ginocchio:</strong> artrosi, lesioni del menisco, lesioni delle cartilagini, legamenti crociati, sindrome femoro-rotulea</li>
+    <li><strong>Problemi all’Anca:</strong> sostituzione protesica dell’anca in caso di degenerazione articolare avanzata.  
+    Dai nostri specialisti viene applicata una tecnica mininvasiva detta <em>Fast Track</em>, che migliora la gestione peri-operatoria del paziente, consentendo un recupero precoce e con minor dolore.</li>
+    <li><strong>Mano:</strong> sindrome del tunnel carpale e problematiche correlate</li>
+    <li><strong>Piede:</strong> patologie legate a piattismo, cavismo, alluce valgo, dito a martello, dismorfismi della caviglia</li>
+    <li><strong>Fratture</strong></li>
+    <li><strong>Scoliosi</strong></li>
+  </ul>
+
+  <p>Possono essere un valido aiuto anche le <strong>infiltrazioni eseguite dallo specialista</strong>, come quelle con acido ialuronico o cortisone.  
+  Le infiltrazioni ecoguidate, grazie all’ausilio dell’ecografo, garantiscono un’applicazione più precisa nella zona interessata.</p>
+
+  <h4>Alluce Valgo e Dito a Martello</h4>
+  <p>L’Alluce Valgo è una deformità del piede molto diffusa, caratterizzata dalla deviazione della falange verso l’esterno.  
+  Si associa alla presenza di una tumefazione dolente alla sua base, la cosiddetta “cipolla”, ovvero una borsite provocata dallo sfregamento con la calzatura.  
+  Può causare, oltre a lesioni cutanee, anche deformazioni al secondo e terzo dito, definiti a martello.</p>
+
+  <p>Una <strong>tecnica innovativa e mininvasiva</strong> per un recupero rapido e completo prevede due o tre micro-incisioni, attraverso le quali si svolgono le varie fasi dell’intervento.  
+  Sotto controllo radiografico vengono poi eseguiti, in maniera precisa, i gesti correttivi della deformità.</p>
+
+  <p><strong>I vantaggi della tecnica mininvasiva dell’alluce valgo:</strong></p>
+  <ul>
+    <li>nessuna cicatrice</li>
+    <li>ridotto trauma chirurgico</li>
+    <li>ridotto sanguinamento</li>
+    <li>ridotto dolore post-operatorio</li>
+    <li>ridotto tempo di degenza</li>
+    <li>più rapido recupero funzionale rispetto alle altre tecniche chirurgiche</li>
+  </ul>
+
+  <h4>Patologie dell’Anca – La Protesi d’Anca</h4>
+  <p>In presenza di una degenerazione articolare di grado avanzato, quando il consumo della cartilagine è eccessivo per essere trattato con infiltrazioni, può rendersi necessaria la sostituzione protesica dell’anca.  
+  Tale metodica, un tempo riservata al paziente anziano, è stata perfezionata negli anni, consentendo di estendere l’indicazione chirurgica a pazienti più giovani e attivi.</p>
+
+  <p>Grazie alla protesi d’anca è possibile riprendere una vita lavorativa, ricreativa e relazionale soddisfacente.  
+  L’anca, una volta sostituita, permette di iniziare subito il processo riabilitativo, finalizzato al recupero del movimento e al rinforzo dei muscoli.</p>
+
+  <p>Il corretto funzionamento della protesi viene mantenuto se si tengono i muscoli in allenamento.  
+  Periodicamente è consigliato effettuare dei controlli clinici e delle radiografie dell’anca, per monitorare eventuali fenomeni di usura della protesi o l’invecchiamento dell’osso.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Pneumologia": `
+<p>La Pneumologia è una disciplina che si occupa dello studio della funzione respiratoria e delle malattie broncopolmonari, come asma e bronchite, con particolare interesse per le patologie ostruttive delle vie aeree, le infezioni respiratorie, la broncopneumopatia cronica ostruttiva, la polmonite, la tubercolosi, il tumore polmonare e le malattie interstiziali del polmone.</p>
+
+  <p>Essa si fa carico della gestione a lungo termine dell’insufficienza respiratoria, dell’ossigenoterapia e della ventilazione meccanica non invasiva.</p>
+
+  <p><strong>Prestazioni offerte:</strong></p>
+  <ul>
+    <li><strong>Visita pneumologica con esame spirometrico:</strong>  
+      generalmente le visite pneumologiche comprendono l’esame spirometrico di accertamento.  
+      Combina la valutazione medica approfondita del paziente con un test diagnostico fondamentale per la misurazione della funzionalità polmonare.  
+      Questa visita contribuisce a identificare, diagnosticare e monitorare malattie respiratorie come l’asma, la fibrosi polmonare e altre condizioni che influenzano la capacità respiratoria.
+    </li>
+    <li><strong>Visita di controllo pneumologica:</strong>  
+      è incentrata sul monitoraggio e la gestione delle patologie respiratorie croniche o in fase di trattamento.  
+      Il Pneumologo valuta l’andamento della malattia e l’efficacia della terapia in atto.
+    </li>
+    <li><strong>Spirometria semplice:</strong>  
+      test diagnostico rapido utilizzato per misurare la funzionalità polmonare del paziente, valutando la capacità dei polmoni di inspirare ed espirare l’aria.  
+      Durante questo esame, il paziente espira attraverso un boccaglio collegato a uno strumento che registra il volume e la velocità dell’aria emessa, fornendo dati utili alla valutazione clinica.
+    </li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Podologia": `
+ <p>La Podologia studia la fisiologia, la patologia e i trattamenti del piede.  
+  Il Podologo tratta gli stati algici del piede dall’età pediatrica a quella geriatrica.</p>
+
+  <p>Valuta l’anatomia del piede e la sua funzionalità (in statica e dinamica) con tecniche diagnostiche quali la <strong>Podoscopia</strong> e la <strong>Baropodometria</strong>.  
+  Provvede alla <strong>riabilitazione del passo</strong> con tecniche riabilitative attive e passive, e con l’utilizzo di presidi ortesici plantari di tipo biomeccanico e posturale.</p>
+
+  <p>Esegue lo <strong>screening del piede diabetico</strong> e provvede alla medicazione delle ulcere.  
+  Il Podologo trova campo di applicazione delle proprie conoscenze anche in <strong>Posturologia</strong>, in quanto il piede è un importante recettore del Sistema Tonico Posturale (STP).</p>
+
+  <p>Assiste inoltre all’educazione dei pazienti con patologie a rischio e svolge il suo lavoro in équipe, con i colleghi medici e specialisti in vari settori, assumendo un ruolo importante nelle decisioni terapeutiche e preventive da prendere.</p>
+
+  <p><strong>Trattamenti correttivi e terapeutici delle patologie del piede:</strong></p>
+  <ul>
+    <li>Ulcere diabetiche</li>
+    <li>Ipercheratosi (callosità)</li>
+    <li>Onicopatie (patologie delle unghie)</li>
+    <li>Griffe delle dita (deformità e infiammazione)</li>
+    <li>Alluce valgo</li>
+    <li>Sperone calcaneare</li>
+    <li>Ragade</li>
+    <li>Neuroma di Morton</li>
+    <li>Studio degli ipercarichi</li>
+    <li>Problemi di dolorabilità del piede</li>
+    <li>Correzione dell’appoggio e dei deficit funzionali evidenziabili durante il cammino</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Psichiatria e Psicologia": `
+<h4>Psicologia</h4>
+  <p>La Psicologia si occupa della prevenzione, diagnosi, cura e riabilitazione cognitiva, riferite a tutto il ciclo di vita dell’individuo, dal bambino all’anziano.  
+  Studia il comportamento degli individui e i processi mentali che influenzano il modo in cui le persone elaborano le informazioni, prendono decisioni e rispondono agli stimoli esterni.</p>
+
+  <p>Gli psicologi del nostro staff forniscono terapia e supporto psicologico per affrontare le sfide personali legate alle varie fasi della vita e migliorare il proprio benessere mentale.</p>
+
+  <p>Si prende cura dei bisogni sanitari di tipo psicologico del singolo, della famiglia e dei gruppi, mediante interventi ambulatoriali e attività consulenziali rivolte anche ad altri servizi sanitari, educativi, scolastici e giudiziari.</p>
+
+  <h5>Psicologia dello sviluppo, minori e famiglie</h5>
+  <p>Preparazione e supporto alla nascita e alla genitorialità, diagnosi psicologica e valutazione del livello di sviluppo dei minori, psicologia clinica, psicoterapie, riabilitazione cognitiva e valutazione dei Disturbi Specifici di Apprendimento.</p>
+
+  <p><strong>Ci si può rivolgere allo psicologo per:</strong></p>
+  <ul>
+    <li>Difficoltà durante particolari fasi dello sviluppo</li>
+    <li>Disarmonie relazionali</li>
+    <li>Psicopatologie dello sviluppo e difficoltà negli apprendimenti</li>
+    <li>Disturbi nutrizionali</li>
+    <li>Disagi o crisi del bambino, del ragazzo o della famiglia</li>
+    <li>Gestione dello stress, ansia e bassa autostima</li>
+  </ul>
+
+  <h5>Psicologia clinica – Età adulta e senile</h5>
+  <p>Valutazioni, diagnosi e assessment psicologico, supporto a stili di vita salutari, anche in fase di ricovero ospedaliero.</p>
+
+  <h4>Psichiatria</h4>
+  <p>La Psichiatria è la branca specialistica della medicina che si occupa dello studio sperimentale, della prevenzione, della cura e della riabilitazione dei disturbi mentali.</p>
+
+  <p>Lo scopo fondamentale della psichiatria viene ottenuto prendendo in considerazione diversi ambiti:</p>
+  <ul>
+    <li>Medico-farmacologici</li>
+    <li>Neurologici</li>
+    <li>Psicologici</li>
+    <li>Giuridici</li>
+  </ul>
+
+  <p>Il nostro obiettivo è quello di fornire al paziente gli strumenti necessari per navigare attraverso le proprie emozioni in modo più efficace, migliorando la qualità della vita e rafforzando la resilienza.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+        "Reumatologia": `
+<p>La Reumatologia si occupa delle malattie reumatiche, patologie caratterizzate dall'infiammazione di articolazioni, muscoli, ossa e, a volte, altri organi interni.</p>
+<p>Le malattie più spesso trattate dal Reumatologo sono:</p>
+<ul>
+<li>Reumatismi infiammatori, articolari acuti e l'Artrite Reumatoide;</li>
+<li>Connettiviti, ad esempio il lupus eritematoso sistemico, Sindrome di Sjogren, Polimiosite, Sclerodermia e Vasculiti;</li>
+<li>Artriti causate da agenti infettivi;</li>
+<li>Artropatie da alterazioni metaboliche, come la gotta;</li>
+<li>Spondilo artropatie;</li>
+<li>Malattie degenerative come l'Artrosi;</li>
+</ul>
+<div class="actions">
+  <button class="btn btn-primary" onclick="window.open('https://www.miodottore.it', '_blank')"><span>📅 Prenota Visita</span></button>
+  <button class="btn btn-outline" onclick="window.location.href='mailto:info@studiomed.it'"><span>💬 Richiedi Info</span></button>
+</div>
+`,
+"Senologia": `
+<p>La Senologia è una scienza multidisciplinare che studia la patologia mammaria e ha come obiettivo la prevenzione, la diagnosi e la cura delle malattie della mammella, in particolare della patologia maligna (tumore al seno).  
+  Lo specialista pone particolare attenzione alla <strong>prevenzione oncologica</strong>, informando le donne sui rischi e sulle strategie di difesa adottabili.</p>
+
+  <p>Le patologie più spesso trattate dal Senologo includono: ascessi, cisti, mastiti, processi infiammatori e infettivi di vario tipo, tumori benigni della mammella e, soprattutto, neoplasie mammarie.</p>
+
+  <p><strong>Si raccomanda di rivolgersi al Senologo in presenza di:</strong></p>
+  <ul>
+    <li>Dolore localizzato o diffuso al seno</li>
+    <li>Arrossamenti e/o tumefazioni</li>
+    <li>Noduli palpabili o visibili</li>
+    <li>Alterazioni del capezzolo</li>
+    <li>Perdite sierose o ematiche dal capezzolo</li>
+    <li>Cambiamenti della pelle o della forma del seno</li>
+  </ul>
+
+  <p><strong>Presso il Poliambulatorio Luigi Einaudi è possibile effettuare:</strong></p>
+  <ul>
+    <li>Visita specialistica senologica</li>
+    <li>Palpazione</li>
+    <li>Ecografia mammaria / senologica</li>
+  </ul>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Urologia e Andrologia": `
+<h3>Urologia</h3>
+
+  <p>L’Urologia si occupa del trattamento delle patologie di interesse urologico che riguardano, nella donna, l’apparato urinario e, nell’uomo, l’apparato genito–urinario.</p>
+
+  <p>L’Urologo ha come obiettivo quello di diagnosticare, escludere o monitorare disturbi di carattere urologico, tra cui:</p>
+  <ul>
+    <li>Incontinenza</li>
+    <li>Infezioni e calcolosi delle vie urinarie</li>
+    <li>Disturbi legati alle funzioni sessuali</li>
+    <li>Neoplasie</li>
+    <li>Infezioni genitali maschili e femminili</li>
+    <li>Prostatiti (nell’uomo)</li>
+  </ul>
+
+  <p><strong>L’Urologo inoltre esegue:</strong></p>
+  <ul>
+    <li>Visite specialistiche ed ecografie</li>
+    <li>Cistoscopie</li>
+    <li>Mapping prostatico</li>
+    <li>Circoncisione</li>
+    <li>Fimosi</li>
+    <li>Frenulopatia</li>
+    <li>Incurvamento congenito del pene</li>
+    <li>Recupero testicolare degli spermatozoi</li>
+    <li>Chirurgia dell’idrocele</li>
+    <li>Chirurgia del varicocele</li>
+  </ul>
+
+  <h5>Prima visita urologica</h5>
+  <p>Il medico raccoglie informazioni dettagliate sulla storia clinica del paziente, poi esegue un esame fisico dei genitali esterni maschili per verificare la presenza di gonfiori o altre anomalie.  
+  L’esame si conclude con una valutazione digitale rettale per controllare dimensioni, consistenza e presenza di eventuali noduli o aree sospette nella prostata.</p>
+
+  <p>L’Urologo può inoltre prescrivere esami aggiuntivi come esami del sangue o delle urine, ecografie, uroflussometria o cistoscopia.</p>
+
+  <h5>Visita urologica di controllo</h5>
+  <p>È finalizzata alla discussione dei risultati degli esami precedentemente prescritti o all’aggiornamento delle opzioni di trattamento disponibili.</p>
+
+  <p><strong>Si consiglia, con l’aumentare dell’età, di effettuare controlli periodici</strong> per prevenire o intervenire tempestivamente su eventuali patologie dell’apparato uro-genitale, la cui incidenza aumenta progressivamente nel tempo.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Vulnologia (trattamento e cura ulcere)": `
+ <p>La Vulnologia è la disciplina che studia le <strong>ulcere cutanee croniche</strong>, introducendo medicazioni innovative per favorirne la guarigione.  
+  Le ulcere cutanee più comuni sono quelle da decubito e quelle causate da insufficienza venosa o arteriosa.</p>
+
+  <p>La <strong>visita vulnologica</strong> ha come obiettivo la presa in carico globale del paziente, attraverso la diagnosi e il trattamento sia della causa che della lesione stessa.</p>
+
+  <p>Il trattamento si avvale di <strong>medicazioni avanzate e interattive</strong>, con l’eventuale utilizzo di presidi ad elevata tecnologia, che possono essere associate a bendaggi o terapie complementari.</p>
+
+  <p>In caso di necessità, lo specialista proporrà il corretto iter di <strong>consulenze specialistiche</strong> per completare il percorso terapeutico.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`,
+"Neuropsicomotricità": `
+ <h3>Neuropsicomotricità Evolutiva (Psicomotricità per Bambini)</h3>
+
+  <p>La <strong>neuropsicomotricità evolutiva</strong>, comunemente chiamata <strong>psicomotricità per bambini</strong>, è una terapia che sostiene lo sviluppo personale e cognitivo del bambino attraverso il movimento.</p>
+
+  <p>Gli interventi neuropsicomotori consentono al piccolo paziente di ottenere una piena padronanza del proprio corpo e di correggere comportamenti disfunzionali.  
+  Oggi sappiamo che il movimento non è solo un atto meccanico, ma un elemento essenziale per lo sviluppo fisico, mentale e socio-affettivo del bambino.</p>
+
+  <p>Il corpo è il mezzo con cui il bambino esplora il mondo e si relaziona con gli altri nei primi anni di vita: il movimento diventa quindi lo strumento per <strong>correggere alterazioni comportamentali e relazionali</strong>.</p>
+
+  <p>L’infanzia è il periodo in cui la fisicità assume un’importanza maggiore rispetto alle parole. Gli esercizi di psicomotricità per bambini possono essere utilizzati come strumento di conoscenza e percezione dei movimenti corporei, con lo scopo di aumentare la fiducia in sé stessi.</p>
+
+  <h5>Le sessioni di neuropsicomotricità per bambini possono essere svolte per:</h5>
+  <ul>
+    <li>Valutazione per sospetta disgrafia</li>
+    <li>Valutazione neuropsicomotoria</li>
+    <li>Trattamento neuropsicomotorio</li>
+    <li>Osservazione in contesto scolastico</li>
+  </ul>
+
+  <p>Il trattamento si svolge attraverso <strong>giochi, attività di disegno, percorsi, stimoli e movimenti a corpo libero</strong>.  
+  Le sedute avvengono in un <strong>clima sereno e giocoso</strong> e prevedono un lavoro mirato sia sulla <strong>motricità fine</strong> che su quella <strong>grosso-motoria</strong>.</p>
+
+  <p>Lo specialista <strong>TNPEE</strong> (Terapista della Neuro e Psicomotricità dell’Età Evolutiva) possiede competenze di anatomia, pedagogia e neurofisiologia, ed è in grado di intervenire sul modo in cui il bambino percepisce il proprio corpo in relazione all’ambiente circostante.</p>
+
+  <p>Il percorso terapeutico inizia con un’attenta osservazione del bambino e prosegue con l’elaborazione di un <strong>programma riabilitativo personalizzato</strong>.  
+  È fondamentale che il terapista instauri un rapporto di fiducia ed empatia: solo attraverso la serenità dei piccoli pazienti la terapia può esprimere pienamente i suoi benefici.</p>
+
+  <div class="actions">
+    <button class="btn btn-primary"><span>📅 Prenota Visita</span></button>
+    <button class="btn btn-outline" onclick="window.location.href='tel:0173742501'"><span>📞 Richiedi Info</span></button>
+  </div>
+`
+      };
+
+      // Create navigation chips
+      SPECS.forEach((spec, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'nav-chip';
+        chip.dataset.index = index.toString();
+        chip.textContent = spec.title;
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('.nav-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          const targetItem = document.querySelector(`.timeline-item[data-index="${index}"]`);
+          if (targetItem) {
+            const yOffset = -150;
+            const y = targetItem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        });
+        navChips.appendChild(chip);
+      });
+
+      // Build timeline items
+      SPECS.forEach((spec, index) => {
+        const colorObj = COLORS[index % COLORS.length];
+        const side = index % 2 === 0 ? 'left' : 'right';
+        const item = document.createElement('div');
+        item.className = `timeline-item ${side}`;
+        item.style.transitionDelay = `${index * 0.04}s`;
+        item.dataset.index = index.toString();
+        item.style.setProperty('--dot-color', colorObj.value);
+        
+        // Controlla se ha contenuto
+        const hasContent = CONTENT[spec.title] && CONTENT[spec.title].trim() !== '';
+        const cardClass = hasContent ? 'card clickable' : 'card non-clickable';
+        const shortText = hasContent ? '<p class="short">Scopri di più su questa specializzazione →</p>' : '';
+        const clickHint = hasContent ? '<div class="click-hint">✨ Clicca per saperne di più</div>' : '';
+        
+        item.innerHTML = `
+          <div class="${cardClass}" style="color:${colorObj.value};">
+            <h3 style="color:${colorObj.value};">${spec.title}</h3>
+            ${shortText}
+            ${clickHint}
+          </div>
+        `;
+        timeline.appendChild(item);
+
+        // Add click event solo se ha contenuto
+        if (hasContent) {
+          const card = item.querySelector('.card');
+          card.addEventListener('click', () => {
+            openModal(spec.title, colorObj.value);
+          });
+        }
+      });
+
+      // Reveal items on scroll
+      function reveal() {
+        const items = document.querySelectorAll('.timeline-item');
+        const windowHeight = window.innerHeight;
+        items.forEach((item) => {
+          const top = item.getBoundingClientRect().top;
+          if (top < windowHeight - 100) item.classList.add('visible');
+        });
+      }
+      
+      window.addEventListener('scroll', reveal);
+      reveal();
+
+      // Update active chip on scroll
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const items = document.querySelectorAll('.timeline-item');
+            const chips = document.querySelectorAll('.nav-chip');
+            items.forEach((item, idx) => {
+              const rect = item.getBoundingClientRect();
+              const isInView = rect.top >= 0 && rect.top <= window.innerHeight / 2;
+              if (isInView) {
+                chips.forEach(c => c.classList.remove('active'));
+                if(chips[idx]) chips[idx].classList.add('active');
+              }
+            });
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+
+      // Modal functions
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modal = document.getElementById('modal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      const modalClose = document.getElementById('modalClose');
+
+      function openModal(title, color) {
+        modalTitle.textContent = title;
+        modalTitle.style.color = color;
+        const body = CONTENT[title] || `<p>Contenuto non disponibile per <strong>${title}</strong>.</p>`;
+        modalBody.innerHTML = body;
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modalOverlay.classList.add('closing');
+        setTimeout(() => {
+          modalOverlay.classList.remove('active', 'closing');
+          document.body.style.overflow = '';
+        }, 500);
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Animate stats counter
+      function animateStats() {
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+          const target = parseInt(stat.getAttribute('data-target') || '0', 10);
+          const duration = 2000;
+          const step = target / (duration / 16);
+          let current = 0;
+          const counter = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              stat.textContent = target + (stat.textContent.includes('+') ? '+' : '');
+              clearInterval(counter);
+            } else {
+              stat.textContent = Math.floor(current).toString();
+            }
+          }, 16);
+        });
+      }
+      
+      animateStats();
+      updateScrollIndicators();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Dottori — Poliambulatorio Luigi Einaudi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --accent-pink:#ff1f7d;
+  --accent-orange:#ff8c00;
+  --accent-green:#4caf50;
+  --bg1:#ffe8f0;
+  --bg2:#fff5f8;
+  --sidebar-w: 280px; /* larghezza sidebar (modificabile) */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html, body { margin:0; padding:0; height:100%; overflow-x:hidden; font-family:'Inter',sans-serif; }
+body{
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+   /* Sidebar Desktop */
+        .sidebar-desktop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-sidebar {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logo-sidebar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.05) 0%, transparent 100%);
+            color: #ff8c00;
+            border-left-color: #ff8c00;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.1) 0%, transparent 100%);
+            color: #ff1f7d;
+            border-left-color: #ff1f7d;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            display: none;
+        }
+
+        /* Mobile Hamburger */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar-mobile {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar-mobile.active {
+            left: 0;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+  /* Main content */
+.main { margin-left:280px; padding:60px 40px 140px; min-height:100vh; position:relative; }
+
+/* Hero sezione dottori senza box trasparente */
+.doctors-hero { 
+  text-align:center; 
+  margin-top:80px; /* distanza dal top della pagina */
+}
+
+.doctors-hero h1 { 
+  font-size: 80px;       /* dimensione testo */
+  font-weight: 900; 
+  line-height: 1.1; 
+  margin-bottom: 20px;
+
+  background: linear-gradient(90deg, #ff1f7d, #ff8c00); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+}
+
+
+.doctors-hero p { 
+  font-size: 30px;
+  margin-top:10px; 
+}
+
+  
+/* Main content shifted to the right to leave space for the fixed sidebar */
+main{
+  margin-left: var(--sidebar-w);
+  padding:44px 48px 120px;
+  min-height:100vh;
+  position:relative;
+  z-index:1;
+}
+
+/* Header & Orbit */
+.header{display:flex;flex-direction:column;align-items:flex-start;gap:20px;margin-bottom:30px}
+.kicker{display:inline-block;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,var(--accent-pink),#ff4f9d);color:#fff;font-weight:900}
+.title{font-weight:900;font-size:42px;margin:14px 0}
+.lead{color:#444;max-width:800px}
+.orbit-stage{position:relative;margin-top:20px;min-height:700px;perspective:1000px;display:flex;flex-wrap:wrap;justify-content:center;gap:30px;transition:all 1s ease}
+.node{width:340px;height:340px;border-radius:24px;display:flex;align-items:center;justify-content:center;position:relative;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.9,.3,1),opacity .4s}
+.card{width:100%;height:100%;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(255,255,255,.92));border-radius:24px;box-shadow:0 18px 40px rgba(0,0,0,.08);padding:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .3s ease}
+.card:hover{transform:scale(1.04)}
+.initials{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:40px;color:#fff;margin-bottom:16px;background:linear-gradient(135deg,var(--accent-pink),var(--accent-orange));box-shadow:0 8px 24px rgba(255,31,125,.12)}
+.name{font-weight:900;font-size:24px;text-align:center;margin-bottom:8px}
+.spec{font-weight:700;color:var(--accent-orange);font-size:18px;text-align:center}
+@keyframes pulseSlow{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+.pulse{animation:pulseSlow 4s ease-in-out infinite}
+
+
+
+/* PARTICLES: fixed and behind everything so it does NOT affect layout */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Modal overlay */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:2000}
+.modal{background:#fff;border-radius:20px;max-width:700px;width:90%;max-height:80vh;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,0.25);}
+.modal-header{padding:30px 40px 10px 40px;border-bottom:1px solid rgba(0,0,0,0.05)}
+.modal-header h2{margin:0;font-size:28px;font-weight:900;color:var(--accent-pink)}
+.modal-header h3{margin-top:4px;font-size:20px;color:var(--accent-orange)}
+.modal-body{padding:20px 40px 40px 40px;overflow-y:auto;font-size:18px;line-height:1.6;color:#333}
+.modal-close{position:absolute;top:20px;right:24px;font-size:28px;cursor:pointer;color:#999;transition:color .3s ease}
+.modal-close:hover{color:var(--accent-pink)}
+
+/* Footer */
+        .footer-luxury.light {
+            position: relative;
+            background: linear-gradient(180deg, #ffffff 0%, #fff8f3 100%);
+            color: #333;
+            margin-left: 280px;
+            padding: 100px 0 50px;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 140, 0, 0.15);
+            box-shadow: inset 0 10px 40px rgba(255, 140, 0, 0.05);
+        }
+
+        .footer-luxury.light .footer-glow {
+            position: absolute;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.18), rgba(255, 31, 125, 0.12), transparent 70%);
+            filter: blur(60px);
+            animation: glowMove 8s ease-in-out infinite alternate;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .footer-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: #222;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-slogan {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .footer-links h4,
+        .footer-contact h4,
+        .footer-social h4 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-links h4::after,
+        .footer-contact h4::after,
+        .footer-social h4::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            border-radius: 3px;
+        }
+
+        .footer-links ul,
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .footer-links li,
+        .footer-contact li {
+            margin-bottom: 10px;
+            font-size: 19px;
+            color: rgba(0, 0, 0, 0.6);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-links li a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-links li:hover,
+        .footer-contact li:hover {
+            color: #ff4f9d;
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ff1f7d;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(135deg, #ff8c00, #ff4f9d);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.3);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 30px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-bottom: 8px;
+        }
+
+        .footer-credit {
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .heart {
+            color: #ff4f9d;
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* === FOOTER MOBILE OPTIMIZATION (2025-10-20) === */
+@media (max-width: 768px) {
+  .footer-luxury.light {
+    margin-left: 0 !important;
+    padding: 40px 20px 30px;
+    text-align: center;
+  }
+  .footer-luxury.light .footer-container { padding: 0; }
+  .footer-luxury.light .footer-grid {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 28px; margin-bottom: 40px;
+  }
+  .footer-luxury.light .footer-logo { font-size: 28px; }
+  .footer-luxury.light .footer-slogan { font-size: 14px; margin-top: 6px; }
+  .footer-luxury.light h4 { font-size: 18px; margin-bottom: 10px; }
+  .footer-luxury.light ul { padding: 0; }
+  .footer-luxury.light li { list-style: none; margin-bottom: 6px; font-size: 16px; }
+  .footer-luxury.light .social-icons { justify-content: center; gap: 12px; }
+  .footer-luxury.light .social-icons a { width: 40px; height: 40px; }
+  .footer-luxury.light .footer-bottom { padding-top: 16px; }
+  .footer-luxury.light .footer-bottom p { font-size: 13px; line-height: 1.4; }
+  .footer-luxury.light .footer-glow { width: 600px; height: 200px; bottom: -80px; filter: blur(40px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+  :root { --sidebar-w: 0px; } /* annulla lo spazio della sidebar */
+  main { margin-left: 0; padding:24px; }
+  .sidebar-desktop { display: none; }
+  .footer-container { padding-left: 48px; padding-right: 24px; }
+  .node { width: 300px; height: 300px; }
+  .initials { width: 80px; height: 80px; font-size:32px; }
+  .name { font-size:20px; }
+  .spec { font-size:16px; }
+}
+
+@media (max-width: 640px) {
+  .node { width: 280px; height: 280px; }
+}
+
+/* --- Typography & spacing --- */
+.modal-body { line-height: 1.75; }
+.modal-body p { margin: 0 0 14px 0; }
+.modal-body .cv-section { margin: 12px 0 6px; font-weight: normal; font-size: inherit; color: inherit; }
+.modal-body ul, .modal-body ol { margin: 8px 0 14px 20px; padding-left: 18px; }
+.modal-body li { margin: 4px 0; }
+.modal-body strong { font-weight: 800; }
+.modal-body em { font-style: italic; }
+/* Remove overlay dimming */
+.modal-overlay { background: transparent !important; opacity: 1 !important; transition: none !important; }
+/* Spectacular modal animation (only modal) */
+
+  60%  { filter: blur(0); }
+  100% { transform: rotateX(0) rotateY(0) scale(1); opacity: 1; box-shadow: 0 24px 80px rgba(0,0,0,0.20); }
+.modal { backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity; }
+
+
+.modal::after{
+  content:''; position:absolute; inset:-2px;
+  background: radial-gradient(420px 220px at 50% -20%, rgba(255,140,0,.18), rgba(255,31,125,.12), transparent 70%);
+  z-index:0; pointer-events:none; opacity:.75; filter: blur(28px); mix-blend-mode: screen;
+}
+.modal > * { position:relative; z-index:1; }
+
+/* --- Elegant modal animation (flip+blur, 780ms), no overlay, no colors --- */
+@keyframes modalFlipIn {
+  0%   { transform: rotateX(-35deg) rotateY(15deg) scale(0.94); opacity: 0; filter: blur(8px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+  60%  { filter: blur(0); }
+  100% { transform: rotateX(0) rotateY(0) scale(1); opacity: 1; box-shadow: 0 24px 80px rgba(0,0,0,0.20); }
+}
+.modal { backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity; }
+.modal.spectacular-reset { transform: rotateX(-35deg) rotateY(15deg) scale(0.94); opacity: 0; filter: blur(8px); }
+.modal.spectacular-in { animation: modalFlipIn 780ms cubic-bezier(.2,.9,.3,1) forwards; }
+
+/* --- Reverse (close) animation: symmetric to open (780ms) --- */
+@keyframes modalFlipOut{
+  0%   { transform: rotateX(0) rotateY(0) scale(1); opacity: 1; filter: blur(0); box-shadow: 0 24px 80px rgba(0,0,0,0.20); }
+  40%  { filter: blur(2px); }
+  100% { transform: rotateX(-35deg) rotateY(15deg) scale(0.94); opacity: 0; filter: blur(8px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+.modal.spectacular-out{ animation: modalFlipOut 780ms cubic-bezier(.2,.9,.3,1) forwards; }
+
+/* X close button (if not already styled) */
+.modal-close{
+  position:absolute; top:20px; right:24px;
+  font-size:28px; line-height:1; cursor:pointer; color:#666;
+  padding:6px 10px; border-radius:8px; user-select:none;
+  transition:background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+.modal-close:hover{ background-color:rgba(0,0,0,0.05); color:#000; transform:scale(1.05); }
+.modal-close:active{ transform:scale(0.98); }
+
+/* --- Ensure the close X is always clickable and above content --- */
+.modal { position: relative; }
+.modal-close { z-index: 3001; pointer-events: auto; }
+.modal-overlay { pointer-events: auto; } /* keep overlay interactive for outside-click */
+
+/* ===== Mobile & Tablet Optimizations ===== */
+
+/* General touch & text adjustments */
+html, body { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Modal defaults (desktop/tablet baseline improvements) */
+.modal {
+  max-width: min(720px, 92vw);
+  max-height: 86vh;
+}
+.modal-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure the header area is readable and doesn't scroll off too fast on small screens */
+@media (max-width: 768px){
+  .modal { max-width: 94vw; max-height: 90vh; }
+  .modal-header { position: sticky; top: 0; background: #fff; z-index: 2; padding-top: 18px; }
+  .modal-body { padding-top: 10px; }
+  .modal-close { top: 8px; right: 10px; }
+}
+
+/* Phone layout: full-screen modal for best reading comfort */
+@media (max-width: 520px){
+  .modal {
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+    border-radius: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.16);
+  }
+  .modal-header { padding: 18px 18px 10px 18px; }
+  .modal-body { padding: 0 18px 18px 18px; }
+  .modal-close {
+    top: 6px;
+    right: 8px;
+    width: 44px; height: 44px; /* larger touch target */
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    border-radius: 12px;
+  }
+  /* Cards: slightly smaller on very small screens without changing design language */
+  .node { width: 260px; height: 260px; }
+  .initials { width: 72px; height: 72px; font-size: 30px; }
+  .name { font-size: 18px; }
+  .spec { font-size: 15px; }
+}
+
+/* Ultra-small devices tweaks */
+@media (max-width: 380px){
+  .node { width: 240px; height: 240px; }
+}
+
+/* Reduce motion if user prefers */
+@media (prefers-reduced-motion: reduce){
+  .modal.spectacular-in,
+  .modal.spectacular-out { animation: none !important; }
+  .modal { filter: none !important; transform: none !important; }
+}
+
+/* Safe-area insets for notches (iOS/Android) */
+@supports (padding: max(0px)){
+  .modal-header{ padding-top: max(18px, env(safe-area-inset-top)); }
+  .modal{ padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+}
+
+/* Improve scrolling performance */
+.modal-body { contain: content; overscroll-behavior: contain; }
+
+/* === Mobile layout fixes === */
+@media (max-width: 1024px){
+  :root { --sidebar-w: 0px; }
+  .sidebar-desktop { display: none !important; }
+  .footer-luxury.light { margin-left: 0 !important; }
+  .main, main { margin-left: 0 !important; padding-left: 16px; padding-right: 16px; }
+}
+
+/* Mobile header bar */
+.mobile-header{
+  position: fixed; top:0; left:0; right:0; height:64px;
+  background:#fff; display:flex; align-items:center; justify-content:space-between;
+  padding: 0 14px; z-index: 2500; box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+.mh-logo{ height: 40px; width:auto; display:block; }
+.hamburger{ width: 30px; height: 24px; display:flex; flex-direction:column; justify-content:space-between; border:0; background:transparent; padding:0; cursor:pointer; }
+.hamburger span{ display:block; height:3px; background:#333; border-radius:3px; transition: all .25s ease; }
+.hamburger.active span:nth-child(1){ transform: rotate(45deg) translate(6px, 6px); }
+.hamburger.active span:nth-child(2){ opacity:0; }
+.hamburger.active span:nth-child(3){ transform: rotate(-45deg) translate(6px, -6px); }
+
+/* Compact side drawer */
+.sidebar-mobile{
+  position: fixed; top:0; left: -78vw; width: 78vw; max-width: 300px; height: 100dvh;
+  background:#fff; box-shadow: 4px 0 16px rgba(0,0,0,.16); z-index: 2400;
+  transition: left .28s ease;
+  overflow-y:auto; -webkit-overflow-scrolling: touch;
+}
+.sidebar-mobile.active{ left:0; }
+.mobile-overlay{
+  position: fixed; inset:0; background: rgba(0,0,0,.25);
+  opacity:0; visibility:hidden; transition: all .25s ease; z-index: 2300;
+}
+.mobile-overlay.active{ opacity:1; visibility:visible; }
+
+/* Make sure content sits below the fixed mobile header */
+@media (max-width: 768px){
+  .main, main { padding-top: 80px !important; }
+  .doctors-hero { margin-top: 10px !important; }
+}
+
+/* Center the orbit stage cards on mobile to avoid lateral bias */
+.orbit-stage{ justify-content: center !important; margin-top: 10px; }
+
+/* === v15 Mobile improvements === */
+.mobile-header{ z-index: 3000; }
+.hamburger{ z-index: 3001; }
+.sidebar-mobile{ z-index: 2999; }
+.mobile-overlay{ z-index: 2998; }
+
+/* Larger cards on small screens while keeping layout centered */
+@media (max-width: 520px){
+  .orbit-stage{ justify-content:center !important; gap: 20px !important; }
+  .node { width: 320px; height: 320px; }
+  .initials { width: 84px; height: 84px; font-size: 34px; }
+  .name { font-size: 20px; }
+  .spec { font-size: 16px; }
+}
+@media (max-width: 380px){
+  .node { width: 300px; height: 300px; }
+}
+
+/* === Mobile-specific drawer redesign (distinct from desktop) === */
+:root{
+  --mobile-drawer-w: 78vw;
+  --fx-pink: #ff1f7d;
+  --fx-pink-2: #ff4f9d;
+  --fx-pill-bg: linear-gradient(90deg, rgba(255,31,125,0.14), rgba(255,79,157,0.12));
+  --fx-pill-grad: linear-gradient(90deg, var(--fx-pink), var(--fx-pink-2));
+}
+
+@media (max-width: 1024px){
+  /* Header: keep slim, no extra "striscione" */
+  .mobile-header{ height:56px; padding:0 12px; }
+  .mh-logo{ height:34px; }
+  /* Drawer as a compact, mobile-first panel (not the desktop copy) */
+  .sidebar-mobile{
+    left:-100vw; width: var(--mobile-drawer-w); max-width: 340px; height:auto; max-height: calc(100dvh - 72px);
+    top: 64px; margin-left: 10px; margin-bottom: 10px;
+    border-radius: 16px; border:1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    background: #fff;
+  }
+  .sidebar-mobile.active{ left:10px; }
+  .mobile-overlay{ background: rgba(0,0,0,.18); }
+  /* Drawer head */
+  .mnav-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; border-bottom:1px solid rgba(0,0,0,0.06);
+  }
+  .mnav-logo{ height:28px; width:auto; }
+  .mnav-close{
+    background:transparent; border:0; cursor:pointer; font-size:26px; color:#666; line-height:1;
+    padding:6px 10px; border-radius:10px;
+    transition: background-color .15s ease, color .15s ease, transform .15s ease;
+  }
+  .mnav-close:hover{ background:rgba(0,0,0,0.05); color:#000; transform:scale(1.05); }
+  /* Drawer list */
+  .mnav-list{ list-style:none; margin:0; padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .mnav-link{
+    display:block; padding:12px 14px; border-radius:12px; text-decoration:none;
+    color:#222; font-weight:600; letter-spacing:.2px;
+    background:transparent; border:1px solid transparent;
+    transition: background-color .18s ease, transform .12s ease, border-color .18s ease;
+  }
+  .mnav-link:hover, .mnav-link:focus-visible{ background: var(--fx-pill-bg); outline:none; }
+  .mnav-link:active{ transform: scale(0.98); }
+  .mnav-link.active{
+    color:#fff;
+    background: var(--fx-pill-grad);
+    border-color: transparent;
+  }
+  /* Slight accent for separators if needed */
+  .mnav-sep{ height:1px; background:rgba(0,0,0,0.06); margin:6px 10px; }
+}
+
+/* Improve hit targets on very small phones */
+@media (max-width: 520px){
+  .mnav-link{ padding:14px 16px; border-radius:14px; }
+}
+
+/* === v17 hamburger clickability & layering === */
+.mobile-header{ position: fixed; z-index: 4000; }
+#hamburgerBtn{ position: relative; z-index: 4002; }
+#mobileOverlay{ z-index: 3998; }
+#sidebarMobile{ z-index: 3999; }
+
+/* === v19 Mobile drawer & layout === */
+:root{
+  --fx-pink:#ff1f7d; --fx-pink-2:#ff4f9d;
+  --fx-pill-bg: linear-gradient(90deg, rgba(255,31,125,0.14), rgba(255,79,157,0.12));
+  --fx-pill-grad: linear-gradient(90deg, var(--fx-pink), var(--fx-pink-2));
+}
+
+@media (max-width: 1024px){
+  .sidebar-desktop { display:none !important; }
+  .main, main { margin-left:0 !important; padding-left:16px; padding-right:16px; }
+  .mobile-header{
+    position:fixed; top:0; left:0; right:0; height:56px; background:#fff;
+    display:flex; align-items:center; justify-content:space-between; padding:0 12px;
+    z-index: 5000; box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .mh-logo{ height:34px; width:auto; display:block; }
+  #hamburgerBtn{ width:30px; height:24px; display:flex; flex-direction:column; justify-content:space-between;
+    border:0; background:transparent; padding:0; cursor:pointer; position:relative; z-index:5002; }
+  #hamburgerBtn span{ display:block; height:3px; background:#333; border-radius:3px; transition: all .25s ease; }
+  #hamburgerBtn.active span:nth-child(1){ transform: rotate(45deg) translate(6px,6px); }
+  #hamburgerBtn.active span:nth-child(2){ opacity:0; }
+  #hamburgerBtn.active span:nth-child(3){ transform: rotate(-45deg) translate(6px,-6px); }
+
+  .mobile-overlay{ position:fixed; inset:0; background: rgba(0,0,0,.18);
+    opacity:0; visibility:hidden; transition:all .2s ease; z-index: 4000; }
+  .mobile-overlay.active{ opacity:1; visibility:visible; }
+
+  .sidebar-mobile{
+    position:fixed; top:64px; left:-100vw; width:78vw; max-width:340px;
+    max-height: calc(100dvh - 80px); background:#fff; border-radius:16px;
+    border:1px solid rgba(0,0,0,0.06); box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    overflow:auto; -webkit-overflow-scrolling:touch; z-index: 4500; margin-left:10px;
+  }
+  .sidebar-mobile.active{ left:10px; }
+
+  .mnav-head{ display:flex; justify-content:flex-end; padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.06); }
+  .mnav-close{ background:transparent; border:0; cursor:pointer; font-size:26px; color:#666; line-height:1;
+    padding:6px 10px; border-radius:10px; transition: background-color .15s ease, color .15s ease, transform .15s ease; }
+  .mnav-close:hover{ background:rgba(0,0,0,0.05); color:#000; transform:scale(1.05); }
+
+  .mnav-list{ list-style:none; margin:0; padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .mnav-link{ display:block; padding:12px 14px; border-radius:12px; text-decoration:none; color:#222; font-weight:600; letter-spacing:.2px; }
+  .mnav-link:hover, .mnav-link:focus-visible{ background: var(--fx-pill-bg); outline:none; }
+  .mnav-link.active{ color:#fff; background: var(--fx-pill-grad); }
+
+  /* Layout: remove leftover top gap and center cards */
+  .main, main{ padding-top:76px !important; }
+  .orbit-stage{ justify-content:center !important; gap: 20px !important; }
+  /* Larger cards on phone */
+  @media (max-width:520px){
+    .node{ width: 320px; height: 320px; }
+    .initials{ width:84px; height:84px; font-size:34px; }
+    .name{ font-size:20px; }
+    .spec{ font-size:16px; }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .mobile-overlay{ transition:none !important; }
+}
+
+/* === v22 Mobile drawer — enforced styles === */
+@media (max-width: 1024px){
+  .mobile-header{ height:56px; padding:0 12px; }
+  .mh-logo{ height:34px; }
+  #mobileOverlay{ position:fixed; inset:0; background: rgba(0,0,0,.18); opacity:0; visibility:hidden; transition:all .2s ease; z-index: 4000; }
+  #mobileOverlay.active{ opacity:1; visibility:visible; }
+  #sidebarMobile{
+    position:fixed; top:64px; left:-100vw; width:78vw; max-width:340px; max-height: calc(100dvh - 80px);
+    background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18); overflow:auto; -webkit-overflow-scrolling:touch;
+    margin-left:10px; z-index: 4500;
+  }
+  #sidebarMobile.active{ left:10px; }
+  .mnav-head{ display:flex; justify-content:flex-end; padding:10px 12px; border-bottom:1px solid rgba(0,0,0,.06); }
+  .mnav-close{ background:transparent; border:0; cursor:pointer; font-size:26px; color:#666; line-height:1; padding:6px 10px; border-radius:10px; }
+  .mnav-list{ list-style:none; margin:0; padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .mnav-link{ display:block; padding:12px 14px; border-radius:12px; text-decoration:none; color:#222; font-weight:600; letter-spacing:.2px; }
+  .mnav-link:hover, .mnav-link:focus-visible{ background: linear-gradient(90deg, rgba(255,31,125,0.14), rgba(255,79,157,0.12)); outline:none; }
+  .mnav-link.active{ color:#fff; background: linear-gradient(90deg, #ff1f7d, #ff4f9d); }
+}
+
+/* === v23 Mobile drawer exact fixes === */
+@media (max-width: 1024px){
+  /* Remove desktop icons in mobile drawer */
+  #sidebarMobile .mnav-link::before{ content: none !important; }
+  #sidebarMobile .mnav-link i, 
+  #sidebarMobile .mnav-link svg { display: none !important; }
+
+  /* Ensure clean spacing and active pill */
+  #sidebarMobile .mnav-list{ list-style:none; margin:0; padding:10px; display:flex; flex-direction:column; gap:8px; }
+  #sidebarMobile .mnav-link{ display:block; padding:12px 14px; border-radius:12px; text-decoration:none; color:#222; font-weight:600; letter-spacing:.2px; }
+  #sidebarMobile .mnav-link:hover, #sidebarMobile .mnav-link:focus-visible{ background: linear-gradient(90deg, rgba(255,31,125,0.14), rgba(255,79,157,0.12)); outline:none; }
+  #sidebarMobile .mnav-link.active{ color:#fff; background: linear-gradient(90deg, #ff1f7d, #ff4f9d); }
+}
+
+/* === v24: scope hamburger & drawer to MOBILE ONLY === */
+@media (min-width: 1025px){
+  .mobile-header,
+  #sidebarMobile,
+  #mobileOverlay { display: none !important; }
+  .sidebar-desktop { display: block !important; }
+}
+@media (max-width: 1024px){
+  .sidebar-desktop { display: none !important; }
+  .mobile-header { display: flex !important; }
+  /* Drawer/overlay remain controlled by classes; don't hard-hide them on mobile */
+}
+</style>
+<style>
+/* === Mobile footer enhancements === */
+@media (max-width: 768px) {
+  .footer { padding: 20px 16px !important; }
+  .footer .footer-inner { display: flex; flex-direction: column; gap: 16px; align-items: stretch; }
+  .footer .footer-columns { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .footer .footer-col { text-align: left; }
+  .footer a { display: inline-block; padding: 8px 0; line-height: 1.3; }
+  .footer .brand, .footer .copyright { text-align: center; }
+  .footer .social { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .footer .cta { margin-top: 8px; }
+  .footer .cta .btn { width: 100%; padding: 12px; font-size: 16px; }
+  .footer .contact-item { display: flex; align-items: center; gap: 8px; }
+  .footer svg { width: 20px; height: 20px; flex: 0 0 auto; }
+}
+</style>
+<style>
+/* === Footer overflow & wrapping fixes (2025-10-20) === */
+* { box-sizing: border-box; }
+html, body { max-width: 100%; overflow-x: hidden; }
+.footer { width: 100%; overflow-x: clip; padding-left: 16px; padding-right: 16px; }
+.footer .footer-inner { width: 100%; margin: 0 auto; }
+.footer .footer-columns { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+  gap: 16px; 
+  align-items: start;
+}
+.footer .footer-col { min-width: 0; }
+.footer .footer-col * { max-width: 100%; }
+.footer p, .footer a, .footer li, .footer span, .footer small {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+.footer img, .footer svg { max-width: 100%; height: auto; }
+@media (max-width: 768px) {
+  .footer { padding-left: 16px !important; padding-right: 16px !important; }
+  .footer .footer-columns { grid-template-columns: 1fr; }
+}
+</style>
+<style>
+/* ===== Footer V2 (stacked vertical) ===== */
+.footer.footer-v2 { width:100%; padding:24px 16px; border-top:1px solid rgba(0,0,0,0.08); }
+.footer.footer-v2 .footer-inner.v2 { display:flex; flex-direction:column; gap:20px; max-width:1100px; margin:0 auto; }
+.footer.footer-v2 h3, .footer.footer-v2 h4 { margin:0 0 8px 0; line-height:1.2; }
+.footer.footer-v2 .brand-title { font-size:1.1rem; font-weight:700; }
+.footer.footer-v2 .brand-tagline { margin:4px 0 0 0; font-size:0.95rem; opacity:0.85; }
+.footer.footer-v2 .footer-nav { display:flex; flex-direction:column; gap:8px; }
+.footer.footer-v2 .footer-nav a { text-decoration:none; }
+.footer.footer-v2 .footer-nav a:focus, .footer.footer-v2 .footer-nav a:hover { text-decoration:underline; }
+.footer.footer-v2 .contacts-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+.footer.footer-v2 .contact-item .label { font-weight:600; margin-right:6px; }
+.footer.footer-v2 .copyright { margin-top:4px; opacity:0.75; }
+/* Hard stop against horizontal overflow */
+.footer.footer-v2, .footer.footer-v2 * { max-width:100%; box-sizing:border-box; word-break:break-word; overflow-wrap:anywhere; }
+@media (min-width: 960px) {
+  /* On large screens keep vertical as asked; if ever needed columns, we can switch here */
+}
+</style>
+<style>
+/* ===== Footer V3: same copy, stacked vertically (no text changes) ===== */
+.footer.footer-v3 { width:100%; padding:24px 16px; border-top:1px solid rgba(0,0,0,0.08); }
+.footer.footer-v3 .footer-inner.v3 { display:flex; flex-direction:column; gap:16px; max-width:1100px; margin:0 auto; }
+.footer.footer-v3, .footer.footer-v3 * { max-width:100%; box-sizing:border-box; word-break:break-word; overflow-wrap:anywhere; }
+@media (min-width: 960px) {
+  /* keep vertical layout on desktop as requested */
+}
+</style>
+<style>
+/* ===== Footer V3.1: stack blocks, no horizontal layout ===== */
+.footer.footer-v3 .footer-inner.v3 {
+  display: block; /* disable flex/grid rows */
+}
+.footer.footer-v3 .footer-inner.v3 > * {
+  display: block;
+  width: 100% !important;
+  margin: 0 0 16px 0;
+}
+/* Kill grids/rows inside footer so sections don't align side-by-side */
+.footer.footer-v3 .footer-inner.v3 .footer-columns,
+.footer.footer-v3 .footer-inner.v3 .row,
+.footer.footer-v3 .footer-inner.v3 .grid,
+.footer.footer-v3 .footer-inner.v3 .columns {
+  display: block !important;
+  width: 100% !important;
+}
+.footer.footer-v3 .footer-inner.v3 [class*="col"] {
+  float: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+/* Remove horizontal overflow and ensure wrapping */
+.footer.footer-v3, .footer.footer-v3 * {
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+/* Optional: increase spacing between logical blocks */
+.footer.footer-v3 .footer-inner.v3 > *:not(:last-child) { margin-bottom: 20px; }
+</style>
+<style>
+/* ===== Footer V4: stacked, resilient, copy untouched ===== */
+.footer.footer-v4 { width:100%; padding:24px 16px; border-top:1px solid rgba(0,0,0,0.08); }
+.footer.footer-v4 .footer-inner.v4 { display:block; max-width:1100px; margin:0 auto; }
+.footer.footer-v4 .footer-inner.v4 > * { display:block; width:100% !important; margin:0 0 16px 0; }
+.footer.footer-v4, .footer.footer-v4 * { box-sizing:border-box; max-width:100%; word-break:break-word; overflow-wrap:anywhere; }
+.footer.footer-v4 a { text-decoration:none; }
+.footer.footer-v4 a:focus, .footer.footer-v4 a:hover { text-decoration:underline; }
+/* Kill any grids/flex/columns inside the footer so nothing sits side by side */
+.footer.footer-v4 .footer-inner.v4 .row,
+.footer.footer-v4 .footer-inner.v4 .grid,
+.footer.footer-v4 .footer-inner.v4 [class*="columns"],
+.footer.footer-v4 .footer-inner.v4 [class*="col-"],
+.footer.footer-v4 .footer-inner.v4 .footer-columns {
+  display:block !important; width:100% !important; margin:0 !important;
+}
+.footer.footer-v4 .footer-inner.v4 [class*="col"] { float:none !important; width:100% !important; max-width:100% !important; }
+/* Ensure icons/media don't push width */
+.footer.footer-v4 img, .footer.footer-v4 svg { max-width:100%; height:auto; }
+/* Gentle spacing between logical blocks */
+.footer.footer-v4 .footer-inner.v4 > *:not(:last-child) { margin-bottom:20px; }
+</style>
+<style id="modal-spin-v5">
+/* === PATCH v5: Modal Spin Animations (non-destructive) === */
+@keyframes modalSpinIn{
+  0%{transform: rotateY(-90deg) scale(0.92); opacity:0; filter: blur(6px);}
+  60%{filter: blur(0);}
+  100%{transform: rotateY(0deg) scale(1); opacity:1; box-shadow:0 24px 80px rgba(0,0,0,.25);}
+}
+@keyframes modalSpinOut{
+  0%{transform: rotateY(0deg) scale(1); opacity:1; filter: blur(0);}
+  40%{filter: blur(2px);}
+  100%{transform: rotateY(90deg) scale(0.92); opacity:0; filter: blur(6px); box-shadow:none;}
+}
+.modal{ transform-origin:center center; backface-visibility:hidden; transform-style:preserve-3d; will-change:transform,opacity; }
+.modal.spectacular-in{ animation: modalSpinIn 720ms cubic-bezier(.23,1,.32,1) forwards !important; }
+.modal.spectacular-out{ animation: modalSpinOut 720ms cubic-bezier(.23,1,.32,1) forwards !important; }
+</style><style>
+/* --- Quick overlay fade-out helper (non-distruttivo) --- */
+#modalOverlay.overlay-fade-out { animation: overlayFadeOut .25s ease forwards; }
+@keyframes overlayFadeOut { to { opacity: 0; } }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+/* --- Mobile optimization patch (non-distruttivo) --- */
+#modalOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  box-sizing: border-box;
+}
+
+#modal {
+  box-sizing: border-box;
+  position: relative;
+}
+
+#modalClose {
+  z-index: 5;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* Phone / small tablets */
+@media (max-width: 768px) {
+  #modal {
+    width: min(92vw, 720px);
+    max-width: 92vw;
+    max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow: auto; /* scroll interno se necessario */
+    border-radius: 16px;
+    padding: clamp(12px, 3vw, 20px);
+  }
+
+  /* X sempre ben visibile e facilmente cliccabile */
+  #modalClose {
+    position: absolute;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    line-height: 1;
+    border-radius: 9999px;
+    touch-action: manipulation;
+  }
+}
+
+/* Ultra-small devices */
+@media (max-width: 360px) {
+  #modal {
+    width: 94vw;
+    max-width: 94vw;
+    padding: clamp(10px, 3.5vw, 16px);
+    border-radius: 14px;
+  }
+  #modalClose {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+}
+</style>
+<style>
+
+/* --- Overlay guard: hidden by default to avoid initial blank modal --- */
+#modalOverlay[aria-hidden="true"] { display: none !important; }
+
+</style>
+<style>
+
+/* --- Sticky header for modal (name + spec + X) --- */
+#modalStickyBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px;
+  background: inherit;
+  backdrop-filter: saturate(1.2) blur(0px);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+#modalStickyBar .id-block {
+  min-width: 0;
+}
+
+#modalStickyBar .id-title {
+  font-size: clamp(18px, 4.5vw, 22px);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#modalStickyBar .id-sub {
+  font-size: clamp(13px, 3.5vw, 15px);
+  opacity: .8;
+  margin: 2px 0 0 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#modalStickyBar #modalClose {
+  position: static !important; /* move into bar layout */
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  border-radius: 9999px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+@media (max-width: 768px) {
+  #modal { padding-top: 0 !important; }
+  #modalStickyBar { padding: 10px 10px; }
+}
+
+</style>
+<style>
+
+/* --- Fix X coperta dalla status bar su mobile (v4c) --- */
+@media (max-width: 768px) {
+  #modalStickyBar {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  }
+  #modal {
+    margin-top: calc(env(safe-area-inset-top, 0px) + 4px);
+  }
+}
+
+</style>
+<style>
+
+/* --- Strong mobile fix: force X always visible above navbars/notch --- */
+@media (max-width: 768px) {
+  /* Ensure overlay is the topmost layer and fixed to viewport */
+  #modalOverlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important; /* max practical */
+  }
+
+  /* Push modal content slightly below safe area */
+  #modal {
+    margin-top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+  }
+
+  /* Sticky header offset and extra right padding so it doesn't conflict with fixed X */
+  #modalStickyBar {
+    top: calc(env(safe-area-inset-top, 0px)) !important;
+    padding-right: 64px !important;
+  }
+
+  /* Make the X fixed relative to viewport so it's never under site nav or browser UI */
+  #modalClose {
+    position: fixed !important;
+    top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+    right: max(10px, env(safe-area-inset-right, 0px)) !important;
+    z-index: 2147483647 !important;
+  }
+}
+
+</style>
+<style>
+
+/* --- Social icons fix: re-enable SVG visibility in footer --- */
+footer svg,
+.footer svg,
+.footer-social svg,
+.social-icons svg,
+.footer-fixed svg,
+.site-footer svg {
+  display: inline-block !important;
+}
+
+.social-icons a svg {
+    width: 22px;
+    height: 22px;
+}
+
+</style>
+<style>
+
+/* --- Prevent caret & text selection on non-editable content (mobile-friendly) --- */
+:root {
+  /* nothing */
+}
+
+/* Global rule: only allow selection in real form fields or explicit contenteditable */
+body :not(input):not(textarea):not([contenteditable="true"]) {
+  -webkit-user-select: none;
+          user-select: none;
+  caret-color: transparent;
+}
+
+/* Improve tap behavior for links/buttons while selection is disabled */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+
+/* In case some paragraphs got text cursor via CSS: reset */
+p, h1, h2, h3, h4, h5, h6, li, span, div {
+  cursor: default;
+}
+
+</style>
+</head>
+<body>
+<!-- Sidebar Desktop -->
+<div class="sidebar-desktop">
+<div class="sidebar-header">
+<img alt="StudioMed Logo" class="logo-sidebar" src="images/logo.JPG"/>
+</div>
+<nav class="sidebar-nav">
+<a class="nav-item" href="index.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+                Dashboard
+            </a>
+<a class="nav-item" href="visite.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                Visite
+            </a>
+<a class="nav-item active" href="dottori.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                I nostri specialisti
+            </a>
+<a class="nav-item" href="terapie.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                Terapie
+            </a>
+<a class="nav-item" href="servizi.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path></svg>
+                Servizi
+            </a>
+<a class="nav-item" href="eventi.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                Eventi
+            </a>
+<a class="nav-item" href="index.html#contatti">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="12" x2="12" y1="16" y2="12"></line>
+<line x1="12" x2="12.01" y1="8" y2="8"></line>
+</svg>
+                Info
+            </a>
+</nav>
+</div>
+<!-- Mobile Header -->
+<div class="mobile-header">
+<img alt="StudioMed Logo" src="img/logo.png" style="height: 40px;"/>
+<div class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+<!-- Sidebar Mobile -->
+<div class="sidebar-mobile" id="sidebarMobile">
+<nav class="sidebar-nav">
+<a class="nav-item" href="index.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+                Dashboard
+            </a>
+<a class="nav-item" href="visite.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                Visite
+            </a>
+<a class="nav-item active" href="dottori.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+</svg>
+                I nostri specialisti
+            </a>
+<a class="nav-item" href="terapie.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                Terapie
+            </a>
+<a class="nav-item" href="servizi.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path></svg>
+                Servizi
+            </a>
+<a class="nav-item" href="eventi.html">
+<svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                Eventi
+            </a>
+</nav>
+</div>
+<main class="main">
+<section class="doctors-hero">
+<h1>I nostri specialisti</h1>
+<p>Clicca sul nome per scoprire il curriculum dei nostri specialisti</p>
+</section>
+<section class="orbit-stage" id="orbit"></section>
+</main>
+<!-- Footer (fuori da <main> per chiarezza, ma può rimanere dentro se preferisci) -->
+ <!-- Footer -->
+    <footer class="footer-luxury light">
+        <div class="footer-glow"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Poliambulatorio <span>Luigi Einaudi</span></h2>
+                    <p class="footer-slogan">La salute, reinventata.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Esplora</h4>
+                    <ul>
+                        <li><a href="servizi.html">Diagnosi</a></li>
+                        <li><a href="dottori.html">Visite</a></li>
+                        <li><a href="terapie.html">Terapie</a></li>
+                        <li><a href="eventi.html">Eventi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contatti</h4>
+                    <ul>
+                        <li>📞 +39 0173 742501</li>
+                        <li>✉️ info@studiomed.it</li>
+                        <li>📍 Via Torino 118/B, 12063 Dogliani CN</li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Seguici</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Poliambulatorio-Luigi-Einaudi-100014016342183/" class="facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/poliambulatorioluigieinaudi/" class="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                       <a href="#" class="doctorlib" aria-label="Doctolib">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 <strong>Poliambulatorio Luigi Einaudi</strong> –  P.I. 03611100045</p>
+            </div>
+        </div>
+    </footer>
+
+<!-- Modal overlay -->
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal" id="modal">
+<div class="modal-close" id="modalClose">×</div>
+<div class="modal-header">
+<h2 id="modalName"></h2>
+<h3 id="modalSpec"></h3>
+</div>
+<div class="modal-body" id="modalBody"></div>
+</div>
+</div>
+<script>
+/* Small helpers for mobile menu */
+function toggleMobileMenu(){
+  document.querySelector('.hamburger').classList.toggle('active');
+  document.querySelector('.sidebar-mobile').classList.toggle('active');
+  document.querySelector('.mobile-overlay').classList.toggle('active');
+}
+
+/* DOCTORS data + rendering */
+const DOCTORS = 
+  [
+  {nome:'AJRALDI GIORGIO', specializzazione:'Chirurgia Generale', bio:'Specialista in chirurgia generale con esperienza in patologie erniarie, difetti della parete addominale e proctologia.', curriculumHtml: "<h4 class=\"cv-section\">Il Dottor Ajraldi \u00e8 specialista in chirurgia generale, effettua visite specialistiche chirurgiche in particolare per quanto riguarda le PATOLOGIE ERNIARIE, I DIFETTI DELLA PARETE ADDOMINALE, DISTURBI APPARATO DIGIRIGENTE, PROCTOLOGIA.\nLe visite specialistiche possono essere integrate, quando viene ritenuto necessario, dal contestuale esame ecografico.\nInoltre, il Dottore, gode di un\u2019 ampia esperienza nel settore, nello specifico:\n1992 al 1998 - Ha lavorato presso il Dipartimento di Chirurgia , In ambulatorio di  chirurgia generale e chirurgia vascolare come  aiuto e operatore sala operatoria\n23-10-1995 -  <em>Universit\u00e0</em> di Torino Laurea in Medicina e Chirurgia  e Qualifica conseguita Medico Chirurgo\nNovembre 1995 - <em>Universit\u00e0</em> di Torino Qualifica conseguita per Abilitazione Professione Medica\n2004 -   Specializzazione in <strong>Chirurgia Generale</strong>\n2004 -  Qualifica conseguita  come Medico Specialista in <strong>Chirurgia Generale</strong>, nello stesso Anno ha  conseguito una Qualifica di  Perfezionamento in Chirurgia Epato-Biliare\n2009/2012 - Qualifica Naturopatia\n2014/2015 -  Conseguito Diploma in <strong>Ecografia</strong> Internistica\n2014/2019 - Qualifica conseguita di Specializzazione in Psicoterapia</h4>"},
+  {nome:'BALBONI ENRICO', specializzazione:'Ortopedia e Traumatologia', bio:'Esperto in chirurgia protesica di anca e ginocchio e traumatologia dello sport.', curriculumHtml: "<h4 class=\"cv-section\">Il Dott. Balboni Enrico,  ha conseguito la sua formazione nella specializzazione in <strong>Ortopedia</strong> e <strong>Traumatologia</strong> nel 2012 presso l&#x27;<em>Universit\u00e0</em> degli Studi di Torino.</h4>\n<p>Ha conseguito la laurea in Medicina e Chirurgia nel 2006 presso l&#x27;<em>Universit\u00e0</em> degli Studi di Torino specialista in <strong>Ortopedia</strong> e <strong>Traumatologia</strong>.</p>\n<h4 class=\"cv-section\">Attualmentesvolge la sua attivit\u00e0 presso l\u2019ospedale Koelliker di Torino presso la <em>Casa di Cura</em> Privata Citt\u00e0 di Bra.</h4>\n<p>Nel corso degli anni ha eseguito come primo e secondo operatore pi\u00f9 di 1000 interventi di chirurgia protesica di anca e ginocchio.</p>\n<h4 class=\"cv-section\">Oltre alle attivit\u00e0 chirurgiche, il dottor Balboni si occupa di visite ortopediche, infiltrazioni e traumatologia dello sport.</h4>\n<p>Tra le patologie trattate dal dottore vi sono protesica di anca, ginocchio, spalla, chirurgia artroscopica di spalla e ginocchio, traumatologia dello sport, chirurgia di mano e piede.</p>"},
+  {nome:'BOSCARINO SANDRO', specializzazione:'Gastroenterologia ed Endoscopia Digestiva', bio:'Esegue prime visite enterologiche e controlli specialistici.', curriculumHtml: "<p>Il Dr. Boscarino \u00e8 un medico Privato con specializzazione in GASTROENTEROLOGIA ED ENDOSCOPIA DIGESTIVA.</p>\n<p>Ha conseguito la laurea in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> di Genova nell\u2019anno 1982.<br>Ha raggiunto l\u2019abilitazione all\u2019esercizio professionale nell\u2019anno 1983.</p>\n<p>Ha ottenuto la Specializzazione in <strong>Gastroenterologia</strong> ed Endoscopia digestiva presso l\u2019<em>Universit\u00e0</em> di Genova nell\u2019anno 1986.</p>\n<h4 class=\"cv-section\">Dirigente Medico di I\u00b0 livello S.O.C. (Struttura Operativa Complessa) di MEDICINA GENERALE e Responsabile S.O.S. (Struttura Operativa Semplice) di <strong>Gastroenterologia</strong> ed <strong>Endoscopia Digestiva</strong> dell\u2019<em>ASL</em> CN 2 Alba-Bra, <em>Presidio Ospedaliero</em> \u201cSanto Spirito\u201d di Bra fino al 31 agosto 2019.\nTipologie di visite effettuate:\nPrima visita enterologica e visita di controllo</h4>"},
+  {nome:'CACCIAPUOTI MARCO', specializzazione:'Dermatologia', bio:'Dirigente medico in dermatologia, responsabile ambulatorio psoriasi, con competenze in dermatochirurgia e dermatologia allergologica.', curriculumHtml: "<p>Attualmente \u00e8 Dirigente Medico U.O. <strong>Dermatologia</strong> Osp. S. Paolo \u2013 Savona.</p>\n<h4 class=\"cv-section\">Laureato in Medicina in data 05/11/1997 presso l&#x27;<em>Universit\u00e0</em> di Genova (con tesi &quot;Reattivit\u00e0 anticorpale atipica nelle malattie bollose autoimmuni intradermiche; significato clinico) e nella stessa sede abilitato alla professione medica in data 28/11/1997.</h4>\n<p>Ha conseguito il diploma di Specialista con lode in <strong>Dermatologia</strong> e Venereologia il 29/10/2001 presso la Scuola di Spec. dell&#x27;<em>Universit\u00e0</em> di Genova diretta dal Prof. A. Rebora.<br>Dal 2004 riveste l&#x27;incarico di Dirigente Medico presso l\u2019<em>Ospedale</em> San Paolo di Savona, Unit\u00e0 Operativa di  <strong>Dermatologia</strong>, e dal 2007 nella stessa sede \u00e8 responsabile dell\u2019AMBULATORIO PSORIASI nell\u2019ambito del progetto PSOCARE.</p>\n<h4 class=\"cv-section\">La sua grande esperienza \u00e8 andata maturando tra gli ospedali locali e stranieri, presso i quali ha ottenuto una formazione completa sia dal punto di vista professionale che nel rapporto con i pazienti. Tiene costantemente aggiornate le sue competenze frequentando corsi di perfezionamento e stage formativi sia in Italia che all&#x27;estero, tra i quali sono degni di nota lo stage di perfezionamento conseguito presso l\u2019<em>Universit\u00e0</em> di Lione in Francia e il Master in <strong>Dermatologia</strong> Allergologica ottenuto presso l\u2019<em>Universit\u00e0</em> di Perugia, grazie ai quali ha sviluppato competenze tali da consentirgli di affrontare qualsiasi esigenza dei suoi pazienti.</h4>\n<h4 class=\"cv-section\">Socio delle pi\u00f9 importanti Societ\u00e0 Italiane di <strong>Dermatologia</strong>, nonch\u00e9 Collaboratore con il Gruppo Italiano di Tricologia (GITRI), il Dr. Marco Cacciapuoti ha indirizzato le sue ricerche cliniche nel campo delle malattie cutanee bollose autoimmuni e delle colture cellulari cheratinocitarie. Il Dr. Marco Cacciapuoti offre consulenze e trattamenti in grado di fronteggiare ogni patologia della pelle offrendo servizi di <strong>Dermatochirurgia</strong>, <strong>Dermatologia</strong> Allergologica, Crioterapia e Microterapia della cellulite.</h4>"},
+  {nome:'CAVALLINI MAURIZIO', specializzazione:'Neurologia', bio:'Specialista in neurologia con esperienza ospedaliera e in neuroriabilitazione.', curriculumHtml: "<p>Laureato in Medicina e Chirurgia e specializzato in <strong>Neurologia</strong> presso l&#x27;<em>Universit\u00e0</em> degli studi &quot;Amedeo Avogadro&quot;<br>Il suo percorso formativo \u00e8 il seguente:<br>Anno 1993:Diploma di Maturit\u00e0 classica presso Liceo Classico Don Bosco di Borgomanero (NO), con votazione 58/60<br>Anno 1999:Laurea in Medicina e Chirurgia c/o <em>Universit\u00e0</em> degli Studi del Piemonte Orientale \u201cA.Avogadro\u201d, Novara. Titolo della tesi: \u201cL\u2019impiego della lamotrigina nella terapia del dolore, relatore Prof. F. Monaco). Votazione 110/110 lode<br>Anno 2000:Abilitazione all\u2019esercizio della Professione di Medico Chirurgo a Novara ed iscrizione all\u2019Albo dei Medici Chirurghi della Provincia di Novara (n\u00b0 3100)<br>Anno 2004:Specializzazione in <strong>Neurologia</strong> c/o <em>Clinica</em> Neurologica dell\u2019<em>Universit\u00e0</em> degli Studi del Piemonte Orientale \u201cA.Avogadro\u201d, Novara. Titolo della tesi: \u201cL\u2019impiego dell\u2019ecocolordoppler transcranico nella diagnosi della perviet\u00e0 del forame ovale cardiaco in paziente con emicranica con aura e senz\u2019aura\u201d, relatore Prof. F. Monaco. Votazione 70/70 lode</p>"},
+  {nome:'CENNA ENZO', specializzazione:'Ortopedia e Traumatologia, Medicina Fisica e Riabilitazione', bio:'Esperto in chirurgia artroscopica, protesica e medicina dello sport.', curriculumHtml: "<h4 class=\"cv-section\">Il Dott. Enzo Cenna \u00e8 specializzato in <strong>Ortopedia</strong> e <strong>Traumatologia</strong>, Medicina Legale e delle Assicurazioni e Medicina Fisica e Riabilitazione e ha maturato ampia esperienza nella chirurgia mini invasiva artroscopia e protesica e nella Medicina sportiva.</h4>\n<p>Laureato in Medicina e Chirurgia nel 1980 presso l\u2019<em>Universit\u00e0</em> di Torino con voto 110/110, nel 1985 si \u00e8 diplomato specialista in <strong>Ortopedia</strong> e traumatologia, nel 1989 in Medicina Legale e delle Assicurazioni e nel 1997 in Medicina Fisica e Riabilitazione presso l\u2019<em>Universit\u00e0</em> degli studi di Torino.</p>\n<h4 class=\"cv-section\">Dal novembre 1982 al febbraio 2015 ha svolto attivit\u00e0 di medico ortopedico traumatologo presso strutture ospedaliere: dal 1989 \u00e8 stato assunto al CTO di Torino presso la <em>Clinica</em> Ortopedica II dell\u2019<em>Universit\u00e0</em>. Dal 2003 al 2015 \u00e8 stato anche responsabile di Unit\u00e0 Dipartimentale di Patologia dello sport sviluppando una esperienza importante nei trattamenti chirurgici e conservativo-riabilitativi in ambito sportivo amatoriale e agonistico.\nDal 2003 al 2012 \u00e8 stato titolare della didattica aggiuntiva di \u201c<strong>Traumatologia</strong> dello sport\u201d presso la scuola di specializzazione in Medicina Fisica e Riabilitazione dell\u2019<em>Universit\u00e0</em> di Torino.</h4>\n<p>Nel Marzo 2006 ha svolto mansioni di Chief Medical Officer alle Paralimpiadi di Torino 2006 nella Venue di Torino Esposizioni.</p>\n<h4 class=\"cv-section\">Ha sviluppato una esperienza ampia in ambito valutativo medico-legale ad indirizzo ortopedico-traumatologico.</h4>\n<p>Negli anni ha svolto mansioni di tutor in numerosi corsi internazionali di chirurgia artroscopica e protesica di ginocchio ed ha partecipato alla relazione di numerosi lavori scientifici su riviste nazionali ed internazionali.</p>\n<p>Ha partecipato presso il CTO di Torino alla stesura di protocolli riabilitativi specifici di ginocchio e spalla per il trattamento conservativo e post-chirurgico.</p>\n<h4 class=\"cv-section\">Ha sviluppato una particolare esperienza clinica in ambito sportivo per il trattamento conservativo delle lesioni cartilaginee traumatiche e degenerative articolari e delle lesioni degenerative tendinee.</h4>\n<h4 class=\"cv-section\">La sua attivit\u00e0 chirurgica e di ricerca \u00e8 rivolta oggi principalmente alla chirurgia endoscopica e protesica di ginocchio (oltre che di anca e spalla) con tecniche mini-invasive.</h4>"},
+  {nome:'MONDINO FIORELLA', specializzazione:'Neurologia, Medicina del Sonno', bio:'Specialista in neurologia e medicina del sonno; tratta disturbi del sonno e cefalee.', curriculumHtml: "<p>Specialista  in NEUROLOGIA -Medico Esperto in <strong>Medicina del Sonno</strong><br>Ha conseguito la laurea presso la Facolt\u00e0 di Medicina e Chirurgia dell\u2019<em>Universit\u00e0</em> di Torino.</p>\n<p>Ha conseguito il titolo di Medico Esperto in disturbi del Sonno presso l\u2019Accademia Italiana di <strong>Medicina del Sonno</strong> ed \u00e8 iscritta all&#x27;Albo Italiano degli Esperti di <strong>Medicina del Sonno</strong>.</p>\n<p>Dal 2002 al 2023 \u00e8 stata Dirigente Medico presso l\u2019Unit\u00e0 Operativa di <strong>Neurologia</strong> dell&#x27;<em>Ospedale</em> S.Croce e Carle di Cuneo, ove ha svolto il ruolo di responsabile del Centro di <strong>Medicina del Sonno</strong>.</p>\n<ul><li>Abilitata presso la Scuola di Perfezionamento in Neuroauricoloterapia di Torino.</li><li>La dottoressa effettua:</li><li>Visite Neurologiche</li><li>Visite Neurologiche domiciliari</li><li>Visite specialistiche di <strong>Medicina del Sonno</strong></li><li>Trattamenti di Neuroauricoloterapia</li><li>Nello specifico:</li></ul>\n<h4 class=\"cv-section\">La <strong>Medicina del Sonno</strong>\nIl sonno \u00e8 un bene assai prezioso per la salute del corpo e della mente, per un sano invecchiamento, per il successo scolastico, lavorativo e sportivo e infine anche per la bellezza. Va il pi\u00f9 possibile rispettato, protetto e curato ove necessario.\n \nLa Neuroauricoloterapia</h4>\n<p>E\u2019 una disciplina occidentale, riconosciuta dall\u2019OMS, che utilizza le connessioni neurofisiologiche esistenti tra padiglione auricolare e cervello.</p>\n<p>Si tratta di una terapia del tutto naturale, operata dalle risorse del corpo umano stesso una volta attivate attraverso la stimolazione di determinati punti dell\u2019orecchio.<br>Tra i disturbi pi\u00f9 sensibili a questa tecnica appare il dolore come cefalee, nevralgie, lombalgie, dolori oncologici o di qualsiasi altra natura.</p>\n<p>E\u2019 molto utile nei disturbi del sonno, della sfera dell&#x27;umore e dell&#x27;ansia, nello stress cronico, in difficolt\u00e0 di apprendimento e concentrazione, nel tremore, nelle vampate di calore, in presenza di difficolt\u00e0 digestive, disturbi di transito intestinale, colon irritabile, aerofagia, incontinenza, dipendenza da fumo o da cibo e diversi altri problemi.</p>"},
+  {nome:'PELUSO PIER LUIGI', specializzazione:'Reumatologia', bio:'Specialista in reumatologia e direttore sanitario del Poliambulatorio Einaudi Dogliani.', curriculumHtml: "<p>Il Dr. Peluso \u00e8 un professionista specializzato in reumatologia, ha conseguito la Laurea in Medicina e Chirurgia presso l&#x27;<em>Universit\u00e0</em> degli studi di Catania nel 1983.</p>\n<h4 class=\"cv-section\">Il Dott. Peluso, dopo aver conseguito la specializzazione in <strong>Reumatologia</strong>, ha svolto un corso di formazione per Tutor CFSMG (Corso di Formazione Specifica in Medicina Generale).</h4>\n<p>Nel 2021 \u00e8 diventato direttore sanitario presso il Poliambulatorio Einaudi Dogliani.<br>Specializzazione in <strong>Reumatologia</strong> presso l&#x27;<em>Universit\u00e0</em> degli studi di Catania nel 1988.</p>\n<h4 class=\"cv-section\">Il dottore tra il 1989 e il 2020 \u00e8 stato medico specialista in <strong>Reumatologia</strong> presso LP a Roccavisione, Poliambulatorio L.Einaudi di Dogliani e Centro Medico Euoropeo di Cuneo. (TROVATO SU CDS ALBA)\nEffettua le seguenti prestazioni:\nPrima visita reumatologica\nVisita reumatologica di controllo</h4>"},
+  {nome:'PETTINAU GRAZIA', specializzazione:'Ginecologia e Medicina della Riproduzione', bio:'Esperta in fecondazione assistita, medicina materno-fetale ed ecografia ostetrica.', curriculumHtml: "<p>Nata nel 1983 a Torino, laureata in Medicina e Chirurgia nel 2008 presso l&#x27;<em>Universit\u00e0</em> degli Studi di Torino, specialista in <strong>Ginecologia</strong> dal 2014</p>\n<h4 class=\"cv-section\">Ha focalizzato la sua attenzione su fecondazione assistita omologa ed eterologa dedicandovi la sua attivit\u00e0 lavorativa presso Istituto Marques Barcellona e Milano, Promea, Centro di Procreazione Assistita dell&#x27;<em>Ospedale</em> di Asti e attualmente C.M.R. di Torino</h4>\n<p>Nel 2016 e 2017 \u00e8 stata dirigente medico I livello nel reparto di <strong>Ginecologia</strong> e <strong>Ostetricia</strong> dell&#x27;<em>Ospedale</em> di Borgosesia, occupandosi di <strong>Ostetricia</strong>, <strong>Ginecologia</strong> e ambulatorio di Isteroscopia e dal 2020 al 2023 dirigente medico I livello dell&#x27;<em>Ospedale</em> Cardinal Massaja di Asti, occupandosi di <strong>Ostetricia</strong>, <strong>Ginecologia</strong> e Riproduzione Assistita</p>\n<p>Nel 2022 ha conseguito il Master di Medicina Materno Fetale presso l&#x27;<em>Universit\u00e0</em> degli studi di Torino</p>\n<h4 class=\"cv-section\">La sua attivit\u00e0 clinica si svolge prevalentemente nell&#x27;ambito della Medicina della Riproduzione, dell&#x27;<strong>Ostetricia</strong> e della Patologia Ginecologica Benigna</h4>\n<p>Laureata in Medicina e Chirurgia conseguita presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino (ottobre 2008).<br>La Dott.ssa ha conseguito i seguenti titoli:<br>Specializzazione con Lode in <strong>Ginecologia</strong> conseguita presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino (2014);<br>Master di 2\u00b0 livello in Medicina Materno Fetale conseguito presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino (maggio 2022).</p>\n<h4 class=\"cv-section\">La Dott. Ssa Pettinau effettua le seguenti prestazioni:</h4>\n<p><strong>Ecografia</strong> transvaginale<br>Visita Consulenza sterilit\u00e0<br>Visita Ginecologica con ecografia<br>Visita Ginecologica prima visita<br>Visita Ostetrica prima visita</p>"},
+  {nome:'PONZO FRANCESCA', specializzazione:'Logopedia', bio:'Logopedista specializzata in riabilitazione del linguaggio, deglutizione e disturbi dell’apprendimento.', curriculumHtml: "<p>Specialista in logopedia, Ha conseguito la Laurea presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino.</p>\n<p>Logopedista volontaria presso l\u2019<em>ASL</em> CN1 con pazienti in et\u00e0 evolutiva ed adulta da luglio 2019 a febbraio 2020. <br>Si occupa della riabilitazione del linguaggio, della comunicazione e della deglutizione in et\u00e0 evolutiva, adulta e geriatrica.</p>\n<p>In particolare si occupa di valutazione e trattamento di:</p>\n<p>Disturbi specifici di apprendimento (DSA) nell\u2019ambito della letto-scrittura (dislessia, disortografia) e calcolo (discalculia)<br>Disturbi di linguaggio<br>Deglutizione disfunzionale e squilibrio muscolare oro-facciale<br>Disfagia infantile<br>Afasia<br>Disartria<br>Disfagia post-chirurgica, neurologica e presbifagia<br>Disfonia disfunzionale e post-chirurgiche</p>"},
+  {nome:'SCHEURER CHRISTOPH', specializzazione:'Radiologia Diagnostica', bio:'Radiologo con oltre 25 anni di esperienza in radiografia, ecografia, TAC e risonanza magnetica.', curriculumHtml: "<h4 class=\"cv-section\">Medico chirurgo specialista in <strong>Radiologia</strong> Diagnostica CON  esperienza clinica, da pi\u00f9 di 25 anni, in Radiografia tradizionale, <strong>Ecografia</strong>, TAC e Risonanza Magnetica.</h4>\n<p>Ha conseguito la laurea in Medicina e specializzato in <strong>Radiologia</strong> Diagnostica in Germania.</p>\n<p>Ha lavorato come specialista in Germania in un ospedale di alto livello e in seguito si \u00e8 trasferito in provincia di Cuneo, nelle Langhe.</p>\n<p>Dal 2004 al 2019: ha lavorato nel reparto di <strong>Radiologia</strong> dell\u2019ospedale di Alba.<br>Dal 2019 al 2022 ha esercitato la professione in Alto Adige nel reparto di <strong>Radiologia</strong> dell\u2019ospedale di Merano e di Silandro.</p>\n<p>Dal 2021 ha ricoperto il ruolo di Direttore facente funzione.</p>\n<h4 class=\"cv-section\">Dal 2023 in qualit\u00e0 di Medico Radiologo \u201cSpecialista Ambulatoriale Interno\u201d presta servizio presso l\u2019ASLCN1 nel reparto di <strong>Radiologia</strong> dell\u2019<em>Ospedale</em> di Ceva nonch\u00e9 libero professionista.</h4>"},
+  {nome:'SCIOLLA ANDREA GIORGIO', specializzazione:'Chirurgia Vascolare', bio:'Specialista in chirurgia vascolare con ampia esperienza clinica e diagnostica.', curriculumHtml: "<p>Specialista in <strong>Chirurgia Vascolare</strong>.</p>\n<h4 class=\"cv-section\">ESPERIENZE PROFESSIONALI:</h4>\n<p>Dal 1986 al 1997: Divisione di <strong>Chirurgia Vascolare</strong> (prof. D.G. Tealdi) dell&#x27;<em>Ospedale</em> Clinicizzato Gruppo S. Donato - Centro E. Malan (Prof. U. Ruberti) - <em>Universit\u00e0</em> degli Studi di Milano</p>\n<p>Dal 1997 al 2000: Dirigente I livello di ruolo C/O Divisione di <strong>Chirurgia Vascolare</strong> (dott. C. Novali) - Azienda Osp. S. Croce e Carle di Cuneo con, dal Marzo 1998, incarico dirigenziale di Gestione delle Sale Operatorie e dal Marzo 1999 Componente del Comitato Direttivo del Dipartimento di Malattie Cardiovascolari.</p>\n<p>Dal 2000 ad oggi: Specialista titolare SAI - Branca Angiologia - <strong>Chirurgia Vascolare</strong> presso l&#x27; <em>ASL</em> CN1 ed <em>ASL</em> CN2 - Regione Piemonte<br>Attualmente Responsabile della Branca Chirurgica - <em>ASL</em> CN1</p>\n<h4 class=\"cv-section\">Dal 2000 l&#x27;attivit\u00e0 di chirurgo vascolare \u00e8 stata svolta presso Strutture accreditate al Servizio Sanitario Nazionale ed attualmente viene effettuata nelle Strutture della <em>ASL</em> CN1 (Ospedali di Mondov\u00ec, Ceva, Savigliano, Saluzzo).</h4>"},
+  {nome:'TAGLIATI DANILO', specializzazione:'Ginecologia e Ostetricia, Senologia', bio:'Specialista in ginecologia e senologia con esperienza ospedaliera e libero professionale.', curriculumHtml: "<p>Il Dott. Danilo Tagliati \u00e8 specializzato in <strong>Ginecologia</strong> e <strong>Ostetricia</strong>, senologia e oncologia.</p>\n<p>Ha conseguito la Laurea in Medicina e Chirurgia presso l&#x27;<em>Universit\u00e0</em> degli studi di Genova nel 1978.</p>\n<h4 class=\"cv-section\">Attualmente esercita attivit\u00e0 libero professionale presso strutture private.</h4>\n<p>Specializzato in <strong>Ginecologia</strong> ed ostetricia presso l&#x27;<em>Universit\u00e0</em> degli studi di Torino nel 1984.<br>Ha ricoperto il ruolo di Dirigente Medico di I\u00b0 Livello S.O.C. (Struttura Operativa Complessa) di <strong>Ostetricia</strong> e <strong>Ginecologia</strong> dell\u2019A.S.L. CN2 Alba-Bra, <em>Ospedale</em> \u201cSan Lazzaro\u201d di Alba fino al 2015.</p>\n<h4 class=\"cv-section\">Effettua le seguenti prestazioni: \nVisita ginecologica comprensiva di ecografia \nVisita senologica\n<strong>Ecografia</strong> senologica\nPap test</h4>\n<h4 class=\"cv-section\">Il dottor Danilo Tagliati \u00e8 un medico specializzato in <strong>Ginecologia</strong> e <strong>Ostetricia</strong>, formatosi presso l&#x27;<em>Universit\u00e0</em> degli Studi di Torino, e ha conseguito il Diploma in Senologia sotto la guida del Professor Umberto Veronesi. Ha lavorato come Dirigente Medico in <strong>Ginecologia</strong> e <strong>Ostetricia</strong> presso l&#x27;<em>ASL</em> Alba-Bra dal 2000 al 2016 e, dal 2016, \u00e8 libero professionista, esercitando la sua attivit\u00e0 in libera professione. \nFormazione \nLaurea in Medicina e Chirurgia: <em>Universit\u00e0</em> degli Studi di Genova.\nSpecializzazione in <strong>Ginecologia</strong> ed <strong>Ostetricia</strong>: <em>Universit\u00e0</em> degli Studi di Torino.\nDiploma in Senologia: Scuola Italiana di Senologia.\nEsperienze Professionali \nDirigente Medico: <strong>Ginecologia</strong> e <strong>Ostetricia</strong> presso l&#x27;A.S.L. Alba-Bra (2000-2016).\nLibero Professionista: Dal 2016, supportando le donne nella prevenzione e nel trattamento delle patologie ginecologiche e senologiche.\nAree di Competenza Diagnosi precoce e trattamento delle patologie del seno, Interventi ginecologici, Prevenzione e diagnosi precoce. \n(parte gialla trovata su internet)</h4>"},
+  {nome:'VENEZIA VALERIA CAROLINA', specializzazione:'Urologia', bio:'Specialista in urologia con competenze in chirurgia laparoscopica, oncologia urologica e andrologia.', curriculumHtml: "<p>La Dr.ssa Venezia ha conseguito la specializzazione in <strong>Urologia</strong> presso l\u2019<em>Universit\u00e0</em> degli Studi di Pavia, si \u00e8 laureata in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli Studi del Piemonte Orientale A. Avogadro.</p>\n<h4 class=\"cv-section\">La Dott.ssa dall\u2019anno 2010 ha svolto attivit\u00e0 ambulatoriale specialistica presso numerose sedi in Piemonte.</h4>\n<p>Dal 2010 al 2017 ha ricoperto il ruolo di libero professionista in qualit\u00e0 di Medico Chirurgo specialista in <strong>Urologia</strong> presso la clinica Citt\u00e0 di Alessandria.</p>\n<h4 class=\"cv-section\">Nel corso della sua attivit\u00e0 lavorativa, la Dott.ssa Venezia ha approfondito la sua esperienza in campo urologico, adottando approcci multidisciplinari per il trattamento di patologie oncologiche urologiche, di ipertrofia prostatica benigna, di calcolosi urinaria, di andrologia e di infezioni delle basse vie urinarie. Inoltre, ha sviluppato competenze chirurgiche tradizionali, laparoscopiche e mininvasive.</h4>\n<h4 class=\"cv-section\">La Dott.ssa Venezia ha collaborato a numerosi progetti di educazione e prevenzione sessuale, ponendo particolare attenzione all\u2019integrazione culturale e all\u2019accesso ai servizi.\nDa alcuni anni, collabora attivamente con la Lega Italiana per la Lotto contro i Tumori \u2013 LILT di Alessandria e Asti. Inoltre, recentemente \u00e8 stata nominata Membro del Consiglio Direttivo nel ruolo di Consiglia della LILT di Asti.\nLa Dott.ssa Venezia \u00e8 autrice e co-autrice di numerosi articoli scientifici specialistici e, attualmente, \u00e8 iscritta alla Federazione Italiana Incontinenti.</h4>"},
+  {nome:'VINAI ELENA', specializzazione:'Radiodiagnostica', bio:'Medico radiologo esperto in ecografie addominali, muscoloscheletriche e pediatriche.', curriculumHtml: "<p>Medico Chirurgo specialista in <strong>Radiodiagnostica</strong>.</p>\n<h4 class=\"cv-section\">Laureata in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino nel 1997 e specializzata in <strong>Radiodiagnostica</strong> e Scienze delle Immagini nella stessa <em>Universit\u00e0</em> nel novembre 2001; da allora Dirigente Medico di I livello presso il servizio di <strong>Radiologia</strong> dell\u2019<em>Azienda Ospedaliera</em> S.Croce e Carle di Cuneo per  oltre 21 anni.</h4>\n<h4 class=\"cv-section\">Dal 2023  svolgo attivit\u00e0 di Medico Specialista Convenzionato Interno nella Branca di <strong>Radiologia</strong> presso l\u2019<em>ASL</em> CN 1 nell\u2019<em>Ospedale</em> di Mondov\u00ec .</h4>\n<p>Si occupa di Ecografie di vari distretti: <br>Addominale, <br>Reno-vescicale, <br>Muscolo scheletrica, <br>Dei tessuti molli, <br>Dei linfonodi, <br>Delle anche neonatali (nello specifico: L\u2019ecografia delle anche neonatale fa parte dello screening neonatale ed \u00e8 consigliata sia ai maschi sia alle femmine. Si esegue solitamente, entro i primi 2-3 mesi di vita o prima su segnalazione del pediatra, quando le anche non sono ancora particolarmente ossificate.<br>Questo esame permette di visualizzare i rapporti articolari e la maturit\u00e0 dell\u2019anca neonatale, permette di individuare precocemente anomalie come la displasia (che pu\u00f2 avere cause genetiche oppure origine nella posizione assunta dal bambino nell\u2019utero materno) e la lussazione.<br>Testicolare<br>Ecodoppler delle arterie renali.</p>"},
+  {nome:'GUZZO GIOVANNI', specializzazione:'Otorinolaringoiatria', bio:'Specialista ORL in visite, audiometria, chirurgia rinosinusale e patologie otologiche.', curriculumHtml: "<p>Specialista in <strong>Otorinolaringoiatria</strong>.</p>\n<h4 class=\"cv-section\">In servizio presso il reparto di otorinolaringoiatria dell\u2019ospedale SS Annunziata di Savigliano.</h4>\n<h4 class=\"cv-section\">Svolge attivit\u00e0 Libero Professionale Intramoenia-<em>ASL</em> CN1.</h4>\n<h4 class=\"cv-section\">Prestazioni: \nVisita Otorinolaringoiatrica\nControllo\nLavaggio auricolare\nEsame Audiometrico</h4>\n<h4 class=\"cv-section\">Tratta le seguenti patologie:\nMalattie delle tonsille e delle adenoidi: interventi di tonsillectomia, adenoidectomia\nMalattie del naso, dei seni paranasali: chirurgia endoscopica dei seni paranasali, chirurgia funzionale del naso (settoplastica, turbinoplastica, chirurgica funzionale dei turbinati)\nOSAS: chirurgia del russamento, sleep endoscopy\nMalattie dell\u2019orecchio: interventi di timpanoplastica, di miringotomia, di stapedectomia; inquadramento diagnostico e terapia delle sordit\u00e0 improvvise e delle sindromi vertiginose.\nPatologie benigne e maligne della cute del volto: interventi chirurgici di asportazione di lesioni del volto.\nPatologia benigna e maligna della ghiandola tiroide e delle paratiroidi: tiroidectomia totale e parziale, paratiroidectomia\nPatologia benigna e maligna delle ghiandole salivari maggiori: chirurgia delle ghiandole salivari maggiori (scialoadenectomia sottomandibolare, parotidectomia parziale e totale)\nPatologia benigna e maligna del cavo orale e dell\u2019orofaringe\nPatologie benigne e maligne della laringe, della faringe, dei linfonodi laterocervicali: interventi di chirurgia endoscopica della laringe, laringectomie parziali e subtotali ricostruttive, laringectomia totale e laringofaringectomie, impianto di protesi fonatorie, chirurgia dei linfonodi del collo\nConsulti multidisciplinari GIC in collaborazione con servizi di Oncologia <em>ASL</em> CN1 e ASO S.Croce e Carle e Radioterapia ASO S.Croce e Carle per la gestione dei pazienti oncologici</h4>"},
+  {nome:'GROSSO SILVIA', specializzazione:'Oftalmologia', bio:'Specialista in chirurgia oculare e trattamenti per cataratta, glaucoma e retina.', curriculumHtml: "<p>La Dr.ssa Grosso si \u00e8 laureata nel 1989 in Medicina e Chirurgia presso l&#x27;<em>Universit\u00e0</em> degli Studi di Genova e successivamente nel 1995 si \u00e8 specializzata in <strong>Oftalmologia</strong> presso il medesimo Ateneo.</p>\n<p>Attualmente esercita la libera professione di Oculista presso lo Studio di Genova.</p>\n<h4 class=\"cv-section\">Esegue prestazioni di chirurgia oculare, visite specialistiche per cataratta, glaucoma, malattie della retina, terapia per maculopatie ed altri trattamenti.</h4>\n<h4 class=\"cv-section\">La Dr.ssa Grosso Silvia specializzata in <strong>Oftalmologia</strong>, dirigente ospedale S. Martino esegue chirurgia oculare, visite cataratta, glaucoma, terapie maculopatie\nLa Dr.ssa Grosso Silvia laureata con lode in Medicina e Chirurgia presso l&#x27;<em>Universit\u00e0</em> degli Studi di Genova e successivamente specializzata in <strong>Oftalmologia</strong> presso il medesimo Ateneo. Attualmente \u00e8 dirigente di I livello presso il <em>Policlinico</em> S. Martino di Genova e svolge attivit\u00e0 privata presso il Centro Colombo in viale Sauli 39 a Genova. Esegue prestazioni di chirurgia oculare, visite specialistiche per cataratta, glaucoma, malattie della retina, terapia per maculopatie ed altri trattamenti.</h4>"},
+  {nome:'LOMBARDO ENRICO', specializzazione:'Cardiologia', bio:'Cardiologo esperto in ecocardiografia, ECG e diagnosi di patologie cardiache.', curriculumHtml: "<p>Specialista in cardiologia, il dott. Lombardo \u00e8 dirigente medico presso l&#x27;ASLCN1, ospedale di Mondov\u00ec.</p>\n<p>Il dottore si occupa della diagnosi, del trattamento e della cura delle malattie che colpiscono cuore e arterie, quali lo scompenso cardiaco, la cardiomiopatia ischemica, l&#x27;ipertensione.</p>\n<p>Il dottore esegue in studio la vista cardiologica, l&#x27;elettrocardiogramma, l&#x27;ecocardiografia e Doppler tsa.</p>"},
+  {nome:'RIVELLINI CARLO', specializzazione:'Chirurgia Vascolare', bio:'Specialista in chirurgia vascolare e diagnostica ecocolordoppler.', curriculumHtml: "<p>Ha conseguito il diploma di laurea in medicina e chirurgia conseguita in data 27/07/1999 presso la facolt\u00e0 di medicina e chirurgia dell\u2019universit\u00e0 degli studi di l\u2019aquila.</p>\n<p>Ha ottenuto la specializzazione nella disciplina di chirurgia vascolare conseguita in data 3/11/2004 presso universit\u00e0 degli studi di l\u2019aquila</p>\n<h4 class=\"cv-section\">Ha una notevole esperienza nel suo campo: \nDall\u2019anno 1999 all\u2019anno 2000 \u00e8 stato dirigente medico del reparto di chirurgia vascolare presso l\u2019azienda ospedaliera S. Croce e Carle di cuneo;</h4>\n<h4 class=\"cv-section\">Dall\u2019anno 2005  ad oggi \u00e8 dirigente medico dell\u2019 <em>ASL</em> CN 1 a tempo indeterminato\nInoltre, ha svolto le seguenti attivit\u00e0 supplementari e periodi di internato presso altre strutture:\nUn paio d\u2019anni presso la SC di trapianti di organo diretta dal Professor Antonio Famulari dove ha eseguito da primo operatore numerosi prelievi e alcuni trapianti di rene nonch\u00e9 il confezionamento di fistole artero-venose.</h4>\n<p>Un anno  presso la SC di <strong>Chirurgia Generale</strong> diretta dal Professor Giorgio Citone dove si \u00e8 dedicato in particolar modo alla chirurgia addominale.</p>\n<p>3 mesi presso la <em>Clinica</em> Columbus di Roma dove con la Direzione del Professor Antonio Sturniolo si \u00e8 dedicato al confezionamento di fistole artero- venose.</p>\n<p>6 mesi presso il reparto di Emodinamica dell\u2019<em>Ospedale</em> di Pescara Diretto dal Dott. Leonardo Paloscia dove ha imparato le tecniche interventistiche svolgendo da primo operatore sia esami angiografici che interventi di ricanalizzazione.</p>\n<h4 class=\"cv-section\">Ha lavorato come libero professionista presso numerose strutture private (Mater Dei,\nPaideia, Villa Salaria, vedi curriculum) presso la citt\u00e0 di Roma dove ha svolto attivit\u00e0 chirurgiche, di guardia medica e di organizzazione dei turni di lavoro nonch\u00e9 progetti di Screening Vascolari.</h4>\n<ul><li>Ha lavorato presso la SC di <strong>Chirurgia Vascolare</strong> ASO S.Croce e Carle di Cuneo fino al 2019 dove si \u00e8 occupato di:</li><li>Attivit\u00e0 clinica di reparto ed ambulatoriale</li><li>Attivit\u00e0 di diagnostica vascolare con ecocolordoppler</li><li>Attivit\u00e0 chirurgica eseguendo moltissimi interventi come primo operatore sia di chirurgia arteriosa maggiore che di chirurgia minore, sia di chirurgia tradizionale che endovascolare e ibrida accumulando un\u2019importante casistica operatoria.</li></ul>"},
+  {nome:'COMITE LODOVICO', specializzazione:'Neurochirurgia e Chirurgia Vertebrale', bio:'Neurochirurgo con esperienza internazionale in chirurgia vertebrale.', curriculumHtml: "<p>Medico Chirurgo, specializzato in <strong>Neurochirurgia</strong> e <strong>Chirurgia Vertebrale</strong>.</p>\n<p>Nell\u2019anno 2018:  ha conseguito la Laurea Magistrale a ciclo unico in Medicina e Chirurgia, conseguita presso l\u2019<em>Universit\u00e0</em> La Sapienza di Roma.</p>\n<h4 class=\"cv-section\">Nell\u2019anno 2019 ha ottenuto l\u2019Abilitazione all\u2019esercizio della professione medica \u2013 Iscrizione all\u2019Ordine dei Medici Chirughi e Odontoiatri di Salerno.\nHa una buona esperienza nel settore:</h4>\n<h4 class=\"cv-section\">Da Novembre 2024 a oggi: Dirigente Medico libero professionista c/o UO <strong>Chirurgia Vertebrale</strong> Humanitas Gradenigo\nHa conseguito nell\u2019anno la Specializzazione in <strong>Neurochirurgia</strong> e <strong>Chirurgia Vertebrale</strong> c/o l\u2019<em>Universit\u00e0</em> degli Studi di Torino <em>AOU</em> Citt\u00e0 della Salute e della Scienza, ospedali Molinette e CTO Humanitas Gradenigo\nDall\u2019anno 2019 all\u2019anno 2024: Medico in formazione specialistica in <strong>Neurochirurgia</strong> c/o <em>AOU</em> Citt\u00e0 della Salute e della Scienza di Torino Ospedali Molinette e CTO</h4>\n<h4 class=\"cv-section\">Neurochirurgo e Chirurgo vertebrale specializzato nel trattamento delle patologie della colonna e dell&#x27;encefalo, con l\u2019ausilio di tecniche moderne e tecnologie mininvasive. Svolge la sua attivit\u00e0 clinica e chirurgica presso Humanitas Gradenigo, centro di eccellenza, riconosciuto nel 2024 tra i migliori 11 ospedali d\u2019Italia secondo una ricerca condotta da Agenas, sviluppata su mandato del Ministero della Salute. Svolge, inoltre, la sua attivit\u00e0 clinica in diversi centri polispecialistici della provincia di Torino, del Piemonte e della Liguria. Dopo la laurea in medicina e chirurgia ottenuta con il massimo dei voti e con lode presso l\u2019<em>Universit\u00e0</em> di Roma La Sapienza, si \u00e8 specializzato in <strong>Neurochirurgia</strong> all&#x27;<em>Universit\u00e0</em> di Torino presso l&#x27;<em>AOU</em> Citt\u00e0 della Salute e della Scienza (Ospedali Molinette e CTO), frequentando i reparti diretti dal Prof Diego Garbossa, con una tesi sul trattamento delle spondilolistesi degenerative che ha ricevuto la dignit\u00e0 di stampa da parte della commissione esaminatrice. Ha avuto la possibilit\u00e0 di integrare e perfezionare le mie conoscenze e capacit\u00e0 chirurgiche acquisite durante frequenza della scuola di specializzazione di Torino, con esperienze presso prestigiosi centri chirurgici esteri ed italiani. In particolare, ha trascorso diversi mesi presso la Spine Unit del Rothman Institute della Jefferson University (Philadelphia \u2013 PA, USA) diretta dal Professor Alexander Vaccaro. Ha trascorso un periodo come Fellow presso la <strong>Neurochirurgia</strong> del Klinikum Rechts der Isar (Monaco di Baviera) diretta dal Professor Bernhard Meyer . Durante gli anni della specializzazione ha frequentato l\u2019unit\u00e0 di chirurgia vertebrale in Humanitas Gradenigo diretta dal Dr Marco Bozzaro. E&#x27; inoltre coautore di diverse pubblicazioni su riviste internazionali, ha partecipato e presentato lavori presso i congressi nazionali della Societ\u00e0 Italiana di <strong>Neurochirurgia</strong>. Ha avuto modo durante gli anni di partecipare a numerosi corsi di perfezionamento delle conoscenze e abilit\u00e0 chirurgiche, cos\u00ec come ha avuto modo di partecipare e organizzare corsi riguardanti le tecniche di base in chirurgia vertebrale su preparati anatomici.\nParte gialla trovata su un sito internet ( )</h4>"},
+  {nome:'AVICO ANNA', specializzazione:'Dietistica', bio:'Dietista con esperienza ospedaliera e in progetti di educazione alimentare.', curriculumHtml: ""},
+  {nome:'PEROTTO FABRIZIO', specializzazione:'Chirurgia Generale e Coloproctologia', bio:'Specialista in chirurgia generale e coloproctologia con esperienza ospedaliera.', curriculumHtml: "<p>Specialista  in CHIRURGIA GENERALE E COLOPROCTOLOGICA.</p>\n<p>Laureato in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli studi di Torino nell\u2019anno 2000 con valutazione di 110 su 110 con lode.</p>\n<h4 class=\"cv-section\">Dal 2008 presta la propria attivit\u00e0 presso il reparto di Chirurgia dell\u2019<em>Ospedale</em> di Mondov\u00ec</h4>\n<h4 class=\"cv-section\">Il  Dr.  presta servizio presso <em>ASL</em> CN1 in REGIME DI INTRAMOENIA</h4>"},
+  {nome:'MAGRO GIANPAOLO', specializzazione:'Diabetologia, Endocrinologia, Geriatria', bio:'Specialista in diabetologia ed endocrinologia con lunga esperienza clinica e didattica.', curriculumHtml: "<h4 class=\"cv-section\">Il Dr. Magro Giampaolo, si \u00e8 laureato in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> di Genova il 18/10/1982.\nSi \u00e8 abilitato nel Novembre 1982 e iscritto all\u2019Ordine dei Medici in data 26/01/83. \n\u00c8 specializzato in <strong>Diabetologia</strong> e Malattie del Ricambio il 23/10/1985, in Geriatria e Gerontologia il 23/06/1989 ed in <strong>Endocrinologia</strong> il 24/09/1992 sempre a pieni voti. \nNello specifico: \n\u00c8 stato Dirigente medico a tempo pieno dal 1986, prima presso USSL 60 di Borgo San Dalmazzo, dall\u2019anno 1986 all\u2019anno 1988 come assistente a tempo pieno nella disciplina di Igiene Epidemiologia e Sanit\u00e0 pubblica.\nDall\u2019 anno 1988 all\u2019anno 1990 come assistente a tempo pieno nella disciplina di Medicina Generale quindi dal Gennaio 1990, presso la divisione di <strong>Endocrinologia</strong> dell\u2019USSL 58 di Cuneo. \nNell\u2019anno 1995 ha vinto la graduatoria p/o la Divisione di <strong>Endocrinologia</strong> con la quale si individua il medico idoneo allo svolgimento delle mansioni superiori in caso di assenza del Responsabile. Vincitore del relativo concorso, \u00e8 diventato aiuto di <strong>Diabetologia</strong> presso la medesima Divisione dal 01/03/1996. \n\u00c8 stato Responsabile della S.S. di <strong>Diabetologia</strong> dell\u2019<em>Azienda Ospedaliera</em> Santa Croce e Carle dal Gennaio 2002 al Luglio 2021 All\u2019interno dell\u2019<em>Azienda Ospedaliera</em> dopo la nomina a responsabile della struttura operativa di diabetologica ha istituito l\u2019ambulatorio per la cura del piede diabetico, l\u2019ambulatorio dedicato ai giovani diabetici tipo 1 e ha formalizzato numerosi percorsi di cura in collaborazione con Cardiologia, Cardiochirurgia, Pediatria, Oftalmica, Nefrologia, <strong>Ortopedia</strong>, <strong>Chirurgia Vascolare</strong>, Malattie Infettive e <strong>Radiologia</strong> Interventistica al fine di ottimizzare la cura ospedaliera delle complicanze del diabete. \nMembro dal Novembre 2006 della commissione Diabetologica della <em>ASL</em> CN1 ha partecipato attivamente alla stesura del piano della qualit\u00e0 dell\u2019assistenza diabetologica sul territorio della nuova <em>ASL</em> CN1.\n E\u2019 autore o coautore di numerose pubblicazioni scientifiche di interesse diabetologico e/o endocrinologico, collabora a ricerche a carattere prevalentemente clinico/epidemiologico in collaborazione con Istituti di Ricerca e con le societ\u00e0 scientifiche di <strong>Diabetologia</strong>. E\u2019 stato principal Investigator di numerosi studi clinici (Comitato Etico di Cuneo).\n Dal Luglio 2021 \u00e8 in pensione e continua la propria attivit\u00e0 in regime di libera professione.</h4>"},
+  {nome:'GERMANETTO DANILO', specializzazione:'Fisioterapia e Massofisioterapia', bio:'Fisioterapista esperto in tecarterapia, rieducazione e massoterapia.', curriculumHtml: "<p>Il Dr. Germanetto \u00e8 specializzato in Fisioterapia e Massofisioterapia.</p>\n<h4 class=\"cv-section\">Effettua le seguenti prestazioni:\nTrattamento Fisioterapico\nTecar Terapia\nMassoterapia\nMassaggio Sportivo\nGinnastica posturale e Rinforzo muscolare\nFisiokinesiterapia\nMassokinesiterapia</h4>"},
+  {nome:'TATTOLI FABIO', specializzazione:'Nefrologia', bio:'Specialista in nefrologia con esperienza clinica e trapianti.', curriculumHtml: "<p>Ha conseguito la laurea in medicina e chirurgia nell\u2019anno 2003 presso l\u2019<em>Universit\u00e0</em> di Roma \u201cLa Sapienza\u201d.<br>Ha ottenuto l\u2019abilitazione alla professione in Medico Chirurgo nella seconda sessione del 2003 presso l\u2019<em>Universit\u00e0</em> di Roma \u201cLa Sapienza\u201d con successiva iscrizione all\u2019albo. <br>Ha ottenuto nell\u2019anno 2009 il diploma di specializzazione in Nefrologia, conseguito presso l\u2019<em>Universit\u00e0</em> di Torino.</p>\n<h4 class=\"cv-section\">Esperienze professionali: \nDall\u2019anno 2000 all\u2019anno 2003 ha frequentato l\u2019istituto di Idrologia Medica presso il servizio di <strong>Endoscopia Digestiva</strong>.\nNell\u2019anno 2003 ha eseguito un corso di medicina di emergenza nel territorio presso <em>Fondazione</em> S. Lucia <em>IRCCS</em> Roma.\nDall\u2019anno 2004 medico frequentatore presso la Sc di nefrologia Dialisi e trapianto dell\u2019<em>Ospedale</em> \u201cLe Molinette\u201d di Torino.</h4>"},
+  {nome:'DI BONO MASSIMO', specializzazione:'Pediatria, Ecografia Neonatale', bio:'Pediatra specializzato in ecografia neonatale e pediatrica.', curriculumHtml: "<p>Specialista  in PEDIATRIA e ECOGRAFIA NEO NATALE</p>\n<p>Si \u00e8 laureato in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli Studi di Pavia nel 1984.</p>\n<p>Ha ottenuto la Specializzazione in Pediatria presso l\u2019<em>Universit\u00e0</em> degli Studi di Pavia nel 1989.</p>\n<h4 class=\"cv-section\">Ha frequentato il Servizio di Ecotomografia del Reparto di <strong>Radiologia</strong> dell\u2019 <em>Ospedale</em> di Savigliano.</h4>\n<h4 class=\"cv-section\">Dal febbraio 1995 ha attivato il Servizio dei Ecotomografia Pediatrica presso l\u2019<em>Ospedale</em> di Ceva.</h4>\n<p>Presso l\u2019<em>Ospedale</em> di Mondov\u00ec ha continuato ad effettuare ecotomografie delle anche e reno vescicali .</p>\n<p>Dal 5 giugno 2017 \u00e8 responsabile dell\u2019Ambulatorio di <strong>Ecografia</strong> Neonatale presso l\u2019<em>Ospedale</em> di Mondov\u00ec.</p>\n<h4 class=\"cv-section\">E&#x27; stato in servizio come Dirigente Sanitario di Pediatria presso l\u2019<em>Ospedale</em> Regina Montis Regalis di Mondov\u00ec fino al 15 Luglio 2023.</h4>"},
+  {nome:'TAMORRI ETTORE', specializzazione:'Pneumologia e Tisiologia', bio:'Specialista in pneumologia; tratta BPCO, asma e apnea notturna.', curriculumHtml: "<p>Si \u00e8 laureato in Medicina e Chirurgia nel 1976 presso l\u2019<em>Universit\u00e0</em> \u201cLa Sapienza\u201d di Roma e successivamente ottiene la Specializzazione in Tisiologia e Malattie dell\u2019Apparato Respiratorio.</p>\n<h4 class=\"cv-section\">Vanta un\u2019esperienza trentennale in reparto di Medicina Interna e di Pronto Soccorso ed \u00e8 Responsabile dell\u2019Ambulatorio di Pneumologia e di Fisiopatologia respiratoria presso l\u2019<em>Ospedale</em> Regina Montis Regalis di Mondov\u00ec.</h4>\n<h4 class=\"cv-section\">Attualmente svolge attivit\u00e0 di libero professionista in varie strutture nella provincia di Cuneo e collabora con la <em>Casa di Cura</em> Citt\u00e0 di Bra.</h4>\n<h4 class=\"cv-section\">Principalmente si occupa di Pneumologia con particolare riguardo alla bronchite cronica o ostruttiva, dispnea notturna e asma bronchiale.\nIl dottore vanta un\u2019esperienza trentennale in reparto di Medicina Interna e di Pronto Soccorso ed \u00e8 Responsabile dell\u2019Ambulatorio di Pneumologia e di Fisiopatologia respiratoria presso l\u2019<em>Ospedale</em> Regina Montis Regalis di Mondov\u00ec.\nPatologie trattate\nasma allergica\nmalattie infiammatorie come la laringite, le bronchiti, le polmoniti e le brocopolmoniti, sia in forma acuta che cronica, come nel caso della broncopneumopatia cronica ostruttiva (BPCO) tubercolosi.\napnea notturna\ntumori al polmone\nsarcoidosi</h4>"},
+  {nome:'GAMBINO VALENTINA', specializzazione:'Psicoterapia', bio:'Psicoterapeuta ad orientamento psicoanalitico; lavora con adolescenti e adulti.', curriculumHtml: "<p>Si \u00e8 laureata all\u2019<em>Universit\u00e0</em> degli Studi di Torino, la dott.ssa Gambino \u00e8 Psicoterapeuta ad orientamento psicoanalitico.</p>\n<p>Si occupa di adolescenti, giovani-adulti e adulti attraverso percorsi di sostegno psicologico e psicoterapie individuali.</p>\n<p>Iscritta dal 2014 all\u2019Ordine degli Psicologi del Piemonte sezione A al n. 7108 e all\u2019Albo degli Psicoterapeuti</p>"},
+  {nome:'BORSA ROBERTO', specializzazione:'Urologia', bio:'Urologo esperto in calcolosi, incontinenza e oncologia urologica.', curriculumHtml: "<p>Si \u00e8 laureato in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino nel 1989.</p>\n<p>Ha ottenuto la specializzazione in <strong>Urologia</strong> nel 1994 presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino.</p>\n<h4 class=\"cv-section\">Dal 1990 al 1993 in servizio presso il reparto di <strong>Urologia</strong> dell\u2019<em>Ospedale</em> Maggiore San Giovanni Battista di Torino ( Molinette ) diretto dal Prof. Giovanni Sesia</h4>\n<p>Dal 1993 ad oggi \u00e8 I\u00b0 Liv.Dir.Med intamoenia presso la Struttura Complessa di <strong>Urologia</strong> dell\u2019<em>ASL</em> CN1 <em>Ospedale</em> Santissima Annunziata di Savigliano</p>\n<p>Dal 2000 al 2013 \u00e8 stato docente di <strong>Urologia</strong> presso l\u2019<em>Universit\u00e0</em> di Scienze Infermieristiche sede di Cuneo</p>\n<p>Nel 2010 specializzato in Bioetica presso la Facolt\u00e0 di Teologia dell\u2019Italia Settentrionale</p>\n<p>Nel 2011 Master Universitario di II\u00b0 Livello in Biotetica presso la Facolt\u00e0 di Teologia dell\u2019Italia Settentrionale</p>\n<p>E\u2019 stato componente delle commissione Etica - Deontologia dell\u2019 Ordine dei Medici di Cuneo, E\u2019 stato componente della commissione Dolore-cure palliative dell\u2019 Ordine dei Medici di Cuneo</p>\n<h4 class=\"cv-section\">Referente Urologo per il Centro Accoglienza e Servizi ( CAS ) rete Oncologia del Piemonte e Valle d\u2019Aosta</h4>\n<p>E\u2019 autore e coautore di numerose pubblicazioni ed abstract congressuali nei vari ambiti uro-andrologici. Si occupa del trattamento della calcolosi,dell\u2019incontinenza urinaria, dei tumori urologicici, dell\u2019infertilit\u00e0 maschile ed impotenza oltre che dal punto di vista clinico anche delle problematiche di etica clinica correlate a tali situazioni ,delle malattie sessualmente trasmesse con particolare riguardo alla diagnostica di II\u00b0 livello delle lesioni maschili da HPV.</p>"},
+  {nome:'DADONE CLAUDIO', specializzazione:'Urologia e Andrologia', bio:'Esperto in andrologia, tutor nazionale per Greenlight laser e formatore specialistico.', curriculumHtml: "<p>Dopo la Laurea in Medicina e Chirurgia presso l\u2019<em>Universit\u00e0</em> degli Studi di Torino, mi specializzo in <strong>Urologia</strong>.</p>\n<p>Ha svolto due Master \u2013 uno di I livello a Torino, e l\u2019altro di II livello Europeo \u2013 in Andrologia, diventando uno dei principali esperti nazionali in questo campo.</p>\n<p>Inizia la sua carriera professionale presso il reparto di <strong>Urologia</strong> dell\u2019<em>Azienda Ospedaliera</em> S. Croce e Carle di Cuneo, dove lavora ancora oggi.</p>\n<h4 class=\"cv-section\">Attivit\u00e0 Didattica:\n\u00c8 uno dei 4 tutor nazionali per l\u2019utilizzo del  che, utilizzato nell\u2019operazione alla prostata, garantisce un intervento pi\u00f9 soft con cateterizzazione minore (24h invece di 72 o 96)\nCorsi per la SIA, \u00e8 considerato una delle eccellenze nazionali\n\u00c8 titolare del corso NASA (National Surgical Andrological Academy), corso che si tiene in soli 15 centri italiani.\nSociet\u00e0 Scientifiche di cui \u00e8 membro: Societ\u00e0 Italiana di Andrologia (SIA)</h4>"},
+  {nome:'SCARLATA DORIANA', specializzazione:'Massofisioterapia', bio:'Massofisioterapista specializzata in riabilitazione e terapia manuale.', curriculumHtml: "<h4 class=\"cv-section\">La Dr.ssa \u00e8 specializzata in massofisioterapia equipollente \nHa conseguito il diploma specializzazione Massofisioterapista corso triennale di formazione equipollente al diploma universitario \nNell\u2019anno 1998 MASTER DI SPECIALIZZAZIONE 1 livello 14*Master riabilitazione e chirurgia della mano UNIMI - MULTIMEDICA 2019/2020 \nCORSI DI SPECIALIZZAZIONE:\nCorso 1\u00b0 - 2\u00b0 livello professionista certificato in Chinesiologia per algie vertebrali indetto dall\u2019unione nazionale Chinesiologi \u2013 Back School. \nCorso teorico pratico di Riabilitazione Integrata delle Lombalgie indetto dalla S.I.R.I. ( Scuola Italiana di Riabilitazione Integrata).\nCorso specializzazione in Idrokinesiterapia. \nCorso specializzazione Tecarterapia 2001. \nCorso specializzazione in Linfodrenaggio Manuale metodo Leduc.\nCorso specializzazione in Patologie della mano rieducazione funzionale, confezionamento e applicazione di tutori. \nCorso specializzazione EdiErmes confezionamento di tutori della mano \nCorso specializzazione 15\u00b0 Corso \u201cElementi di Chirurgia e Riabilitazione della mano\u201d . \nPartecipazione al \u201cFirst International WRISTH Symposium on Wrist and Hand Disorders\u201d ecm (istituto Mondiale di ricerca per la traumatologia Sportiva della mano) \nCorso specializzazione in KINESIO TAPING CLINICAL REASONING (KT1 - KT2). Corso specializzazione in KINESIO TAPING CLINICAL REASONING (KT3). \nCorso specializzazione in TAPING NMT linfotaping Corso specializzazione in TAPING NMT riabilitazione Corso specializzazione in \u201cLe patologie del piede\u201c. Corso specializzazione in \u201cI tutori neurologici : ideazione costruzione ed addestramento \u201c T.O: Silvio Tocco 2018 Corso specializzazione in Confezionamento di tutori statici e dinamici in materiale termoplastico Orfit Intermedica Milano 2019 Corso specializzazione in Riabilitazione dei disordini temporomandibolari A.T.M. Valerio Palmerini Savona 2019 Corso specializzazione in Rieducazione dei disordini temporomandibolari Corso avanzato Valerio Palmerini Milano 2019 Corso specializzazione in Auricoloterapia e Manupuntura per il trattamento del dolore in fisioterapia Milano Edi Ermes 2019 Corso specializzazione in \u201cla Neurodinamica nel percorso riabilitativo in terapia manuale\u201d (mobilizzazione del sistema nervoso) Partecipazione al Congresso della societ\u00e0 francese di chirurgia della mano GEM Parigi 2018 14^Master di 1 livello riabilitazione e chirurgia della mano Unimi -Multimedica</h4>"},
+  {nome:'GALLO GIORGIA', specializzazione:'Terapia Neuro e Psicomotricità dell’Età Evolutiva', bio:'Neuropsicomotricista dell’età evolutiva, impegnata in ambiti riabilitativi ed educativi.', curriculumHtml: "<p>Ha conseguito con Lode la laurea in TNPEE. Attraverso il gioco e il movimento supporta,sostiene e facilita lo sviluppo del bambino.<br>Lavora come Libero professionista</p>\n<h4 class=\"cv-section\">Svolge attivit\u00e0 in ambito: \nPreventivo\nEducativo\nTerapeutico\nSocio-educativo</h4>\n<h4 class=\"cv-section\">Si \u00e8 Laureata in \u201cTerapia della Neuro e Psicomotricit\u00e0 dell\u2019Et\u00e0 Evolutiva (TNPEE)\u201d , presso l\u2019<em>Universit\u00e0</em> di Torino UNITO nel 2023.\n\u00c8  volontaria presso la CROCE ROSSA ITALIANA di SAVIGLIANO dal 2018 e ha partecipato a un Progetto di Fisioterapia presso l&#x27;ONG Rishilpi International, miglioramento dello standard di vita dei bambini e delle lorofamiglie attraverso la presa in carico dei bambini con disabilit\u00e0, assistenza e cura presso il campus centrale Rishilpi e altri 5centri di riabilitazione comunitaria, formazione del personale locale e ampliamento delle conoscenze sulle terapie mediche, difisioterapia e di terapia occupazionale, progettazione degli interventi e realizzazione di ausili e ortesi su misura, in Bangladesh da Febbraio a Aprile 2024.\nEsperienze\nInsegnante di scuola dell\u2019infanzia Istituto Comprensivo Federico Sacco  [ 11/2023 \u2013 02/2024 ] Fossano\nOrganizzazione, progettazione e realizzazione di attivit\u00e0 didattiche e ludiche con l&#x27;obiettivo di sviluppare le competenze cognitive e motorie, promuovere lo sviluppo sociale, psicologico e relazionale e incrementare le abilit\u00e0 emotive e linguistiche in bambini di et\u00e0 prescolare.\nTirocinante TNPEE (Terapia della Neuro e Psicomotricit\u00e0 dell\u2019Et\u00e0 Evolutiva) <em>Universit\u00e0</em> degli Studi di Torino [ 10/2020 \u2013 07/2023 ] Torino\nPresa in carico diretta o indiretta, valutazione e trattamento abilitativo/riabilitativo, approfondimento di ogni procedura inerente lo speci\ufb01co professionale (counselling, test funzionali, scale di valutazione neuromotorie e psicomotorie, assessmentper ortesi ed ausili).\nEsperienze di tirocinio e\ufb00etuate c/o asilo nido e scuola dell\u2019infanzia \u201cBay\u201d (TO), c/o ospedale ostetrico-ginecologico Sant\u2019Anna(TO), c/o ospedale infantile Regina Margherita (TO), c/o <em>ASL</em> CN1 (Fossano e Savigliano).\nEducatrice Comune di Genola, Estate Bimbi [ 06/2019 \u2013 09/2019 ]\nDe\ufb01nizione degli obiettivi del progetto e di tempi e modalit\u00e0 di partecipazione, organizzazione delle attivit\u00e0 ludiche e ricreative e monitoraggio settimanale.\nTirocinante Scuola dell\u2019infanzia Santa Maria della Pieve [ 03/2018 \u2013 08/2018 ] Savigliano\nPartecipazione alla piani\ufb01cazione, preparazione e applicazione delle attivit\u00e0 di gioco quotidiane, costante supervisione dei bambini e mantenimento di un ambiente pulito e sicuro.\nDiploma di Insegnante di Massaggio Infantile AIMI (Associazione Italiana Massaggio Infantile) [01/2024 \u2013 01/2024] Milano\nLaurea in \u201cTerapia della Neuro e Psicomotricit\u00e0 dell\u2019Et\u00e0 Evolutiva (TNPEE)\u201d Unito (universit\u00e0 degli studi di Torino) [ 30/08/2022 \u201311/2023]Torino\nCampi di studio: Salute e assistenza: Terapia e riabilitazione\nAssistenza all\u2019infanzia e servizi per i giovani  Voto \ufb01nale: 110/110 con Lode  Tesi: La gestione del dolore acuto:strumenti di valutazione e trattamento riabilitativo in una coorte di pazienti oncologici in et\u00e0 pediatrica. Competenze mediche e di assistenza sanitaria che permettono di svolgere interventi di prevenzione, terapia e riabilitazione delle malattie neuropsichiatriche infantili (0-18 anni) nelle aree della neuro e psicomotricit\u00e0, al \ufb01ne di favorire i processi di (ri)organizzazione funzionale attraverso l&#x27;uso di tecniche speci\ufb01che per fasce d&#x27;et\u00e0, stadi di sviluppo e di\ufb00erenti quadri clinici.</h4>\n<p>GIORGIA GALLO \u2013 NEUROPSICOMOTRICISTA<br>Buongiorno,</p>\n<h4 class=\"cv-section\">Sperando di fare cosa gradita, lascio qui di seguito una breve presentazione come specialista in Psicomotricit\u00e0 dell\u2019Et\u00e0 Evolutiva, e dell\u2019attivit\u00e0 sanitaria ad essa associata che attualmente svolgo.</h4>\n<p>Sono la Dott.ssa Giorgia Gallo, professionista sanitaria nell\u2019area della riabilitazione, ho conseguito la laurea in Terapia della Neuro e Psicomotricit\u00e0 dell\u2019Et\u00e0 Evolutiva (TNPEE).</p>\n<p>Il Decreto Ministeriale 56/1997 ha istituito e normato la professione sanitaria del TNPEE, unica figura sanitaria professionale specializzata nella abi-riabilitazione e prevenzione deli disturbi e disabilit\u00e0 dell\u2019et\u00e0 evolutiva (0-18 anni), conciliando l\u2019ambito infantile-pediatrico con quello dell\u2019esercizio fisico del corpo e del movimento, in una cornice sanitaria di Riabilitazione e Cura.</p>\n<p>La Neuropsicomotricista dell\u2019Et\u00e0 Evolutiva si occupa in particolare di, prevenzione, valutazione e riabilitazione delle disabilit\u00e0 Neuropsichiatriche e dei disturbi del Neurosviluppo nei bambini in et\u00e0 compresa tra 0 e 18 anni.</p>\n<h4 class=\"cv-section\">Attraverso il gioco e il movimento, che rappresentano le attivit\u00e0 pi\u00f9 serie e importanti per il bambino, si osserva la globalit\u00e0 dello sviluppo, considerando l\u2019integrazione di tutte le funzioni e competenze.</h4>\n<p>Inoltre, sollecitando l\u2019organizzazione delle competenze emergenti, l\u2019operatore interagisce attraverso stimoli, al miglioramento delle potenzialit\u00e0 presenti, alla riorganizzazione dei processi funzionali e alla modificazione graduale dei comportamenti atipici.</p>\n<p>L\u2019obiettivo finale \u00e8 quello di promuovere un percorso di crescita che sia il pi\u00f9 equilibrato e armonico possibile nelle situazioni di difficolt\u00e0 e disabilit\u00e0 che limitano le capacit\u00e0 del bambino.</p>\n<h4 class=\"cv-section\">Nello specifico, la Neuropsicomotricista dell\u2019Et\u00e0 Evolutiva svolge attivit\u00e0 di prevenzione, percorsi di potenziamento, laboratori multisensoriali e in caso si reputasse necessario, anche corsi di massaggio infantile.</h4>\n<p>I trattamenti Neuropsicomotori sono indicati nel caso si presentassero:</p>\n<h4 class=\"cv-section\">-Disturbi Specifici di Apprendimento (Disgrafia)\n-Disturbi dello Spettro Autistico\n-Disturbi da Deficit di Attenzione, Iperattivit\u00e0 e Impulsivit\u00e0 (ADHD)\n-Difficolt\u00e0 di capacit\u00e0 Attentive e delle Funzioni Esecutive\n-Disturbi della Coordinazione Motoria \n-Disturbi della Regolazione, della Relazione e della Comunicazione\n-Ritardo Globale dello Sviluppo\n-Disabilit\u00e0 Intellettive \n-Sindromi Genetiche\n-Disturbi Neurologici, Neuromotori e Sensoriali</h4>\n<p>Ringrazio per l\u2019attenzione, resto a disposizione in caso potesse esserVi utile la mia collaborazione, mi trovate presso il Poliambulatorio Luigi Einaudi di Dogliani.</p>"},
+  {nome:'BONINO PAOLA', specializzazione:'Psicologia Clinica e Neuropsicologia', bio:'Psicologa clinica esperta in neuropsicologia dell’età evolutiva e tecniche ABA.', curriculumHtml: "<ul><li>Psicologia <em>Clinica</em></li><li>Esperta in Neuropsicologia dell\u2019et\u00e0 evolutiva</li><li>Pedagogista</li><li>Specializzata in Pedagogia <em>Clinica</em></li><li>Tecnico ABA (For Autism)</li><li>La Dottoressa si occupa di prevenzione, valutazione, diagnosi e terapia nei disturbi del neurosviluppo, in bambini e adolescenti. In modo particolare di:</li><li>Disturbi specifici di apprendimento;</li><li>Disturbi da deficit di attenzione /iperattivit\u00e0;</li><li>ADHD;</li><li>Disturbi comportamentali (DOP);</li><li>Disturbi emotivo-relazionali (fobie scolare, ansia da separazione);</li><li>Disabilit\u00e0 intellettiva;</li><li>Disturbi dello spettro dell\u2019autismo.</li></ul>\n<h4 class=\"cv-section\">La sua preparazione accademica e professionale, Le ha permesso di potersi confrontare in diversi contesti e situazioni che hanno contribuito a comporre la sua esperienza in ambito abilitativo nel trattamento dei disturbi dello spettro dell\u2019autismo. \nLa riabilitazione/abilitazione delle funzioni esecutive \u00e8 un obiettivo molto importante da perseguire, per aiutare il bambino a sviluppare le abilit\u00e0 di base, e alleggerire il sovraccarico sensoriale ed emotivo al fine di insegnare al bambino la gestione dei comportamenti problema attraverso la pianificazione di routine stabili. \nAttraverso tecniche cognitivo comportamentali e percorsi di affiancamento ai genitori e insegnanti, \u00e8 possibile migliorare la relazione, per raggiungere un migliore funzionamento sociale, supportando anche le famiglie (Parent Training) e la scuola attraverso il Teachers Training. \n\u00c8 inoltre consulente e psicologa scolastica, si occupa di diagnosi e screening nei disturbi di apprendimento (-DSA): Dislessia, Disortografia, Disgrafia, Discalculia e di interventi abilitativi attraverso training sulle funzioni esecutive (difficolt\u00e0 della Working Memory e di attenzione), acquisizione di metodi di studio efficaci. \nUn bambino o un adolescente con DSA, pur avendo una capacit\u00e0 cognitiva adeguata per la sua et\u00e0, pu\u00f2 apprendere con difficolt\u00e0, seguendo un ritmo pi\u00f9 lento rispetto ai coetanei perch\u00e9 faticando disperde energie a discapito della propria autostima. \nRiconoscere, diagnosticare e pianificare interventi specifici, permette un maggior successo negli apprendimenti ed evita conseguenze negative che possono influenzare il percorso scolastico e la possibilit\u00e0 di successo negli studi.</h4>"},
+  {nome:'NEGRO FEDERICA', specializzazione:'Dietistica', bio:'Dietista esperta in educazione alimentare, nutrizione in gravidanza e prevenzione allergie.', curriculumHtml: "<p>La Dr.ssa ha conseguito la Laurea triennale in Dietistica presso l\u2019<em>Universit\u00e0</em> degli studi di Genova, <br>Si occupa di:<br>Educazione alimentare per tutte le et\u00e0<br>Alimentazione in gravidanza e allattamento<br>Prevenzione e trattamento di patologie e allergie/intolleranze</p>"},
+  {nome:'CAMPERI ROMINA', specializzazione:'Dietistica', bio:'Dietista con esperienza in nutrizione clinica e sportiva.', curriculumHtml: "<h4 class=\"cv-section\">Ha conseguito la Laurea in Dietista il 29 ottobre 2004 presso l\u2019universit\u00e0\ndegli Studi di Torino.\nDa novembre 2004 lavora presso la struttura di riabilitazione Stella del Mattino, nello stesso periodo ha iniziato l\u2019attivit\u00e0 ambulatoriale.\nSi tiene costantemente aggiornata con corsi inerenti la professione.\nNel 2019 ha conseguito l\u2019attestato Sanis in esperto in nutrizione sportiva.</h4>\n<p>MEDICO specialista in DIETISTICA<br>La dottoressa esegue :<br>Visita<br>Controllo<br>Dieta personalizzata</p>"},
+  {nome:'RAVERA ENRICO', specializzazione:'', bio:'Profilo professionale registrato.', curriculumHtml: ""},
+  {nome:'FROLA EDOARDO', specializzazione:'Chirurgia Vascolare', bio:'Chirurgo vascolare specializzato in aneurismi, arteriopatie e varici.', curriculumHtml: "<h4 class=\"cv-section\">Il Dott. Edoardo Frola \u00e8 un Chirurgo Vascolare, specializzato nella diagnosi e nel trattamento delle patologie vascolari che colpiscono il sistema arterioso e venoso. La sua formazione e la sua esperienza gli permettono di affrontare una vasta gamma di problematiche legate alla circolazione, inclusi aneurismi, insufficienza cerebrovascolare, arteriopatia e varici degli arti inferiori.\nI principali campi di interesse e le patologie trattate dal Dott. Frola includono:\nAneurismi\nInsufficienza cerebrovascolare\nArteriopatia\nVarici degli arti inferiori\nMalformazioni vascolari\nTrattamenti endovascolari\nChirurgia vascolare mininvasiva\nIl Dott. Frola adotta un approccio personalizzato nella gestione del rischio operatorio e nella scelta delle terapie pi\u00f9 adatte per ciascun paziente, migliorando la qualit\u00e0 della vita e minimizzando i rischi di complicazioni.</h4>"},
+  {nome:'BASILE ALESSANDRO', specializzazione:'Ginecologia e Ostetricia', bio:'Dirigente medico in ostetricia e ginecologia; segue visite e percorsi gravidanza.', curriculumHtml: "<p>MEDICO specialista in GINECOLOGIA \u2013 OSTETRICIA<br>Dirigente Medico SC <strong>Ostetricia</strong> e <strong>Ginecologia</strong> <em>Ospedale</em> Regina Montis Regalis di Mondov\u00ec<br>Il dottore esegue :<br>Prima visita ginecologica / ostetrica<br><strong>Ecografia</strong> ginecologica / ostetrica<br>Percorso e controllo gravidanza<br>Pap test</p>"},
+  {nome:'EGIDIO ANTONIO CARMINE', specializzazione:'Ortopedia e Traumatologia', bio:'Specialista in ortopedia e traumatologia presso struttura ospedaliera.', curriculumHtml: "<h4 class=\"cv-section\">Specialista in ORTOPEDIA E TRAUMATOLOGIA\n \nIl Dr. presta servizio presso A.O. SANTA CROCE E CARLE DI CUNEO in REGIME DI INTRAMOENIA</h4>"}
+];
+
+function initials(name){
+  const p = name.split(/\s+/);
+  return ( (p[0] && p[0][0] ? p[0][0] : '') + (p[1] && p[1][0] ? p[1][0] : '') ).toUpperCase();
+}
+
+const orbit = document.getElementById('orbit');
+
+// safety: if an element year is present set it, otherwise ignore
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+function buildCards(){
+  if (!orbit) return;
+  orbit.innerHTML = '';
+  DOCTORS.forEach(d => {
+    const node = document.createElement('div');
+    node.className = 'node';
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class='initials'>${initials(d.nome)}</div>
+      <div class='name'>${d.nome}</div>
+      <div class='spec'>${d.specializzazione}</div>
+    `;
+    node.appendChild(card);
+    orbit.appendChild(node);
+    card.addEventListener('click', () => openModal(d));
+  });
+}
+
+function introAnimation(){
+  const nodes = Array.from(orbit.querySelectorAll('.node'));
+  nodes.forEach((n, i) => {
+    const angle = (i / Math.max(nodes.length,1)) * Math.PI * 2;
+    const x = Math.cos(angle) * 200;
+    const y = Math.sin(angle) * 100;
+    n.style.transform = `translate(${x}px,${y}px)`;
+    n.style.opacity = '0';
+    setTimeout(() => {
+      n.style.transition = 'transform 2.5s ease, opacity 2.5s ease';
+      n.style.transform = 'translate(0,0)';
+      n.style.opacity = '1';
+    }, 50 * i);
+  });
+  setTimeout(() => startPulses(), 3000);
+}
+
+function startPulses(){
+  const cards = Array.from(document.querySelectorAll('.card'));
+  if (!cards.length) return;
+  function pulseOnce(){
+    const idx = Math.floor(Math.random() * cards.length);
+    const c = cards[idx];
+    c.classList.add('pulse');
+    setTimeout(() => c.classList.remove('pulse'), 4000);
+    setTimeout(pulseOnce, 2000 + Math.random() * 4000);
+  }
+  pulseOnce();
+}
+
+// Modal
+const modalOverlay = document.getElementById('modalOverlay');
+const modal = document.getElementById('modal');
+const modalName = document.getElementById('modalName');
+const modalSpec = document.getElementById('modalSpec');
+const modalBody = document.getElementById('modalBody');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(d){
+  modalName.textContent = d.nome;
+  modalSpec.textContent = d.specializzazione;
+  modalBody.innerHTML = (d.curriculumHtml || d.bio);
+  modalOverlay.style.display = 'flex';
+modalOverlay.setAttribute('aria-hidden','false');
+}
+
+function closeModal(){
+  modalOverlay.setAttribute('aria-hidden','true'); modalOverlay.style.display = 'none';
+modalOverlay.classList.remove('overlay-fade-out'); modalOverlay.style.pointerEvents=''; }
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+window.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* Particles: append the canvas once and draw; it's fixed & behind via CSS */
+function startParticles(){
+  if (document.getElementById('particles')) return;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'particles';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const parts = Array.from({ length: 25 }).map(() => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 10 + 4,
+    vx: (Math.random() - .5) * .2,
+    vy: (Math.random() - .5) * .2,
+    alpha: .05 + Math.random() * .1
+  }));
+
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      g.addColorStop(0, `rgba(255,31,125,${p.alpha})`);
+      g.addColorStop(1, `rgba(255,140,0,0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* Avvio */
+buildCards();
+introAnimation();
+startParticles();
+</script>
+<script>
+(function(){
+  const drawer = document.getElementById('sidebarMobile');
+  const overlay = document.getElementById('mobileOverlay');
+  const closeBtn = drawer ? drawer.querySelector('.mnav-close') : null;
+  if(!drawer || !overlay || !closeBtn) return;
+  function closeDrawer(){
+    const btn = document.getElementById('hamburgerBtn');
+    if(btn){ btn.classList.remove('active'); btn.setAttribute('aria-expanded','false'); }
+    drawer.classList.remove('active'); drawer.setAttribute('aria-hidden','true');
+    overlay.classList.remove('active');
+  }
+  closeBtn.addEventListener('click', closeDrawer);
+})();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('sidebarMobile');
+  var overlay = document.getElementById('mobileOverlay');
+  var closeX = drawer ? drawer.querySelector('.mnav-close') : null;
+  if(!btn || !drawer || !overlay) return;
+
+  function openDrawer(){
+    btn.classList.add('active'); btn.setAttribute('aria-expanded','true');
+    drawer.classList.add('active'); drawer.setAttribute('aria-hidden','false');
+    overlay.classList.add('active');
+  }
+  function closeDrawer(){
+    btn.classList.remove('active'); btn.setAttribute('aria-expanded','false');
+    drawer.classList.remove('active'); drawer.setAttribute('aria-hidden','true');
+    overlay.classList.remove('active');
+  }
+  function toggleDrawer(e){ if(e){ e.preventDefault(); e.stopPropagation(); } drawer.classList.contains('active') ? closeDrawer() : openDrawer(); }
+
+  // Clean old handlers
+  var newBtn = btn.cloneNode(true); btn.parentNode.replaceChild(newBtn, btn); btn = newBtn;
+
+  btn.addEventListener('click', toggleDrawer, true);
+  overlay.addEventListener('click', closeDrawer);
+  if(closeX){ closeX.addEventListener('click', closeDrawer); }
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeDrawer(); } });
+
+  // Ensure active is on "dottori.html"
+  try{
+    document.querySelectorAll('#sidebarMobile .mnav-link').forEach(function(a){ a.classList.remove('active'); });
+    var set = false;
+    document.querySelectorAll('#sidebarMobile .mnav-link').forEach(function(a){
+      var href = (a.getAttribute('href')||'').toLowerCase();
+      if(!set && (href.endsWith('dottori.html') || href.indexOf('/dottori') !== -1)){ a.classList.add('active'); set = true; }
+    });
+  }catch(e){}
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var drawer = document.getElementById('sidebarMobile');
+  var overlay = document.getElementById('mobileOverlay');
+  var closeX = drawer ? drawer.querySelector('.mnav-close') : null;
+  if(!drawer || !overlay || !closeX) return;
+  function closeDrawer(){
+    var btn = document.getElementById('hamburgerBtn');
+    if(btn){ btn.classList.remove('active'); btn.setAttribute('aria-expanded','false'); }
+    drawer.classList.remove('active'); drawer.setAttribute('aria-hidden','true');
+    overlay.classList.remove('active');
+  }
+  closeX.addEventListener('click', closeDrawer);
+});
+</script>
+<script>
+  (function(){
+    var y = document.getElementById('year-js');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+</script>
+<script>
+/* === PATCH v5: Modal spin & render safety === */
+(function(){
+  var modalOverlay = document.getElementById('modalOverlay');
+  var modal = document.getElementById('modal');
+  var modalCloseBtn = document.getElementById('modalClose');
+  var modalName = document.getElementById('modalName');
+  var modalSpec = document.getElementById('modalSpec');
+  var modalBody = document.getElementById('modalBody');
+  var orbit = document.getElementById('orbit');
+
+  if (!modal || !modalOverlay) return;
+
+  // Override open/close to animate
+  window.openModal = function(d){
+    if (modalName && d && d.nome) modalName.textContent = d.nome;
+    if (modalSpec && d && d.specializzazione) modalSpec.textContent = d.specializzazione;
+    if (modalBody) modalBody.innerHTML = (d && (d.curriculumHtml || d.bio)) || '';
+
+    modalOverlay.style.display = 'flex';
+modalOverlay.setAttribute('aria-hidden','false');
+    modal.classList.remove('spectacular-out');
+    modal.style.animation = 'none'; void modal.offsetWidth; modal.style.animation = '';
+    modal.classList.add('spectacular-in');
+  };
+
+  window.closeModal = function(){
+    if (modal.classList.contains('spectacular-out')) return;
+    modal.classList.remove('spectacular-in');
+    modal.style.animation = 'none'; void modal.offsetWidth; modal.style.animation = '';
+    modal.classList.add('spectacular-out');
+    var onEnd = function(e){
+      if (e && e.target !== modal) return;
+      modalOverlay.style.display = 'none';
+      modal.classList.remove('spectacular-out');
+      modal.removeEventListener('animationend', onEnd);
+      modal.removeEventListener('webkitAnimationEnd', onEnd);
+    };
+    modal.addEventListener('animationend', onEnd, { once:true });
+    modal.addEventListener('webkitAnimationEnd', onEnd, { once:true });
+  };
+
+  // Ensure buttons/overlay/ESC close
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); window.closeModal(); });
+  if (modalOverlay) modalOverlay.addEventListener('click', function(e){ if (e.target === modalOverlay) window.closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') window.closeModal(); });
+
+  // Safety: if cards not rendered yet, try to render after load
+  function ensureCards(){
+    try{
+      if (orbit && orbit.children.length === 0){
+        if (typeof buildCards === 'function') { buildCards(); }
+        // if still empty but DOCTORS exists, render minimal
+        if (orbit.children.length === 0 && Array.isArray(window.DOCTORS)){
+          window.DOCTORS.forEach(function(d){
+            var node = document.createElement('div'); node.className='node';
+            var card = document.createElement('div'); card.className='card';
+            card.innerHTML = "<div class='initials'>" + (d.nome?d.nome.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase():'') + "</div>"+
+                             "<div class='name'>" + (d.nome||'') + "</div>"+
+                             "<div class='spec'>" + (d.specializzazione||'') + "</div>";
+            node.appendChild(card); orbit.appendChild(node);
+            card.addEventListener('click', function(){ window.openModal(d); });
+          });
+        }
+      }
+    }catch(e){}
+  }
+  if (document.readyState === 'complete'){ setTimeout(ensureCards, 0); }
+  else { window.addEventListener('load', function(){ setTimeout(ensureCards, 0); }); }
+})();
+</script><script>
+/* Fix chiusura animata modale (X/overlay/ESC) — non distruttivo */
+(function () {
+  var modalOverlay = document.getElementById('modalOverlay');
+  var modal        = document.getElementById('modal');
+  var closeX       = document.getElementById('modalClose');
+  if (!modal || !modalOverlay || !closeX) return;
+
+  function animatedClose(e){
+    if (e) { e.preventDefault(); e.stopImmediatePropagation(); }
+    if (modal.classList.contains('spectacular-out')) return;
+
+    // reset eventuali animazioni in corso e avvia la chiusura speculare
+    modal.classList.remove('spectacular-in');
+    modal.style.animation = 'none'; void modal.offsetWidth; modal.style.animation = '';
+    modal.classList.add('spectacular-out');
+
+    var onEnd = function(ev){
+      if (ev && ev.target !== modal) return;
+      modalOverlay.style.display = 'none';
+      modal.classList.remove('spectacular-out');
+      modal.removeEventListener('animationend', onEnd);
+      modal.removeEventListener('webkitAnimationEnd', onEnd);
+    };
+    modal.addEventListener('animationend', onEnd, { once: true });
+    modal.addEventListener('webkitAnimationEnd', onEnd, { once: true });
+  }
+
+  // CAPTURE = true: il nostro handler parte prima degli altri e li blocca
+  closeX.addEventListener('click', animatedClose, true);
+  modalOverlay.addEventListener('click', function(e){
+    if (e.target === modalOverlay) animatedClose(e);
+  }, true);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') animatedClose(e);
+  }, true);
+})();
+</script>
+
+<script>
+// --- Init: keep overlay hidden on load; clear any leftover classes ---
+(function(){
+  var modalOverlay = document.getElementById('modalOverlay');
+  var modal = document.getElementById('modal');
+  if (!modalOverlay || !modal) return;
+  // Ensure aria-hidden true at start
+  if (!modalOverlay.hasAttribute('aria-hidden')) modalOverlay.setAttribute('aria-hidden','true');
+  // Safety: clear any accidental open/animation classes
+  modal.classList.remove('spectacular-in','spectacular-out');
+  // Ensure body scroll is normal on load
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  // If some other script forced it visible very early, immediately hide
+  modalOverlay.style.display = 'none';
+})();
+</script>
+
+
+<script>
+// --- Build sticky header inside modal, using #modalName and #modalSpec if present ---
+(function(){
+  var modal = document.getElementById('modal');
+  var modalOverlay = document.getElementById('modalOverlay');
+  var closeBtn = document.getElementById('modalClose');
+  if (!modal || !closeBtn) return;
+
+  // Avoid duplicate bars
+  if (document.getElementById('modalStickyBar')) return;
+
+  var nameEl = document.getElementById('modalName');
+  var specEl = document.getElementById('modalSpec');
+
+  // Create sticky bar
+  var bar = document.createElement('div');
+  bar.id = 'modalStickyBar';
+
+  var idBlock = document.createElement('div');
+  idBlock.className = 'id-block';
+
+  var title = document.createElement('h3');
+  title.className = 'id-title';
+  title.textContent = nameEl ? (nameEl.textContent || nameEl.innerText || '').trim() : '';
+
+  var sub = document.createElement('div');
+  sub.className = 'id-sub';
+  sub.textContent = specEl ? (specEl.textContent || specEl.innerText || '').trim() : '';
+
+  idBlock.appendChild(title);
+  idBlock.appendChild(sub);
+
+  bar.appendChild(idBlock);
+
+  // Move the existing close button into the sticky bar so it remains visible
+  bar.appendChild(closeBtn);
+
+  // Insert the bar at the very top of the modal
+  modal.insertBefore(bar, modal.firstChild);
+})();
+</script>
+
+</body>
+</html>

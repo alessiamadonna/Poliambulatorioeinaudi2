@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servizi Specializzati - StudioMed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #ffe8f0 0%, #fff5f8 100%);
+            min-height: 100vh;
+        }
+
+       /* Sidebar Desktop */
+        .sidebar-desktop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-sidebar {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logo-sidebar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.05) 0%, transparent 100%);
+            color: #ff8c00;
+            border-left-color: #ff8c00;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.1) 0%, transparent 100%);
+            color: #ff1f7d;
+            border-left-color: #ff1f7d;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            display: none;
+        }
+
+        /* Mobile Hamburger */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar-mobile {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar-mobile.active {
+            left: 0;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 60px 40px;
+            min-height: 100vh;
+        }
+
+        /* Hero Header */
+        .servizi-hero {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .servizi-hero h1 {
+            font-size: 64px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .servizi-hero .subtitle {
+            font-size: 22px;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Slideshow Container */
+        .servizi-slideshow {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            padding: 80px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 700px;
+        }
+
+        .servizio-slide {
+            display: none;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .servizio-slide.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Side */
+        .servizio-content {
+            padding-right: 40px;
+        }
+
+        .servizio-number {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .servizio-content h2 {
+            font-size: 52px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            color: #000;
+            position: relative;
+            display: inline-block;
+        }
+
+        .servizio-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 5px;
+            border-radius: 3px;
+        }
+
+        .slide-sport h2::after {
+            background: linear-gradient(90deg, #ff1f7d, #ff4f9d);
+        }
+
+        .slide-lavoro h2::after {
+            background: linear-gradient(90deg, #ff8c00, #ffb347);
+        }
+
+        .slide-infermieristica h2::after {
+            background: linear-gradient(90deg, #4caf50, #81c784);
+        }
+
+        .servizio-intro {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        /* List Styles */
+        .servizio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .servizio-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 18px 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .servizio-list-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            transition: width 0.3s;
+        }
+
+        .slide-sport .servizio-list-item::before {
+            background: linear-gradient(180deg, #ff1f7d, #ff4f9d);
+        }
+
+        .slide-lavoro .servizio-list-item::before {
+            background: linear-gradient(180deg, #ff8c00, #ffb347);
+        }
+
+        .slide-infermieristica .servizio-list-item::before {
+            background: linear-gradient(180deg, #4caf50, #81c784);
+        }
+
+        .servizio-list-item:hover {
+            background: white;
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .servizio-list-item:hover::before {
+            width: 8px;
+        }
+
+        .list-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .slide-sport .list-icon {
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+        }
+
+        .slide-lavoro .list-icon {
+            background: linear-gradient(135deg, #ff8c00, #ffb347);
+        }
+
+        .slide-infermieristica .list-icon {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+        }
+
+        .list-icon::after {
+            content: '✓';
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .list-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Visual Side */
+        .servizio-visual {
+            position: relative;
+            height: 100%;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visual-image {
+            width: 100%;
+            height: 500px;
+            border-radius: 30px;
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .visual-decoration {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        .slide-sport .visual-decoration {
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+            top: -50px;
+            right: -50px;
+        }
+
+        .slide-lavoro .visual-decoration {
+            background: linear-gradient(135deg, #ff8c00, #ffb347);
+            bottom: -50px;
+            left: -50px;
+        }
+
+        .slide-infermieristica .visual-decoration {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            top: -50px;
+            left: -50px;
+        }
+
+        /* Navigation */
+        .slide-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: #333;
+            stroke-width: 2;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            width: 40px;
+            border-radius: 6px;
+        }
+
+        .dot:nth-child(1).active {
+            background: linear-gradient(90deg, #ff1f7d, #ff4f9d);
+        }
+
+        .dot:nth-child(2).active {
+            background: linear-gradient(90deg, #ff8c00, #ffb347);
+        }
+
+        .dot:nth-child(3).active {
+            background: linear-gradient(90deg, #4caf50, #81c784);
+        }
+
+        /* Contact CTA */
+        .contact-cta {
+            background: white;
+            border-radius: 30px;
+            padding: 30px 40px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-cta p {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .contact-btn {
+            padding: 15px 35px;
+            border-radius: 50px;
+            border: none;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slide-sport .contact-btn {
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+        }
+
+        .slide-lavoro .contact-btn {
+            background: linear-gradient(135deg, #ff8c00, #ffb347);
+        }
+
+        .slide-infermieristica .contact-btn {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        .footer-luxury.light {
+            position: relative;
+            background: linear-gradient(180deg, #ffffff 0%, #fff8f3 100%);
+            color: #333;
+            margin-left: 280px;
+            padding: 100px 0 50px;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 140, 0, 0.15);
+            box-shadow: inset 0 10px 40px rgba(255, 140, 0, 0.05);
+        }
+
+        .footer-luxury.light .footer-glow {
+            position: absolute;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.18), rgba(255, 31, 125, 0.12), transparent 70%);
+            filter: blur(60px);
+            animation: glowMove 8s ease-in-out infinite alternate;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .footer-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: #222;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-slogan {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .footer-links h4,
+        .footer-contact h4,
+        .footer-social h4 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-links h4::after,
+        .footer-contact h4::after,
+        .footer-social h4::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            border-radius: 3px;
+        }
+
+        .footer-links ul,
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .footer-links li,
+        .footer-contact li {
+            margin-bottom: 10px;
+            font-size: 19px;
+            color: rgba(0, 0, 0, 0.6);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-links li a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-links li:hover,
+        .footer-contact li:hover {
+            color: #ff4f9d;
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ff1f7d;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(135deg, #ff8c00, #ff4f9d);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.3);
+        }
+
+        .social-icons a svg {
+    width: 22px;
+    height: 22px;
+}
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 30px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-bottom: 8px;
+        }
+
+        .footer-credit {
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .heart {
+            color: #ff4f9d;
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar Desktop -->
+    <div class="sidebar-desktop">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Visite
+            </a>
+
+            <a href="dottori.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                I nostri specialisti
+            </a>
+
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+
+            <a href="servizi.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+
+            <a href="eventi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+
+             <a href="index.html#contatti" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Info
+            </a>
+        </nav>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <img src="img/logo.png" alt="StudioMed Logo" style="height: 40px;">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Sidebar Mobile -->
+    <div class="sidebar-mobile">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Visite
+            </a>
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+            <a href="servizi.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+            <a href="eventi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+        </nav>
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <div class="servizi-hero">
+            <h1>Servizi Specializzati</h1>
+            <p class="subtitle">Il nostro poliambulatorio offre servizi completi e specializzati per rispondere alle diverse esigenze sanitarie con professionalità e competenza.</p>
+        </div>
+
+        <!-- Slideshow Container -->
+        <div class="servizi-slideshow">
+            <!-- Slide 1: Medicina dello Sport -->
+            <div class="servizio-slide slide-sport active">
+                <div class="servizio-content">
+                    <div class="servizio-number">01 / 03</div>
+                    <h2>Medicina<br>dello Sport</h2>
+                    <p class="servizio-intro">
+                        La Medicina dello Sport valuta le capacità funzionali e strutturali per praticare sport agonistico e non agonistico secondo la normativa di Legge. Include esami completi e certificazioni per garantire la sicurezza degli atleti.
+                    </p>
+
+                    <div class="servizio-list">
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Preparazione Atletica-motoria sportiva con Personal Trainer</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Abilitazione preparatore atletico professionista F.I.G.C.</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Fisioterapia Sportiva e Recupero Infortuni</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Programmi dietetici e nutrizionali per sportivi</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-cta">
+                        <p>Prenota la tua visita sportiva</p>
+                        <button class="contact-btn">0173 742501</button>
+                    </div>
+                </div>
+
+                <div class="servizio-visual">
+                    <img src="images/medicina-sport.jpg" alt="Medicina dello Sport" class="visual-image">
+                    <div class="visual-decoration"></div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Medicina del Lavoro -->
+            <div class="servizio-slide slide-lavoro">
+                <div class="servizio-content">
+                    <div class="servizio-number">02 / 03</div>
+                    <h2>Medicina<br>del Lavoro</h2>
+                    <p class="servizio-intro">
+                        Il Poliambulatorio Luigi Einaudi offre servizi completi di Medicina del Lavoro, consulenza aziendale e formazione sulla sicurezza, in conformità al D. Lgs 81/2008.
+                    </p>
+
+                    <div class="servizio-list">
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Medicina del Lavoro e sorveglianza sanitaria</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Perizie medico legali specializzate</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Servizi di consulenza alle aziende</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Sicurezza e Prevenzione sul luogo di lavoro</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Corsi di primo soccorso e formazione (R.S.P.P, antincendio)</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-cta">
+                        <p>Contattaci per maggiori informazioni</p>
+                        <button class="contact-btn">0173 742501</button>
+                    </div>
+                </div>
+
+                <div class="servizio-visual">
+                    <img src="images/medicina-lavoro.png" alt="Medicina del Lavoro" class="visual-image">
+                    <div class="visual-decoration"></div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Assistenza Infermieristica -->
+            <div class="servizio-slide slide-infermieristica">
+                <div class="servizio-content">
+                    <div class="servizio-number">03 / 03</div>
+                    <h2>Assistenza<br>Infermieristica</h2>
+                    <p class="servizio-intro">
+                        L'Infermiere è un operatore sanitario che, in possesso del diploma universitario abilitante, è responsabile dell'Assistenza generale Infermieristica, rispondendo ai bisogni assistenziali e di cura del paziente.
+                    </p>
+
+                    <div class="servizio-list">
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Misurazione pressione arteriosa, frequenza cardiaca e saturazione</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Prelievi venosi e misurazione glicemia capillare</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Medicazioni ferite chirurgiche e lesioni da decubito</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Somministrazione terapie (sottocutanea, intramuscolare, topica)</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Gestione P.E.G., tracheotomia, stomia e catetere vescicale</span>
+                        </div>
+                        <div class="servizio-list-item">
+                            <div class="list-icon"></div>
+                            <span class="list-text">Esecuzione di vaccinazioni prescritte</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-cta">
+                        <p>Richiedi assistenza infermieristica</p>
+                        <button class="contact-btn">0173 742501</button>
+                    </div>
+                </div>
+
+                <div class="servizio-visual">
+                    <img src="images/assistenza-infermieristica.jpg" alt="Assistenza Infermieristica" class="visual-image">
+                    <div class="visual-decoration"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="slide-nav">
+            <button class="nav-btn" onclick="changeSlide(-1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="slide-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+                <span class="dot" onclick="goToSlide(2)"></span>
+            </div>
+
+            <button class="nav-btn" onclick="changeSlide(1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+   <!-- Footer -->
+     <!-- Footer -->
+    <footer class="footer-luxury light">
+        <div class="footer-glow"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Poliambulatorio <span>Luigi Einaudi</span></h2>
+                    <p class="footer-slogan">La salute, reinventata.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Esplora</h4>
+                    <ul>
+                        <li><a href="servizi.html">Diagnosi</a></li>
+                        <li><a href="dottori.html">Visite</a></li>
+                        <li><a href="terapie.html">Terapie</a></li>
+                        <li><a href="eventi.html">Eventi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contatti</h4>
+                    <ul>
+                        <li>📞 +39 0173 742501</li>
+                        <li>✉️ info@studiomed.it</li>
+                        <li>📍 Via Torino 118/B, 12063 Dogliani CN</li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Seguici</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Poliambulatorio-Luigi-Einaudi-100014016342183/" class="facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/poliambulatorioluigieinaudi/" class="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                       <a href="#" class="doctorlib" aria-label="Doctolib">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 <strong>Poliambulatorio Luigi Einaudi</strong> –  P.I. 03611100045</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.servizio-slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (index >= slides.length) currentSlide = 0;
+            if (index < 0) currentSlide = slides.length - 1;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance slides every 8 seconds
+        setInterval(() => {
+            changeSlide(1);
+        }, 8000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+    </script>
+</body>
+</html>

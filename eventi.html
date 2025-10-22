@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Eventi — Poliambulatorio Luigi Einaudi</title>
+  <style>
+    /* === start: imported / adapted styles from index.html (keeps same palette & sidebar/footer) === */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:linear-gradient(135deg,#ffe8f0 0%,#fff5f8 100%);color:#111;overflow-x:hidden}
+
+    /* Sidebar Desktop */
+        .sidebar-desktop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-sidebar {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logo-sidebar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.05) 0%, transparent 100%);
+            color: #ff8c00;
+            border-left-color: #ff8c00;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.1) 0%, transparent 100%);
+            color: #ff1f7d;
+            border-left-color: #ff1f7d;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            display: none;
+        }
+
+        /* Mobile Hamburger */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar-mobile {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar-mobile.active {
+            left: 0;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    /* Page wrapper */
+    .main{margin-left:280px;padding:60px 40px 140px;min-height:100vh;position:relative}
+
+    /* Fancy hero / header for eventi page */
+    .events-hero{background:linear-gradient(180deg,#fff9fc 0%,#fff0f5 100%);border-radius:28px;padding:40px;box-shadow:0 20px 50px rgba(0,0,0,.06);position:relative;overflow:visible}
+    .events-hero .kicker{display:inline-flex;align-items:center;gap:12px;padding:10px 20px;border-radius:40px;background:linear-gradient(135deg,#ff1f7d,#ff4f9d);color:#fff;font-weight:800;font-size:14px;box-shadow:0 8px 30px rgba(255,31,125,.18)}
+    .events-hero h1{font-size:48px;margin-top:18px;line-height:1.02;font-weight:900;background:linear-gradient(135deg,#ff1f7d,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .events-hero p.lead{font-size:18px;color:#444;margin-top:14px}
+
+    /* Animated ribbon under header */
+    .ribbon{position:absolute;right:-60px;top:-40px;width:420px;height:420px;pointer-events:none;filter:blur(30px);opacity:.18;z-index:0}
+
+    /* Layout: featured + list */
+    .events-grid{display:grid;grid-template-columns:1fr 420px;gap:28px;margin-top:28px;align-items:start}
+
+    /* Featured column */
+    .featured-wrap{display:flex;flex-direction:column;gap:20px}
+    .featured-carousel{background:#fff;border-radius:20px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.08);overflow:visible;position:relative}
+    .carousel-stage{height:360px;border-radius:14px;overflow:hidden;position:relative}
+    .slide{position:absolute;inset:0;display:flex;gap:20px;padding:22px;align-items:flex-end;transition:transform .8s cubic-bezier(.22,.9,.35,1),opacity .6s;opacity:0;transform:translateY(20px) scale(.98)}
+    .slide.active{opacity:1;transform:translateY(0) scale(1)}
+    .slide .visual{flex:0 0 45%;height:100%;border-radius:12px;overflow:hidden}
+    .slide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s}
+    .slide:hover img{transform:scale(1.08) rotate(1deg)}
+    .slide .meta{flex:1;padding:18px 10px;color:#222}
+    .meta h3{font-size:28px;margin-bottom:10px}
+    .meta p{color:#555;line-height:1.6;margin-bottom:18px}
+    .meta .cta{display:inline-flex;gap:10px;align-items:center}
+
+    /* Small timeline on right (sticky) */
+    .timeline{position:sticky;top:100px;border-radius:20px;padding:18px;background:linear-gradient(180deg,#fff,#fff8f3);box-shadow:0 20px 50px rgba(0,0,0,.06);height:fit-content}
+    .timeline h4{font-size:18px;margin-bottom:12px}
+    .timeline .dot-list{display:flex;flex-direction:column;gap:12px}
+    .dot{display:flex;gap:12px;align-items:center}
+    .dot .bullet{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#ff1f7d,#ff8c00);box-shadow:0 6px 18px rgba(255,31,125,.18)}
+    .dot .label{font-weight:700;color:#333}
+
+    /* All events grid */
+    .all-events{margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+    .event-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.06);position:relative;transition:transform .4s,box-shadow .4s}
+    .event-card:hover{transform:translateY(-10px);box-shadow:0 40px 80px rgba(0,0,0,.12)}
+    .event-media{height:200px;overflow:hidden}
+    .event-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+    .event-card:hover .event-media img{transform:scale(1.12)}
+    .event-body{padding:18px}
+    .event-date{font-weight:900;color:#ff1f7d;margin-bottom:8px}
+    .event-title{font-size:20px;font-weight:800;margin-bottom:8px}
+    .event-desc{color:#555;line-height:1.6;margin-bottom:14px}
+    .tag{display:inline-block;padding:8px 14px;border-radius:999px;font-weight:800;background:linear-gradient(135deg,rgba(255,31,125,.08),rgba(255,140,0,.04));color:#ff8c00;border:1px solid rgba(255,140,0,.12)}
+
+    /* Past events visual difference */
+    .past{filter:grayscale(.6) saturate(.6) contrast(.9);opacity:.85}
+    .past .tag{opacity:.6}
+
+    /* Mini animated badges */
+    .pulse-badge{position:absolute;left:18px;top:18px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,#ff1f7d,#ff4f9d);color:#fff;font-weight:800;box-shadow:0 12px 30px rgba(255,31,125,.18);transform-origin:center;animation:badgePulse 2.6s infinite}
+    @keyframes badgePulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+    /* subtle floating particles canvas */
+    #particles{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+    /* Controls */
+    .controls{display:flex;gap:12px;align-items:center;margin-top:18px}
+    .controls button{padding:10px 16px;border-radius:12px;border:2px solid rgba(255,31,125,.12);background:white;font-weight:800;cursor:pointer}
+
+    /* Micro interactions */
+    .micro-anim{display:inline-block;will-change:transform,opacity}
+    .glow-line{height:4px;border-radius:4px;background:linear-gradient(90deg,#ff1f7d,#ff8c00);width:0;transition:width .6s}
+
+    /* Responsive */
+    @media(max-width:1000px){.main{margin-left:0;padding:40px 20px}.events-grid{grid-template-columns:1fr}.timeline{position:relative}} 
+
+    /* Footer */
+
+    
+         .footer-luxury.light {
+    width: 100%;
+    max-width: 100%;
+    padding: 100px 0 50px;
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f3 100%);
+    color: #333;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 140, 0, 0.15);
+    box-shadow: inset 0 10px 40px rgba(255, 140, 0, 0.05);
+   margin-left: 200px;
+    margin-bottom: 0;
+}
+
+
+        .footer-luxury.light .footer-glow {
+            position: absolute;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.18), rgba(255, 31, 125, 0.12), transparent 70%);
+            filter: blur(60px);
+            animation: glowMove 8s ease-in-out infinite alternate;
+        }
+
+        .footer-container {
+    max-width: 1200px;   /* qui mantieni il contenuto centrato */
+    margin: 0 auto;       /* centra il container */
+    padding: 0 20px;      /* padding laterale interno, opzionale */
+    position: relative;
+    z-index: 2;
+}
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .footer-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: #222;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-slogan {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .footer-links h4,
+        .footer-contact h4,
+        .footer-social h4 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-links h4::after,
+        .footer-contact h4::after,
+        .footer-social h4::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            border-radius: 3px;
+        }
+
+        .footer-links ul,
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .footer-links li,
+        .footer-contact li {
+            margin-bottom: 10px;
+            font-size: 19px;
+            color: rgba(0, 0, 0, 0.6);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-links li a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-links li:hover,
+        .footer-contact li:hover {
+            color: #ff4f9d;
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ff1f7d;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(135deg, #ff8c00, #ff4f9d);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.3);
+        }
+        .social-icons a svg {
+    width: 22px;
+    height: 22px;
+}
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 30px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-bottom: 8px;
+        }
+
+        .footer-credit {
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .heart {
+            color: #ff4f9d;
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+    /* tiny accessibility focus */
+    a:focus,button:focus{outline:3px solid rgba(255,31,125,.12);outline-offset:3px}
+
+    /* --- Bottoni per filtri --- */
+.timeline button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* oppure il font usato dal sito */
+  font-size: 17px;
+  font-weight: 600;
+  padding: 12px 28px;
+  min-width: 120px; /* assicura larghezza minima */
+  border-radius: 12px;
+  border: 2px solid #28a745; /* verde brillante */
+  background-color: transparent;
+  color: #28a745;
+  cursor: pointer;
+  transition: 
+    background-color 0.25s ease, 
+    color 0.25s ease, 
+    box-shadow 0.2s ease, 
+    transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px; /* spazio fra bottoni */
+}
+
+.timeline button:hover {
+  background-color: #28a745;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(40,167,69,0.25);
+  transform: translateY(-2px);
+}
+
+.timeline button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 6px rgba(40,167,69,0.2);
+}
+
+.timeline button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(40,167,69,0.5);
+}
+
+.timeline button.active {
+  background-color: #28a745;
+  color: #fff;
+  border-color: #ff8c00; /* arancione per il bordo attivo */
+}
+
+/* --- centratura titolo eventi --- */
+.events-hero h1 {
+  text-align: center;
+}
+
+/* --- bottoni per eventi --- */
+.btn-orange {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 26px;
+  border-radius: 12px;
+  border: 2px solid #ff8c00;
+  background-color: transparent;
+  color: #ff8c00;
+  cursor: pointer;
+  transition: 
+    background-color 0.25s ease, 
+    color 0.25s ease, 
+    box-shadow 0.25s ease, 
+    transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-orange:hover {
+  background-color: #ff8c00;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255,140,0,0.3);
+  transform: translateY(-2px);
+}
+
+.btn-orange:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(255,140,0,0.25);
+}
+
+.btn-orange:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,140,0,0.4);
+}
+
+
+  </style>
+</head>
+<body>
+  <!-- Sidebar Desktop -->
+    <div class="sidebar-desktop">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Visite
+            </a>
+
+            <a href="dottori.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                I nostri specialisti
+            </a>
+
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+
+            <a href="servizi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+
+            <a href="eventi.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+
+            <a href="index.html#contatti" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Info
+            </a>
+        </nav>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <img src="img/logo.png" alt="StudioMed Logo" style="height: 40px;">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Sidebar Mobile -->
+    <div class="sidebar-mobile">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Visite
+            </a>
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+            <a href="#servizi-section" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+            <a href="eventi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+        </nav>
+    </div>
+
+
+  <main class="main">
+    <div id="particles"></div>
+
+    <section class="events-hero" aria-labelledby="eventi-title">
+      <div class="kicker">✨ Eventi</div>
+      <h1 id="eventi-title" text-align="center">Scopri gli eventi — prossimi e passati</h1>
+      <div class="ribbon" aria-hidden="true">
+        <!-- decorative SVG morphing blob -->
+        <svg viewBox="0 0 600 600" width="600" height="600" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ff1f7d"/><stop offset="1" stop-color="#ff8c00"/></linearGradient>
+          </defs>
+          <path fill="url(#g1)" d="M300,30 C420,30 520,140 560,260 C600,380 520,480 400,520 C280,560 140,520 80,420 C20,320 180,30 300,30Z" opacity=".9">
+            <animate attributeName="d" dur="8s" repeatCount="indefinite" values="M300,30 C420,30 520,140 560,260 C600,380 520,480 400,520 C280,560 140,520 80,420 C20,320 180,30 300,30Z; M300,10 C460,40 560,160 520,300 C480,440 360,520 220,500 C80,480 30,360 80,240 C130,120 140,60 300,10Z; M300,30 C420,30 520,140 560,260 C600,380 520,480 400,520 C280,560 140,520 80,420 C20,320 180,30 300,30Z"/>
+          </path>
+        </svg>
+      </div>
+
+      <div class="events-grid">
+        <div class="featured-wrap">
+
+          <div class="featured-carousel" aria-roledescription="carousel">
+            
+
+            <div class="carousel-stage" id="carousel">
+              <!-- slides injected by JS -->
+            </div>
+
+            <div class="controls" style="justify-content:space-between;margin-top:14px">
+              <div class="left-controls">
+                <button id="prevBtn" aria-label="slide precedente">‹</button>
+                <button id="nextBtn" aria-label="slide successivo">›</button>
+              </div>
+              <div class="right-controls">
+                <button id="autoplayToggle" aria-pressed="false"></button>
+                <span class="micro-anim" style="margin-left:12px"> <span class="glow-line" id="autoplayLine"></span></span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="all-events" id="allEvents">
+            <!-- all events injected here -->
+          </div>
+
+        </div>
+
+        <aside class="timeline" aria-labelledby="timeline-title">
+          <h4 id="timeline-title">I prossimi eventi in breve</h4>
+          <div class="dot-list" id="dotList">
+            <!-- dots injected -->
+          </div>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.06)">
+
+          <div>
+            <h4>Filtri</h4>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button id="showAll">Tutti</button>
+              <button id="showUpcoming">Prossimi</button>
+              <button id="showPast">Passati</button>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+
+    </section>
+
+
+  </main>
+    <!-- Footer -->
+     <!-- Footer -->
+    <footer class="footer-luxury light">
+        <div class="footer-glow"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Poliambulatorio <span>Luigi Einaudi</span></h2>
+                    <p class="footer-slogan">La salute, reinventata.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Esplora</h4>
+                    <ul>
+                        <li><a href="servizi.html">Diagnosi</a></li>
+                        <li><a href="dottori.html">Visite</a></li>
+                        <li><a href="terapie.html">Terapie</a></li>
+                        <li><a href="eventi.html">Eventi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contatti</h4>
+                    <ul>
+                        <li>📞 +39 0173 742501</li>
+                        <li>✉️ info@studiomed.it</li>
+                        <li>📍 Via Torino 118/B, 12063 Dogliani CN</li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Seguici</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Poliambulatorio-Luigi-Einaudi-100014016342183/" class="facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/poliambulatorioluigieinaudi/" class="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                       <a href="#" class="doctorlib" aria-label="Doctolib">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 <strong>Poliambulatorio Luigi Einaudi</strong> –  P.I. 03611100045</p>
+            </div>
+        </div>
+    </footer>
+
+
+<script>
+const EVENTS_JSON = 'eventi.json';
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  const opts = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+  return d.toLocaleDateString('it-IT', opts);
+}
+
+async function loadAndRender() {
+  try {
+    const res = await fetch(EVENTS_JSON, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Impossibile caricare eventi.json');
+    const events = await res.json();
+
+    const now = new Date();
+    const parsed = events.map(e => ({
+      ...e,
+      DateObj: new Date(e.Data + 'T00:00:00'),
+      isProssimo: String(e.Prossimo).toLowerCase() === 'true'
+    }));
+
+    const upcoming = parsed.filter(p => p.DateObj >= now || p.isProssimo).sort((a, b) => a.DateObj - b.DateObj);
+    const past = parsed.filter(p => p.DateObj < now && !p.isProssimo).sort((a, b) => b.DateObj - a.DateObj);
+
+    renderCarousel(upcoming.length ? upcoming : parsed.slice(0, 3));
+    renderAll(parsed);
+    renderDots(upcoming.slice(0, 6));
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('carousel').innerHTML = '<div style="padding:28px">Errore caricamento eventi.</div>';
+  }
+}
+
+let slides = [];
+let activeIndex = 0;
+let timer = null;
+
+function renderCarousel(items) {
+  const stage = document.getElementById('carousel');
+  stage.innerHTML = '';
+  slides = items.map((it, idx) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide' + (idx === 0 ? ' active' : '');
+    slide.setAttribute('data-index', idx);
+    slide.innerHTML = `
+      <div class="visual"><img src="${it.Foto || 'images/placeholder.jpg'}" alt="${escapeHtml(it.Titolo)}"></div>
+      <div class="meta">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;font-weight:800;color:#ff8c00">${formatDate(it.Data)}</div>
+          <div class="tag">${it.isProssimo ? 'Prossimo' : 'Evento'}</div>
+        </div>
+        <h3>${escapeHtml(it.Titolo)}</h3>
+        <p>${escapeHtml(it.Descrizione)}</p>
+        <div class="cta">
+          <button class="btn-orange btn-detail" data-idx="${idx}">Clicca per maggiori info</button>
+        </div>
+      </div>
+    `;
+    stage.appendChild(slide);
+    return slide;
+  });
+
+  startAutoplay();
+
+  document.getElementById('prevBtn').onclick = () => { gotoSlide(activeIndex - 1); resetAutoplay(); };
+  document.getElementById('nextBtn').onclick = () => { gotoSlide(activeIndex + 1); resetAutoplay(); };
+
+  stage.addEventListener('click', ev => {
+    const b = ev.target.closest('.btn-detail');
+    if (!b) return;
+    const idx = Number(b.dataset.idx);
+    openDetailModal(items[idx]);
+  });
+}
+
+function gotoSlide(i) {
+  if (slides.length === 0) return;
+  const prev = activeIndex;
+  activeIndex = (i + slides.length) % slides.length;
+  slides[prev].classList.remove('active');
+  slides[activeIndex].classList.add('active');
+  const badge = document.getElementById('featured-badge');
+  if (badge) badge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 600 });
+}
+
+function startAutoplay() {
+  stopAutoplay();
+  timer = setInterval(() => gotoSlide(activeIndex + 1), 4000);
+}
+
+function stopAutoplay() {
+  if (timer) clearInterval(timer);
+}
+
+function resetAutoplay() {
+  stopAutoplay();
+  startAutoplay();
+}
+
+function renderAll(items) {
+  const container = document.getElementById('allEvents');
+  container.innerHTML = '';
+  const now = new Date();
+
+  items.sort((a, b) => b.DateObj - a.DateObj).forEach(it => {
+    const card = document.createElement('article');
+    card.className = 'event-card' + (it.DateObj < now && !it.isProssimo ? ' past' : '');
+    card.innerHTML = `
+      <div class="event-media"><img src="${it.Foto || 'images/placeholder.jpg'}" alt="${escapeHtml(it.Titolo)}"></div>
+      <div class="event-body">
+        <div class="event-date">${formatDate(it.Data)}</div>
+        <div class="event-title">${escapeHtml(it.Titolo)}</div>
+        <div class="event-desc">${escapeHtml(it.Descrizione)}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <span class="tag">${it.isProssimo ? 'Prossimo' : 'Storico'}</span>
+          <button class="btn-orange btn-detail small" data-title="${escapeHtml(it.Titolo)}">Clicca per maggiori info</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  container.addEventListener('click', ev => {
+    const b = ev.target.closest('.btn-detail');
+    if (!b) return;
+    const title = b.dataset.title || b.closest('.event-card')?.querySelector('.event-title')?.textContent;
+    const desc = b.closest('.event-card')?.querySelector('.event-desc')?.textContent;
+    openDetailModal({ Titolo: title, Descrizione: desc });
+  });
+}
+
+function renderDots(items) {
+  const list = document.getElementById('dotList');
+  list.innerHTML = '';
+  items.forEach((it, idx) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.innerHTML = `<div class="bullet"></div><div class="label">${escapeHtml(it.Titolo)}<div style="font-size:12px;color:#666">${formatDate(it.Data)}</div></div>`;
+    d.onclick = () => { if (slides[idx]) gotoSlide(idx); window.scrollTo({ top: document.querySelector('.featured-carousel').offsetTop - 40, behavior: 'smooth' }); };
+    list.appendChild(d);
+  });
+}
+
+let modalEl = null;
+function openDetailModal(data) {
+  closeModal();
+  modalEl = document.createElement('div');
+  modalEl.style.position = 'fixed';
+  modalEl.style.inset = 0;
+  modalEl.style.background = 'rgba(0,0,0,.5)';
+  modalEl.style.display = 'flex';
+  modalEl.style.alignItems = 'center';
+  modalEl.style.justifyContent = 'center';
+  modalEl.style.zIndex = 9999;
+  modalEl.innerHTML = `
+    <div style="max-width:920px;width:95%;background:white;border-radius:16px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.35);position:relative;overflow:hidden;transform:translateY(20px);animation:modalIn .35s forwards">
+      <button aria-label="chiudi" style="position:absolute;right:12px;top:12px;background:none;border:none;font-size:22px;cursor:pointer">✕</button>
+      <h3 style="font-size:28px;margin-bottom:8px">${escapeHtml(data.Titolo)}</h3>
+      <p style="color:#555;line-height:1.6">${escapeHtml(data.Descrizione || 'Dettagli in arrivo...')}</p>
+      <div style="margin-top:16px;color:#999;font-weight:700">Data: ${formatDate(data.Data || '')}</div>
+    </div>
+  `;
+  modalEl.querySelector('button').onclick = () => closeModal();
+  document.body.appendChild(modalEl);
+}
+
+function closeModal() {
+  if (modalEl) {
+    modalEl.remove();
+    modalEl = null;
+  }
+}
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// Filtri eventi
+document.getElementById('showAll').onclick = () => filterEvents('all');
+document.getElementById('showUpcoming').onclick = () => filterEvents('upcoming');
+document.getElementById('showPast').onclick = () => filterEvents('past');
+
+function filterEvents(type) {
+  const cards = document.querySelectorAll('.all-events .event-card');
+  cards.forEach(card => {
+    if (type === 'all') card.style.display = '';
+        else if (type === 'upcoming') {
+      card.style.display = card.classList.contains('past') ? 'none' : '';
+    } else if (type === 'past') {
+      card.style.display = card.classList.contains('past') ? '' : 'none';
+    }
+  });
+}
+
+// Inizializzazione al caricamento
+document.addEventListener('DOMContentLoaded', () => {
+  loadAndRender();
+});
+
+// Optional: animazione modal
+const style = document.createElement('style');
+style.textContent = `
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
+document.head.appendChild(style);
+
+// Navigazione mobile: toggle menu
+const mobileToggle = document.getElementById('mobileToggle');
+if (mobileToggle) {
+  mobileToggle.addEventListener('click', () => {
+    const nav = document.querySelector('nav');
+    if (nav) nav.classList.toggle('open');
+  });
+}
+</script>
+
+
+</body>
+</html>

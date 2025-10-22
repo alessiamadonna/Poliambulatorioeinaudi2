@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poliambulatorio Luigi Einaudi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #ffe8f0 0%, #fff5f8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff1f7d 0%, #ff8c00 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-logo {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 30px;
+            animation: logoFloat 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .loader-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            width: 0%;
+            animation: loadProgress 2s ease-out forwards;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            animation: scrollBounce 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 40px;
+            stroke: #ff1f7d;
+            filter: drop-shadow(0 2px 10px rgba(255, 31, 125, 0.3));
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Footer */
+        .footer-luxury.light {
+            position: relative;
+            background: linear-gradient(180deg, #ffffff 0%, #fff8f3 100%);
+            color: #333;
+            margin-left: 280px;
+            padding: 100px 0 50px;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 140, 0, 0.15);
+            box-shadow: inset 0 10px 40px rgba(255, 140, 0, 0.05);
+        }
+
+        .footer-luxury.light .footer-glow {
+            position: absolute;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.18), rgba(255, 31, 125, 0.12), transparent 70%);
+            filter: blur(60px);
+            animation: glowMove 8s ease-in-out infinite alternate;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .footer-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: #222;
+            letter-spacing: -1px;
+        }
+
+        .footer-logo span {
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-slogan {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .footer-links h4,
+        .footer-contact h4,
+        .footer-social h4 {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .footer-links h4::after,
+        .footer-contact h4::after,
+        .footer-social h4::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            border-radius: 3px;
+        }
+
+        .footer-links ul,
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .footer-links li,
+        .footer-contact li {
+            margin-bottom: 10px;
+            font-size: 19px;
+            color: rgba(0, 0, 0, 0.6);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .footer-links li a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer-links li:hover,
+        .footer-contact li:hover {
+            color: #ff4f9d;
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ff1f7d;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(135deg, #ff8c00, #ff4f9d);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.3);
+        }
+
+        .social-icons a svg {
+    width: 22px;
+    height: 22px;
+}
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 30px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.55);
+            margin-bottom: 8px;
+        }
+
+        .footer-credit {
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .heart {
+            color: #ff4f9d;
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* Sidebar Desktop */
+        .sidebar-desktop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-sidebar {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+        }
+
+        .logo-sidebar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 25px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.05) 0%, transparent 100%);
+            color: #ff8c00;
+            border-left-color: #ff8c00;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.1) 0%, transparent 100%);
+            color: #ff1f7d;
+            border-left-color: #ff1f7d;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            opacity: 0.7;
+        }
+
+        .nav-item:hover .nav-icon,
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            display: none;
+        }
+
+        /* Mobile Hamburger */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hamburger {
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 3px;
+            background: #333;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar-mobile {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: left 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar-mobile.active {
+            left: 0;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            margin-left: 280px;
+            padding: 120px 40px 200px 40px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            background-color: #fff0f5;
+            min-height: 100vh;
+            display: block;
+        }
+
+        /* Parallax Background Elements */
+        .parallax-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .parallax-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+        }
+
+        .circle-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #ff1f7d, transparent);
+            top: -100px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff8c00, transparent);
+            bottom: 100px;
+            left: 10%;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .circle-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #4caf50, transparent);
+            top: 50%;
+            right: 20%;
+            animation: float 18s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            text-align: left;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 40px;
+            padding: 100px 80px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .page-header {
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 10;
+            text-align: left;
+        }
+
+        .page-header h1 {
+            font-size: 100px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: #000;
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 50px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+            text-align: left;
+        }
+
+        .description {
+            font-size: 25px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #333;
+            text-align: left;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            text-align: left;
+        }
+
+        .btn {
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-prenota {
+            background: linear-gradient(135deg, #ff1f7d 0%, #ff4f9d 100%);
+            color: white;
+            animation: heartbeat 3.5s ease-in-out infinite;
+            box-shadow: 0 5px 25px rgba(255, 31, 125, 0.4);
+        }
+
+        .btn-servizi {
+            background: linear-gradient(135deg, #ff8c00 0%, #ffb347 100%);
+            color: white;
+            animation: heartbeat 3.5s ease-in-out infinite 0.5s;
+            box-shadow: 0 5px 25px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-contatti {
+            background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+            color: white;
+            animation: heartbeat 3.5s ease-in-out infinite 1s;
+            box-shadow: 0 5px 25px rgba(76, 175, 80, 0.4);
+        }
+
+ @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.08); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.05); }
+            40% { transform: scale(1); }
+        }
+
+
+
+        .gradient-wrapper {
+            position: absolute;
+            right: -100px;
+            top: 0;
+            width: 800px;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .gradient-wrapper svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ecg-line {
+            width: 100%;
+            max-width: 500px;
+            height: 60px;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .ecg-line path {
+            animation: drawECG 3s linear infinite;
+        }
+
+        @keyframes drawECG {
+            0% {
+                stroke-dashoffset: 1000;
+                opacity: 0.5;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
+        }
+    /*bullet point nella sezione hero*/
+        .hero-bullets {
+    list-style: none;
+    margin: 15px 0 15px 0;
+    padding: 0 0 0 25px;
+}
+
+.hero-bullets li {
+    position: relative;
+    margin-bottom: 6px;
+    font-size: 25px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.hero-bullets li::before {
+    content: '•';
+    position: absolute;
+    left: -18px;
+    top: 0;
+    font-size: 40px;
+    line-height: 1;
+    color: #ff8c00; /* 🔸 arancione */
+}
+
+/* Variante verde, se vuoi cambiare tono */
+.hero-bullets.green li::before {
+    color: #4caf50; /* 🟢 verde */
+}
+
+        /* Animazioni hero section */
+        h1,
+        .subtitle,
+        .description,
+        .cta-buttons button {
+            opacity: 0;
+        }
+
+        h1 {
+            transform: translateX(-200px) scale(0.8);
+            animation: titleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation-delay: 2.5s;
+        }
+
+        .subtitle {
+            transform: translateX(200px) scale(0.9);
+            animation: subtitleIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation-delay: 2.9s;
+        }
+
+        .description {
+            transform: translateY(50px) scale(0.9);
+            animation: descriptionIn 1s ease-out forwards;
+            animation-delay: 3.3s;
+        }
+
+        .cta-buttons button {
+            opacity: 0;
+            transform: scale(0.5) translateY(30px);
+            animation: buttonIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            pointer-events: auto;
+        }
+
+        .cta-buttons button:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        .cta-buttons button:nth-child(1) { animation-delay: 3.7s; }
+        .cta-buttons button:nth-child(2) { animation-delay: 3.9s; }
+        .cta-buttons button:nth-child(3) { animation-delay: 4.1s; }
+
+        @keyframes titleIn {
+            0% { opacity: 0; transform: translateX(-200px) scale(0.8); }
+            60% { opacity: 1; transform: translateX(20px) scale(1.05); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes subtitleIn {
+            0% { opacity: 0; transform: translateX(200px) scale(0.9); }
+            60% { opacity: 1; transform: translateX(-10px) scale(1.02); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes descriptionIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes buttonIn {
+            0% { opacity: 0; transform: scale(0.5) translateY(30px); }
+            60% { opacity: 1; transform: scale(1.1) translateY(-5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Eventi Section */
+        .eventi-section {
+            margin-left: 280px;
+            padding: 120px 40px;
+            background: linear-gradient(180deg, #fff9fc 0%, #fff0f5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eventi-section::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 31, 125, 0.08), transparent);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .eventi-section::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.06), transparent);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        .eventi-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eventi-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .eventi-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(255, 31, 125, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .eventi-badge::before {
+            content: '✨';
+            font-size: 18px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .eventi-header h2 {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .eventi-subtitle {
+            font-size: 22px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .eventi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .evento-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .evento-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .evento-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            transition: height 0.5s ease;
+        }
+
+        .evento-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(255, 31, 125, 0.2);
+        }
+
+        .evento-card:hover::before {
+            height: 100%;
+            opacity: 0.03;
+        }
+
+        .evento-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .evento-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+        }
+
+        .evento-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .evento-card:hover .evento-image img {
+            transform: scale(1.15) rotate(2deg);
+        }
+
+        .evento-date-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(255, 31, 125, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .evento-date-badge .day {
+            font-size: 32px;
+            display: block;
+            line-height: 1;
+        }
+
+        .evento-date-badge .month {
+            font-size: 14px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .evento-content {
+            padding: 35px;
+        }
+
+        .evento-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #222;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .evento-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .evento-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .evento-tag {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(255, 31, 125, 0.1));
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 20px;
+            color: #ff8c00;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-evento {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ff8c00, #ff1f7d);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 31, 125, 0.3);
+        }
+
+        .btn-evento:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 31, 125, 0.5);
+        }
+
+        .eventi-cta {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .btn-tutti-eventi {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 50px;
+            background: white;
+            border: 2px solid #ff1f7d;
+            border-radius: 50px;
+            color: #ff1f7d;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(255, 31, 125, 0.2);
+        }
+
+        .btn-tutti-eventi::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-tutti-eventi:hover::before {
+            left: 0;
+        }
+
+        .btn-tutti-eventi:hover {
+            transform: scale(1.05);
+            color: white;
+            border-color: #ff8c00;
+            box-shadow: 0 15px 40px rgba(255, 140, 0, 0.4);
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-tutti-eventi:hover .arrow-icon {
+            transform: translateX(5px);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Servizi Alternati Section */
+        .servizi-section {
+            margin-left: 280px;
+            padding: 120px 40px;
+            background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
+            position: relative;
+        }
+
+        .servizi-header {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .servizi-header h2 {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .servizi-header p {
+            font-size: 30px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .servizio-row {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            margin-bottom: 150px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .servizio-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .servizio-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .servizio-slideshow {
+            flex: 1;
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            height: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .servizio-slideshow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 31, 125, 0.1), rgba(255, 140, 0, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .servizio-slideshow:hover::before {
+            opacity: 1;
+        }
+
+        .servizio-slideshow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #ff1f7d, #ff8c00, #4caf50, #ff1f7d);
+            background-size: 300% 300%;
+            border-radius: 30px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .servizio-slideshow:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .servizio-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 2s ease, transform 8s ease;
+            transform: scale(1);
+        }
+
+        .servizio-slide.active {
+            opacity: 1;
+        }
+
+        .servizio-slideshow:hover .servizio-slide.active {
+            transform: scale(1.08);
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 3;
+            display: flex;
+            gap: 10px;
+        }
+
+        .slide-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .slide-dot.active {
+            background: white;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .servizio-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .servizio-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(255, 31, 125, 0.1), rgba(255, 140, 0, 0.1));
+            border: 1px solid rgba(255, 31, 125, 0.3);
+            border-radius: 20px;
+            color: #ff1f7d;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .servizio-content h3 {
+            font-size: 56px;
+            font-weight: 900;
+            color: #222;
+            margin-bottom: 25px;
+            line-height: 1.1;
+            position: relative;
+            display: inline-block;
+        }
+
+        .servizio-content h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 5px;
+            background: linear-gradient(90deg, #ff1f7d, #ff8c00);
+            border-radius: 3px;
+        }
+
+        .servizio-content p {
+            font-size: 25px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .servizio-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .servizio-features li {
+            padding: 15px 0;
+            font-size: 18px;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .servizio-features li:hover {
+            transform: translateX(10px);
+            color: #ff1f7d;
+        }
+
+        .servizio-features li::before {
+            content: '→';
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff1f7d, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .servizio-features li:hover::before {
+            transform: translateX(5px);
+        }
+
+        .btn-scopri-servizio {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #ff1f7d, #ff8c00);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(255, 31, 125, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-scopri-servizio::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn-scopri-servizio:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-scopri-servizio:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 31, 125, 0.5);
+        }
+
+        .btn-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-scopri-servizio:hover .btn-icon {
+            transform: translateX(5px);
+        }
+
+        /* Sezione Contatti */
+        .contact-section {
+            margin-left: 280px;
+            padding: 120px 40px;
+            background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .title-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+            color: white;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .section-title h2 {
+            font-size: 56px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .info-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-card:hover::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+
+        .phone-card::before {
+            background: linear-gradient(180deg, #ff1f7d, #ff4f9d);
+        }
+
+        .email-card::before {
+            background: linear-gradient(180deg, #ff8c00, #ffb347);
+        }
+
+        .location-card::before {
+            background: linear-gradient(180deg, #4caf50, #81c784);
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .phone-card .info-icon {
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+        }
+
+        .email-card .info-icon {
+            background: linear-gradient(135deg, #ff8c00, #ffb347);
+        }
+
+        .location-card .info-icon {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+        }
+
+        .info-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: white;
+        }
+
+        .info-content h4 {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-main {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 3px;
+        }
+
+        .info-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .schedule-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        .schedule-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .schedule-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff1f7d, #ff4f9d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotate 3s linear infinite;
+        }
+
+        .schedule-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke: white;
+        }
+
+        .schedule-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .schedule-item:hover {
+            background: linear-gradient(90deg, rgba(255, 31, 125, 0.05), transparent);
+            transform: translateX(5px);
+        }
+
+        .schedule-item .day {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .schedule-item .hours {
+            font-weight: 700;
+            color: #ff1f7d;
+        }
+
+        .schedule-item.weekend .hours {
+            color: #ff8c00;
+        }
+
+        .schedule-item.closed .hours {
+            color: #999;
+        }
+
+        .map-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            animation: fadeInUp 1s ease-out;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .map-container {
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            height: 450px;
+            position: relative;
+        }
+
+        .map-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid rgba(255, 31, 125, 0.2);
+            border-radius: 25px;
+            pointer-events: none;
+            animation: mapPulse 3s ease-in-out infinite;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .directions-card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .directions-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 25px;
+        }
+
+        .direction-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .direction-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .direction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .direction-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #ff1f7d;
+        }
+
+        .direction-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .direction-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes mapPulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar-desktop {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .hero-section {
+                margin-left: 0;
+                padding: 150px 20px 100px 20px;
+            }
+
+            .container {
+                padding: 60px 40px;
+            }
+
+            .servizi-section,
+            .contact-section,
+            .eventi-section {
+                margin-left: 0;
+                padding: 90px 20px 40px 20px;
+            }
+
+            .servizio-row {
+                flex-direction: column !important;
+                gap: 40px;
+                margin-bottom: 80px;
+            }
+
+            .servizio-slideshow {
+                height: 400px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-section {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                height: 350px;
+            }
+
+            .footer-luxury.light {
+                margin-left: 0;
+                padding: 80px 0 40px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 36px;
+            }
+
+            .section-title h2,
+            .servizi-header h2,
+            .eventi-header h2 {
+                font-size: 36px;
+            }
+
+            .servizio-content h3 {
+                font-size: 36px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .info-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-logo {
+                font-size: 36px;
+                text-align: center;
+            }
+
+            .servizio-slideshow {
+                height: 300px;
+            }
+
+            .servizio-content {
+                padding: 20px;
+            }
+
+            .servizio-features li {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+        }
+
+        /* Forza i singoli elementi a non essere centrati */
+        .container .page-header h1,
+        .container .page-header .subtitle,
+        .container .page-header .description,
+        .container .page-header .cta-buttons {
+            text-align: left !important;
+            margin: 0 0 18px 0;
+        }
+
+        /* I bottoni a sinistra */
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-start !important;
+        }
+
+        /* Mobile: rimuoviamo l'assoluto (per non rompere il layout su schermi piccoli) */
+        @media (max-width: 1024px) {
+            .container .page-header {
+                position: static;
+                top: auto;
+                left: auto;
+                right: auto;
+                max-width: 100%;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader-logo">Poliambulatorio <span style="color: #ffe8f0;">Luigi Einaudi</span></div>
+        <p class="loader-text">vi diamo il benvenuto nel nostro sito</p>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+    </div>
+
+    <!-- Sidebar Desktop -->
+    <div class="sidebar-desktop">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Visite
+            </a>
+
+            <a href="dottori.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                I nostri specialisti
+            </a>
+
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+
+            <a href="servizi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+
+            <a href="eventi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+
+            <a href="#contatti" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Info
+            </a>
+        </nav>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <img src="img/logo.png" alt="StudioMed Logo" style="height: 40px;">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Sidebar Mobile -->
+    <div class="sidebar-mobile">
+        <div class="sidebar-header">
+            <img src="images/logo.JPG" alt="StudioMed Logo" class="logo-sidebar">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </a>
+            <a href="visite.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                Visite
+            </a>
+            <a href="terapie.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                Terapie
+            </a>
+            <a href="#servizi-section" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
+                </svg>
+                Servizi
+            </a>
+            <a href="eventi.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Eventi
+            </a>
+        </nav>
+    </div>
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="page-header">
+                <h1>Poliambulatorio<br>Luigi Einaudi</h1>
+                <br>
+                 <div class="ecg-line">
+                <svg viewBox="0 0 500 60" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="ecgGradient" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#ff1f7d"/>
+                            <stop offset="100%" stop-color="#ff8c00"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="
+                        M0 30 
+                        L10 30 L15 10 L20 50 L25 30
+                        L35 30 L40 20 L45 35 L50 32
+                        L60 30 L65 10 L70 50 L75 30
+                        L85 30 L90 20 L95 35 L100 32
+                        L110 30 L115 10 L120 50 L125 30
+                        L135 30 L140 20 L145 35 L150 32
+                        L160 30 L165 10 L170 50 L175 30
+                        L185 30 L190 20 L195 35 L200 32
+                        L210 30 L215 10 L220 50 L225 30
+                        L235 30 L240 20 L245 35 L250 32
+                        L260 30 L265 10 L270 50 L275 30
+                        L285 30 L290 20 L295 35 L300 32
+                        L310 30 L315 10 L320 50 L325 30
+                        L335 30 L340 20 L345 35 L350 32
+                        L360 30 L365 10 L370 50 L375 30
+                        L385 30 L390 20 L395 35 L400 32
+                        L410 30 L415 10 L420 50 L425 30
+                        L435 30 L440 20 L445 35 L450 32
+                        L460 30 L465 10 L470 50 L475 30
+                        L485 30 L490 20 L495 35 L500 32
+                    "
+                    stroke="url(#ecgGradient)" stroke-width="3" fill="none" stroke-linecap="round"
+                    stroke-dasharray="1000" stroke-dashoffset="1000"/>
+                </svg>
+            </div>
+            <br>
+                <div class="subtitle">Ci impegniamo ad offrirti <br> <strong style="color:#ff1f7d ;">servizi</strong> sanitari di alta qualità.</div>
+                <div class="description">
+    Presso di noi puoi trovare per le tue esigenze:
+    <ul class="hero-bullets">
+        <li>Visite Specialistiche</li>
+        <li>Esami Diagnostici (Ecografie ed Eco-Color-Doppler)</li>
+        <li>Visite Medico Sportive</li>
+        <li>Fisioterapia</li>
+        <li>Servizi professionali Infermieristici</li>
+        <li>Medicina del Lavoro</li>
+    </ul>
+    perché la tua salute e la tua fiducia sono la cosa più importante per noi.<br><br>
+    Un trattamento unico ad un prezzo competitivo, <br> studiato da un team di professionisti <br> che utilizzano strumentazione di ultima generazione e <br> pongono in primo piano le esigenze del paziente. <br>
+    <br>
+</div>
+
+                <div class="cta-buttons">
+                    <button class="btn btn-prenota" onclick="window.location.href='https://www.miodottore.it/nome-poliambulatorio'">Prenota</button>
+                    <button class="btn btn-servizi" onclick="document.getElementById('servizi-section').scrollIntoView({behavior: 'smooth'})">Servizi</button>
+                    <button class="btn btn-contatti" onclick="document.querySelector('.contact-section').scrollIntoView({behavior: 'smooth'})">Contatti</button>
+                </div>
+            </div>
+
+           
+
+            <div class="gradient-wrapper">
+                <svg viewBox="0 0 800 1000" preserveAspectRatio="none">
+                    <path d="M 800,0 C 600,0 400,100 350,200 C 300,300 350,400 400,450 L 800,450 Z" fill="#ff1f7d"/>
+                    <path d="M 800,350 C 550,350 400,420 370,520 C 340,620 380,680 450,720 L 800,720 Z" fill="#ff6b35"/>
+                    <path d="M 800,600 C 500,600 380,670 360,750 C 340,830 400,880 480,900 L 800,900 Z" fill="#ffb347"/>
+                    <path d="M 800,800 C 450,800 350,870 340,950 C 330,1030 420,1000 500,1000 L 800,1000 Z" fill="#4caf50"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servizi Alternati Section -->
+    <section class="servizi-section" id="servizi-section">
+        <div class="servizi-header">
+            <h2>I Nostri Servizi</h2>
+            <p>Eccellenza medica con un tocco di innovazione</p>
+        </div>
+
+        <!-- Servizio 1: Diagnosi (Slideshow a destra) -->
+        <div class="servizio-row">
+            <div class="servizio-content">
+                <h3>Diagnostica</h3>
+                <p>Strumenti all'avanguardia per un'analisi precisa e tempestiva, con un approccio umano e personalizzato che mette al centro il paziente.</p>
+                <ul class="servizio-features">
+                    <li>Diagnostica per immagini 3D di ultima generazione</li>
+                    <li>Analisi di laboratorio con tecnologie avanzate</li>
+                    <li>Screening preventivi completi e personalizzati</li>
+                    <li>Refertazione rapida entro 24 ore</li>
+                </ul>
+                <button class="btn-scopri-servizio" onclick="window.location.href='servizi.html'">
+                    Scopri di più
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+            <div class="servizio-slideshow">
+                <img src="images/diagnostica1.webp" class="servizio-slide active" alt="Diagnosi 1">
+                <img src="images/diagnostica2.jpg" class="servizio-slide" alt="Diagnosi 2">
+                <img src="images/diagnostica3.jpg" class="servizio-slide" alt="Diagnosi 3">
+                <div class="slide-counter">
+                    <span class="slide-dot active"></span>
+                    <span class="slide-dot"></span>
+                    <span class="slide-dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Servizio 2: Visite (Slideshow a sinistra) -->
+        <div class="servizio-row reverse">
+            <div class="servizio-content">
+                <h3>Visite</h3>
+                <p>Visite approfondite e personalizzate, pensate per garantire attenzione, comfort e chiarezza in ogni momento del percorso di cura.</p>
+                <ul class="servizio-features">
+                    <li>Consulenze con specialisti di alto livello</li>
+                    <li>Ambiente accogliente e confortevole</li>
+                    <li>Tempo dedicato per ogni paziente</li>
+                    <li>Piani di cura personalizzati e dettagliati</li>
+                </ul>
+                <button class="btn-scopri-servizio" onclick="window.location.href='dottori.html'">
+                    Scopri di più
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+            <div class="servizio-slideshow">
+                <img src="images/visite1.webp" class="servizio-slide active" alt="Visite 1">
+                <img src="images/visite2.webp" class="servizio-slide" alt="Visite 2">
+                <img src="images/visite3.jpg" class="servizio-slide" alt="Visite 3">
+                <div class="slide-counter">
+                    <span class="slide-dot active"></span>
+                    <span class="slide-dot"></span>
+                    <span class="slide-dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Servizio 3: Terapie (Slideshow a destra) -->
+        <div class="servizio-row">
+            <div class="servizio-content">
+                <h3>Terapie</h3>
+                <p>Trattamenti mirati e aggiornati, costruiti su misura per le necessità specifiche di ogni paziente, con tecnologie di ultima generazione.</p>
+                <ul class="servizio-features">
+                    <li>Terapie personalizzate e mirate</li>
+                    <li>Tecnologie all'avanguardia</li>
+                    <li>Monitoraggio costante dei progressi</li>
+                    <li>Approccio multidisciplinare integrato</li>
+                </ul>
+                <button class="btn-scopri-servizio" onclick="window.location.href='terapie.html'">
+                    Scopri di più
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+            <div class="servizio-slideshow">
+                <img src="images/terapie1.jpg" class="servizio-slide active" alt="Terapie 1">
+                <img src="images/terapie2.webp" class="servizio-slide" alt="Terapie 2">
+                <img src="images/terapie3.jpg" class="servizio-slide" alt="Terapie 3">
+                <div class="slide-counter">
+                    <span class="slide-dot active"></span>
+                    <span class="slide-dot"></span>
+                    <span class="slide-dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Eventi Section -->
+    <section class="eventi-section">
+        <div class="eventi-container">
+            <div class="eventi-header">
+                <div class="eventi-badge">Eventi in Arrivo</div>
+                <h2>Partecipa ai Nostri Eventi</h2>
+                <p class="eventi-subtitle">Esperienze uniche per prenderti cura della tua salute</p>
+            </div>
+
+            <div class="eventi-grid" id="eventiGrid">
+                <!-- Gli eventi verranno caricati dinamicamente qui -->
+            </div>
+
+            <div class="eventi-cta">
+                <button class="btn-tutti-eventi" onclick="window.location.href='eventi.html'">
+                    Scopri Tutti gli Eventi
+                    <span class="arrow-icon">→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione Contatti -->
+    <div class="contact-section" id="contatti">
+        <div class="eventi-header">
+            <span class="title-badge">Contatti</span>
+            <h2>Vieni a trovarci</h2>
+            <p class="section-subtitle">Siamo qui per te, quando ne hai bisogno</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="info-cards">
+                <div class="info-card phone-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <h4>Telefono</h4>
+                        <p class="info-main">+39 051 123 4567</p>
+                        <span class="info-subtitle">Lun-Ven 8:30 - 12:30 / 14:00 - 20:00, Sab 8:30 - 12:30</span>
+                    </div>
+                </div>
+
+                <div class="info-card email-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p class="info-main">info@studiomed.it</p>
+                    </div>
+                </div>
+
+                <div class="info-card location-card">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <h4>Indirizzo</h4>
+                        <p class="info-main">Via Torino 118/B Dogliani CN</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card">
+                <div class="schedule-header">
+                    <div class="schedule-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Orari di apertura</h3>
+                </div>
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <span class="day">Lunedì</span>
+                        <span class="hours">8:30 - 12:30 / 14:00 - 20:00</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="day">Martedì</span>
+                        <span class="hours">8:30 - 12:30 / 14:00 - 20:00</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="day">Mercoledì</span>
+                        <span class="hours">8:30 - 12:30 / 14:00 - 20:00</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="day">Giovedì</span>
+                        <span class="hours">8:30 - 12:30 / 14:00 - 20:00</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="day">Venerdì</span>
+                        <span class="hours">8:30 - 12:30 / 14:00 - 20:00</span>
+                    </div>
+                    <div class="schedule-item weekend">
+                        <span class="day">Sabato</span>
+                        <span class="hours">8:30 - 12:30</span>
+                    </div>
+                    <!--<div class="schedule-item weekend closed">
+                        <span class="day">Domenica</span>
+                        <span class="hours">Chiuso</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2843.9804475999827!2d7.932588456144054!3d44.5360328967183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12d2a4e075782f61%3A0xb255acd51f3d5d62!2sVia%20Torino%2C%20118b%2C%2012063%20Dogliani%20CN!5e0!3m2!1sit!2sit!4v1759873307318!5m2!1sit!2sit" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            
+            <div class="directions-card">
+                <h3>Come raggiungerci</h3>
+                <div class="direction-item">
+                    <div class="direction-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                            <rect x="9" y="9" width="6" height="6"></rect>
+                            <line x1="9" y1="1" x2="9" y2="4"></line>
+                            <line x1="15" y1="1" x2="15" y2="4"></line>
+                            <line x1="9" y1="20" x2="9" y2="23"></line>
+                            <line x1="15" y1="20" x2="15" y2="23"></line>
+                            <line x1="20" y1="9" x2="23" y2="9"></line>
+                            <line x1="20" y1="14" x2="23" y2="14"></line>
+                            <line x1="1" y1="9" x2="4" y2="9"></line>
+                            <line x1="1" y1="14" x2="4" y2="14"></line>
+                        </svg>
+                    </div>
+                    <div class="direction-content">
+                        <h4>Trasporto pubblico</h4>
+                        <p>Ci troviamo in una zona centrale di Dogliani, facilmente raggiungibile con l’auto o con i mezzi pubblici, di fronte al Mercatò.</p>
+                    </div>
+                </div>
+                <div class="direction-item">
+                    <div class="direction-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    <div class="direction-content">
+                        <h4>Disponiamo di ampio parcheggio libero</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-luxury light">
+        <div class="footer-glow"></div>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Poliambulatorio <span>Luigi Einaudi</span></h2>
+                    <p class="footer-slogan">La salute, reinventata.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Esplora</h4>
+                    <ul>
+                        <li><a href="servizi.html">Diagnosi</a></li>
+                        <li><a href="dottori.html">Visite</a></li>
+                        <li><a href="terapie.html">Terapie</a></li>
+                        <li><a href="eventi.html">Eventi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contatti</h4>
+                    <ul>
+                        <li>📞 +39 0173 742501</li>
+                        <li>✉️ info@studiomed.it</li>
+                        <li>📍 Via Torino 118/B, 12063 Dogliani CN</li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Seguici</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Poliambulatorio-Luigi-Einaudi-100014016342183/" class="facebook" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/poliambulatorioluigieinaudi/" class="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                       <a href="#" class="doctorlib" aria-label="Doctolib">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 <strong>Poliambulatorio Luigi Einaudi</strong> –  P.I. 03611100045</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Loading Screen
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelector('.loading-screen').classList.add('hidden');
+        }, 2200);
+    });
+
+    // Scroll Indicator
+    window.addEventListener('scroll', () => {
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (window.scrollY > 300) {
+            scrollIndicator.classList.add('hidden');
+        } else {
+            scrollIndicator.classList.remove('hidden');
+        }
+    });
+
+    // Parallax Effect
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.parallax-circle');
+        
+        parallaxElements.forEach((element, index) => {
+            const speed = (index + 1) * 0.3;
+            element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    });
+
+    function toggleMobileMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const sidebar = document.querySelector('.sidebar-mobile');
+        const overlay = document.querySelector('.mobile-overlay');
+        
+        hamburger.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    document.querySelectorAll('.sidebar-mobile .nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            toggleMobileMenu();
+        });
+    });
+
+    // Slideshow per i servizi
+    document.querySelectorAll('.servizio-slideshow').forEach(slideshow => {
+        let slides = slideshow.querySelectorAll('.servizio-slide');
+        let dots = slideshow.querySelectorAll('.slide-dot');
+        let current = 0;
+        
+        setInterval(() => {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+        }, 4000);
+    });
+
+    // Reveal Animation on Scroll per servizi
+    const servizioObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.servizio-row').forEach(row => {
+        servizioObserver.observe(row);
+    });
+
+    // Reveal Animation on Scroll per altri elementi
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.evento-card, .info-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.8s ease-out';
+        revealObserver.observe(el);
+    });
+
+    // Funzioni helper (identiche a eventi.html)
+    function escapeHtml(s) {
+        if (!s) return '';
+        return String(s).replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+    }
+
+    function formatDate(iso) {
+        if (!iso) return '';
+        const d = new Date(iso + 'T00:00:00');
+        const opts = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+        return d.toLocaleDateString('it-IT', opts);
+    }
+
+    // Caricamento eventi dal JSON (identico a eventi.html)
+    async function loadEventi() {
+        try {
+            const res = await fetch('eventi.json', { cache: 'no-store' });
+            if (!res.ok) throw new Error('Impossibile caricare eventi.json');
+            const events = await res.json();
+
+            const now = new Date();
+            const parsed = events.map(e => ({
+                ...e,
+                DateObj: new Date(e.Data + 'T00:00:00'),
+                isProssimo: String(e.Prossimo).toLowerCase() === 'true'
+            }));
+
+            const upcoming = parsed.filter(p => p.DateObj >= now || p.isProssimo).sort((a, b) => a.DateObj - b.DateObj);
+            
+            const eventiGrid = document.getElementById('eventiGrid');
+            
+            if (upcoming.length === 0) {
+                eventiGrid.innerHTML = '<p style="color: #666; text-align: center; grid-column: 1/-1;">Nessun evento in programma al momento. Torna presto per aggiornamenti!</p>';
+                return;
+            }
+
+            upcoming.forEach((it, index) => {
+                const dataEvento = it.DateObj;
+                const diffTime = dataEvento - now;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                let indicatore;
+                if (diffDays > 1) {
+                    indicatore = `⏳ Tra ${diffDays} giorni`;
+                } else if (diffDays === 1) {
+                    indicatore = "⏳ Domani";
+                } else if (diffDays === 0) {
+                    indicatore = "✅ Oggi";
+                } else if (diffDays < 0 && diffDays >= -1) {
+                    indicatore = "🔴 In corso";
+                } else {
+                    indicatore = "🕐 Concluso";
+                }
+
+                const giorno = dataEvento.getDate();
+                const mese = dataEvento.toLocaleDateString('it-IT', { month: 'short' }).toUpperCase();
+
+                const card = document.createElement('div');
+                card.className = 'evento-card';
+                card.style.animationDelay = `${index * 0.2}s`;
+
+                card.innerHTML = `
+                    <div class="evento-image">
+                        <img src="${it.Foto || 'images/placeholder.jpg'}" alt="${escapeHtml(it.Titolo)}">
+                        <div class="evento-date-badge">
+                            <span class="day">${giorno}</span>
+                            <span class="month">${mese}</span>
+                        </div>
+                    </div>
+                    <div class="evento-content">
+                        <h3 class="evento-title">${escapeHtml(it.Titolo)}</h3>
+                        <p class="evento-description">${escapeHtml(it.Descrizione)}</p>
+                        <div class="evento-footer">
+                            <span class="evento-tag">⭐ In Arrivo</span>
+                            <span style="font-size:14px; color:#ff8c00; font-weight:600;">${indicatore}</span>
+                            <button class="btn-evento" onclick="window.location.href='eventi.html'">Scopri di più</button>
+                        </div>
+                    </div>
+                `;
+                eventiGrid.appendChild(card);
+            });
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('eventiGrid').innerHTML = '<p style="color: #666; text-align: center; grid-column: 1/-1;">Errore nel caricamento degli eventi.</p>';
+        }
+    }
+
+    // Carica gli eventi quando la pagina è pronta
+    document.addEventListener('DOMContentLoaded', () => {
+        loadEventi();
+    });
+</script>
+</body>
+</html>
