@@ -290,28 +290,88 @@
     .scroll-arrow { position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; background: linear-gradient(135deg, var(--pink), var(--orange)); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; font-weight:bold; z-index:11; opacity:0; transition:all .3s; pointer-events:none; box-shadow:0 4px 12px rgba(255,31,125,.3); animation:pulse-arrow 2s ease-in-out infinite; }
     @keyframes pulse-arrow { 0%,100%{transform:translateY(-50%) scale(1)} 50%{transform:translateY(-50%) scale(1.1)} }
     .scroll-arrow.left{left:12px;} .scroll-arrow.right{right:12px;}
-    .nav-wrapper.show-left .scroll-arrow.left, .nav-wrapper.show-right .scroll-arrow.right { opacity:1; }
-    .nav-container { 
-      background: rgba(255,255,255,.85); 
-      backdrop-filter: blur(20px); 
-      border-radius: 20px; 
-      padding: 18px 28px; 
-      box-shadow: 0 8px 32px rgba(0,0,0,.08); 
-      border:1px solid rgba(255,255,255,.5); 
-      overflow-x:auto; 
-      overflow-y:hidden; 
-      scrollbar-width:auto; 
-      scrollbar-color: rgba(255,31,125,.4) rgba(0,0,0,.05); 
-      scroll-behavior:smooth; 
-    }
-    .nav-container::-webkit-scrollbar{height:10px;} 
-    .nav-container::-webkit-scrollbar-track{background:rgba(0,0,0,.05); border-radius:10px;} 
-    .nav-container::-webkit-scrollbar-thumb{background:rgba(255,31,125,.4); border-radius:10px; border:2px solid rgba(255,255,255,.85);} 
-    .nav-container::-webkit-scrollbar-thumb:hover{background:rgba(255,31,125,.6)}
-    .nav-chips{display:flex; gap:14px; flex-wrap:nowrap; min-width:min-content;}
-    .nav-chip{flex-shrink:0; display:flex; align-items:center; justify-content:center; padding:14px 28px; background:#fff; border:2px solid rgba(255,31,125,.1); border-radius:14px; font-size:15px; font-weight:600; color:var(--text); cursor:pointer; transition:all .4s cubic-bezier(.16,1,.3,1); white-space:nowrap; position:relative; overflow:hidden; letter-spacing:.3px;}
-    .nav-chip:hover{ transform:translateY(-3px); box-shadow:0 10px 25px rgba(255,31,125,.25); border-color: var(--pink); }
-    .nav-chip.active{ background: linear-gradient(135deg, var(--pink), var(--orange)); color:#fff; border-color:transparent; box-shadow: 0 8px 24px rgba(255,31,125,.35); transform:translateY(-2px); }
+   .nav-wrapper.show-left .scroll-arrow.left, .nav-wrapper.show-right .scroll-arrow.right { opacity:1; }
+
+.nav-container { 
+  background: rgba(255,255,255,.85); 
+  backdrop-filter: blur(20px); 
+  border-radius: 20px; 
+  padding: 18px 28px; 
+  box-shadow: 0 8px 32px rgba(0,0,0,.08); 
+  border:1px solid rgba(255,255,255,.5); 
+  overflow-x:auto; 
+  overflow-y:hidden; 
+  scrollbar-width:auto; 
+  scrollbar-color: rgba(255,31,125,.4) rgba(0,0,0,.05); 
+  scroll-behavior:smooth;
+  /* AGGIUNGI QUESTE RIGHE */
+  min-height: 70px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-container::-webkit-scrollbar{
+  height:10px;
+  /* AGGIUNGI QUESTA RIGA */
+  -webkit-appearance: none;
+} 
+
+.nav-container::-webkit-scrollbar-track{
+  background:rgba(0,0,0,.05); 
+  border-radius:10px;
+} 
+
+.nav-container::-webkit-scrollbar-thumb{
+  background:rgba(255,31,125,.4); 
+  border-radius:10px; 
+  border:2px solid rgba(255,255,255,.85);
+} 
+
+.nav-container::-webkit-scrollbar-thumb:hover{
+  background:rgba(255,31,125,.6);
+}
+
+.nav-chips{
+  display:flex; 
+  gap:14px; 
+  flex-wrap:nowrap; 
+  min-width:min-content;
+  /* AGGIUNGI QUESTA RIGA */
+  width: max-content;
+}
+
+.nav-chip{
+  flex-shrink:0; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  padding:14px 28px; 
+  background:#fff; 
+  border:2px solid rgba(255,31,125,.1); 
+  border-radius:14px; 
+  font-size:15px; 
+  font-weight:600; 
+  color:var(--text); 
+  cursor:pointer; 
+  transition:all .4s cubic-bezier(.16,1,.3,1); 
+  white-space:nowrap; 
+  position:relative; 
+  overflow:hidden; 
+  letter-spacing:.3px;
+}
+
+.nav-chip:hover{ 
+  transform:translateY(-3px); 
+  box-shadow:0 10px 25px rgba(255,31,125,.25); 
+  border-color: var(--pink); 
+}
+
+.nav-chip.active{ 
+  background: linear-gradient(135deg, var(--pink), var(--orange)); 
+  color:#fff; 
+  border-color:transparent; 
+  box-shadow: 0 8px 24px rgba(255,31,125,.35); 
+  transform:translateY(-2px); 
+}
 
     .timeline { position: relative; min-height: 500px; }
     .timeline::before { content:''; position:absolute; top:0; bottom:0; left:50%; width:4px; background: linear-gradient(180deg, var(--pink), var(--orange) 50%, var(--green)); transform:translateX(-50%); border-radius:10px; box-shadow:0 0 20px rgba(255,31,125,.2); }
